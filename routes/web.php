@@ -19,6 +19,8 @@ Route::get('/', [ControllerTablaPlanificacion::class, 'getTabla']);
 Route::post('/seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'cargarSS']);
 
 Route::post('/registro_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'registroSemana']);
+Route::post('/recuperar_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'recuperarSemana']);
+Route::post('/actualizar_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'actualizarSemana']);
 
 /*
 Route::get('/', function () {

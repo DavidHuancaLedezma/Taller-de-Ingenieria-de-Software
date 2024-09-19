@@ -32,7 +32,7 @@
         /*inicio mini formulario*/
 
         /* Estilos del formulario emergente */
-        #popupForm {
+        #popupForm, #popupForm-edit {
         display: none; /* Oculto inicialmente */
         position: fixed;
         top: 50%;
@@ -150,7 +150,7 @@
                     <tr>
                         <td>Semana {{$item->numero_semana}}</td>
                         <td>
-                            <button class="btn btn-info">
+                            <button class="btn btn-info openEdit" data-id="{{$item->id_control_semanal}}">
                                 <i class="fa fa-edit"></i>
                             </button>
                         </td>
@@ -163,53 +163,85 @@
         </div>
     </main>
 
+    <!-- Fondo oscuro -->
+    <div id="overlay"></div> 
+    <!-- Formulario emergente -->
+    <div id="popupForm">
+            <div class="contenedor-mini-formulario">
+                <header class="header-mini-formulario">
+                    <h1 class="h1-mini-formulario">Semana</h1>
+                </header>
+                <main class="main-mini-formulario">
+                    <h3>Asistencia</h3>
+                    <div class="integrantes">
+                        <div class="sub-integrante">
 
-    <footer>
+                            @foreach ($integrantes as $item)
+                                <p class="estudiante">{{$item->nombre_estudiante}} {{$item->apellido_estudiante}}</p>
+                            @endforeach
 
-    </footer>
-        <!-- Fondo oscuro -->
-        <div id="overlay"></div> 
-        <!-- Formulario emergente -->
-        <div id="popupForm">
-                <div class="contenedor-mini-formulario">
-                    <header class="header-mini-formulario">
-                        <h1 class="h1-mini-formulario">Semana</h1>
-                    </header>
-                    <main class="main-mini-formulario">
-                        <h3>Asistencia</h3>
-                        <div class="integrantes">
-                            <div class="sub-integrante">
-
-                                @foreach ($integrantes as $item)
-                                    <p class="estudiante">{{$item->nombre_estudiante}} {{$item->apellido_estudiante}}</p>
-                                @endforeach
-
-                            </div>
-                            <div class="marcar-asistencia">
-
-                                @foreach ($integrantes as $item)
-                                    <input name="asistencia[]" value="{{$item->id_estudiante}}" type="checkbox" class="asistencia" checked>
-                                @endforeach
-
-                            </div>
                         </div>
-            
-                    </main>
-            
-                    <div id="descripcion-semana" class="contenedor-descripcion">
-                        <input type="hidden" id="id_hito" name="id_hito" value="{{$id_hito}}">
-                        <textarea name="descripcion" id="descripcion" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
-                        <span id="descripcionError" class="error-message"></span>
+                        <div class="marcar-asistencia">
+
+                            @foreach ($integrantes as $item)
+                                <input name="asistencia[]" value="{{$item->id_estudiante}}" type="checkbox" class="asistencia" checked>
+                            @endforeach
+
+                        </div>
                     </div>
             
-                    <footer class="footer-mini-formulario">
-                        <button id="boton-guardar-seguimiento-semanal" class="btn btn-info">Guardar</button>
-                        <button class="btn btn-danger" id="cancelBtn">Cancelar</button>
-                        
-                    </footer>
+                </main>
+            
+                <div id="descripcion-semana" class="contenedor-descripcion">
+                    <input type="hidden" id="id_hito" name="id_hito" value="{{$id_hito}}">
+                    <textarea name="descripcion" id="descripcion" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
+                    <span id="descripcionError" class="error-message"></span>
                 </div>
+            
+                <footer class="footer-mini-formulario">
+                    <button id="boton-guardar-seguimiento-semanal" class="btn btn-info">Guardar</button>
+                    <button class="btn btn-danger" id="cancelBtn">Cancelar</button>
+                        
+                </footer>
+            </div>
+    </div>
+    
+    <!--INICIO FORMULARIO EDITAR-->
+    <div id="popupForm-edit">
+        <div class="contenedor-mini-formulario">
+            <header class="header-mini-formulario">
+                <h1 class="h1-mini-formulario">Semana Editar</h1>
+            </header>
+            <main class="main-mini-formulario">
+                <h3>Asistencia</h3>
+                <div class="integrantes">
+                    <div id="estudiantes-edit" class="sub-integrante">
+                    
+
+                    </div>
+                    <div id="marcar-asistencia-edit" class="marcar-asistencia">
+
+                        
+
+                    </div>
+                </div>
+        
+            </main>
+        
+            <div id="descripcion-semana-edit" class="contenedor-descripcion">
+                <input type="hidden" id="id_control_semanal-edit" name="id_control_semanal" value="">
+                <textarea name="descripcion" id="descripcion-edit" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
+                <span id="descripcionError-edit" class="error-message"></span>
+            </div>
+        
+            <footer class="footer-mini-formulario">
+                <button id="boton-guardar-seguimiento-semanal-edit" class="btn btn-info">Editar</button>
+                <button class="btn btn-danger" id="cancelBtn-edit">Cancelar</button>
+                    
+            </footer>
         </div>
-  
+    </div>
+    <!--FIN FORMULARIO EDITAR-->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -221,6 +253,9 @@
         const cancelBtn = document.getElementById('cancelBtn');
         const guardarBtn = document.getElementById('boton-guardar-seguimiento-semanal');
         const areaTextoDescripcion = document.getElementById('descripcion');
+
+
+        /*const openEdit = document.querySelectorAll('.openEdit');*/
 
         guardarBtn.addEventListener('click', () => {
             const descripcionError = document.getElementById('descripcionError');
@@ -271,6 +306,7 @@
             popupForm.style.display = 'flex';
             overlay.style.display = 'flex';
         });
+                
     </script>
 
     <script>
@@ -282,18 +318,11 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-
-
             $('#boton-guardar-seguimiento-semanal').on('click', function() {
 
                 if($('#descripcion').val() != ''){
-
-
-
                     let estudiantesConAsistencia = [];
                     let estudiantesSinAsistencia = [];
-
                     // Recorrer los checkboxes y recoger los seleccionados y no seleccionados
                     $('.asistencia').each(function() {
                         if ($(this).is(':checked')) {
@@ -302,16 +331,7 @@
                             estudiantesSinAsistencia.push($(this).val()); // Añadir ID de los estudiantes sin asistencia
                         }
                     });
-                    console.log("Estudiantes con asistencia:" + estudiantesConAsistencia);
-                    console.log("Estudiantes sin asistencia:" + estudiantesSinAsistencia);
-
-
-
-
-
-
-
-
+                    
                     $.ajax({
                     url: 'registro_seguimiento_semanal',
                     method: 'POST',
@@ -335,7 +355,7 @@
                                     <tr>
                                         <td> Semana ${arreglo_semanas[i].numero_semana}</td>
                                         <td>
-                                            <button class="btn btn-info">
+                                            <button class="btn btn-info openEdit" data-id="${arreglo_semanas[i].id_control_semanal}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
                                         </td>
@@ -344,7 +364,6 @@
                                 `;
                             }
                             $("#filas-semanas").html(template);
-                        
                         }else{
                             mensaje = "Error al registrar semana";
                         }
@@ -352,11 +371,143 @@
                         $('#descripcion').val('');
                     });
                 }
+            });
 
+            //Modificar el seguimiento semanal de la semana seleccionda
+            $('#boton-guardar-seguimiento-semanal-edit').on('click', function() {
+                if($('#descripcion-edit').val() != ''){
+                    let estudiantesConAsistencia = [];
+                    let estudiantesSinAsistencia = [];
+                    let idDescripcionSemana = $('#id_control_semanal-edit').val();
+                    // Recorrer los checkboxes y recoger los seleccionados y no seleccionados
+                    $('.asistencia-edit').each(function() {
+                        if ($(this).is(':checked')) {
+                            estudiantesConAsistencia.push($(this).val());
+                        } else {
+                            estudiantesSinAsistencia.push($(this).val());
+                        }
+                    });
 
+                    
+                    
+                    $.ajax({
+                    url: 'actualizar_seguimiento_semanal',
+                    method: 'POST',
+                    data: {
+                        asistencia: estudiantesConAsistencia,
+                        faltas: estudiantesSinAsistencia,
+                        idDescripcion: idDescripcionSemana,
+                        nuevaDescripcion: $('#descripcion-edit').val()
 
+                    }
+                    });
+                }
             });
         });
+
+
+        // Delegar el evento click a los botones generados dinámicamente
+        //Obtener los ids de los botones generados dinmicmaente 
+        $(document).on('click', '.openEdit', function() {
+            let id_semana = $(this).data('id'); // Captura el id del botón presionado
+            
+            function funcionalidadesFormularioEditar(){
+                //restablecer formulario edit
+                $('.asistencia-edit').each(function() {
+                    $(this).prop('checked', false); // Marcar cada checkbox
+                });
+                $('#descripcion-edit').val('');
+                $('#descripcionError-edit').css('display', 'none');
+                $('#descripcion-edit').removeClass('error');
+
+                //visualizar formulario edit
+                $('#popupForm-edit').css('display', 'flex');
+                $('#overlay').css('display', 'flex');
+                
+                
+                //Desaparecer el formulaario edit y el fondo oscuro al presionar a fuera del formulario 
+                $('#overlay').on('click', function() {
+                    $('#popupForm-edit').css('display', 'none');
+                    $('#overlay').css('display', 'none');
+                });
+
+                //boton cancelar del formulario edit
+                $('#cancelBtn-edit').on('click', function(){
+                    $('#popupForm-edit').css('display', 'none');
+                    $('#overlay').css('display', 'none');
+                });
+
+                //Verificar que el campo descripcion no este vacio
+                $('#boton-guardar-seguimiento-semanal-edit').on('click', function() {
+                    const descripcionError = $('#descripcionError-edit');
+                    const descripcion = $('#descripcion-edit').val().trim();
+
+                    // Verificar si el campo de descripción está vacío
+                    if (descripcion === '') {
+                        // Mostrar el mensaje de error y resaltar el campo de texto
+                        descripcionError.text('Por favor, completa la descripción para editar los datos.');
+                        descripcionError.css('display', 'block');
+                        $('#descripcion-edit').addClass('error');
+                    } else {
+                        // Si no está vacío, ocultar el mensaje de error, quitar la clase 'error' y cerrar el formulario
+                        $('#descripcion-edit').removeClass('error');
+                        $('#popupForm-edit').css('display', 'none');
+                        $('#overlay').css('display', 'none');
+                    }
+                });
+            }
+            
+            
+            $.ajax({
+                    url: 'recuperar_seguimiento_semanal',
+                    method: 'POST',
+                    data: {
+                        id_control_semanal: id_semana
+                    }
+                    }).done(function(res){
+                        let datos_semana_actual_seleccionada = JSON.parse(res);
+
+
+                        funcionalidadesFormularioEditar();
+
+
+
+                        let descripcion = datos_semana_actual_seleccionada[0][0].control_semanal;
+                        let id_control_semanal = datos_semana_actual_seleccionada[0][0].id_control_semanal;
+                        let estudiantes_y_asistencias = datos_semana_actual_seleccionada[1];
+
+
+                        $('#descripcion-edit').val(descripcion);
+
+
+                        let template_estudiantes = "";
+                        let template_asistencia = "";
+
+                        for(let i=0; i<estudiantes_y_asistencias.length; i++){
+                            template_estudiantes += `
+                                <p class="estudiante">${estudiantes_y_asistencias[i].nombre_estudiante} ${estudiantes_y_asistencias[i].apellido_estudiante}</p>
+                            `;
+
+                            if(estudiantes_y_asistencias[i].asistio){
+                                template_asistencia += `
+                                    <input name="asistencia[]" value="${estudiantes_y_asistencias[i].id_asistencia}" type="checkbox" class="asistencia-edit" checked>
+                                `;
+                            }else{
+                                template_asistencia += `
+                                    <input name="asistencia[]" value="${estudiantes_y_asistencias[i].id_asistencia}" type="checkbox" class="asistencia-edit">
+                                `;
+                            }
+                        }
+
+                        $("#estudiantes-edit").html(template_estudiantes);
+                        $("#marcar-asistencia-edit").html(template_asistencia);
+                        $('#id_control_semanal-edit').val(id_control_semanal);
+        
+                        
+                    });
+            
+        });
+
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>

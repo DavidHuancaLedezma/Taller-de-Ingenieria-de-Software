@@ -42,6 +42,58 @@ class ControllerSeguimientoSemanal extends Controller
         }
     }
 
+    public function recuperarSemana(Request $request)
+    {
+        $id_semana = $request->input('id_control_semanal');
+
+        $descripcion_semana = DB::select("SELECT id_control_semanal, control_semanal FROM control_semanal WHERE id_control_semanal = ?", array($id_semana));
+        $datos_control_semanal = array($descripcion_semana, self::getEstudiantesConAsistencias($id_semana));
+        return response(json_encode($datos_control_semanal), 200)->header('Content-type', 'text/plain');
+    }
+
+    public function actualizarSemana(Request $request)
+    {
+        $asistencia_estudiantes = $request->input('asistencia', []);
+        $faltas_estudiantes = $request->input('faltas', []);
+        $id_descripcion = $request->input('idDescripcion');
+        $nueva_descripcion = $request->input('nuevaDescripcion');
+
+        self::actualizarAsistencias($asistencia_estudiantes, $faltas_estudiantes);
+        self::actualizarDescripcionSemana($id_descripcion, $nueva_descripcion);
+    }
+
+    private static function actualizarDescripcionSemana($id_control_semanal, $nueva_descripcion)
+    {
+        DB::update("UPDATE control_semanal set control_semanal = ? WHERE id_control_semanal = ?", array($nueva_descripcion, $id_control_semanal));
+    }
+
+    private static function actualizarAsistencias($asistencia_estudiantes, $faltas_estudiantes)
+    {
+        if (count($asistencia_estudiantes) > 0) {
+            foreach ($asistencia_estudiantes as $id_asistencia) {
+                DB::update("UPDATE asistencia set asistio = TRUE WHERE id_asistencia = ?", array($id_asistencia));
+            }
+        }
+
+        if (count($faltas_estudiantes) > 0) {
+            foreach ($faltas_estudiantes as $id_falta) {
+                DB::update("UPDATE asistencia set asistio = FALSE WHERE id_asistencia = ?", array($id_falta));
+            }
+        }
+    }
+
+    private static function getEstudiantesConAsistencias($id_semana)
+    {
+        $consulta = DB::select("SELECT e.nombre_estudiante, e.apellido_estudiante, asis.asistio, asis.id_asistencia 
+        FROM control_semanal cs, asistencia asis, estudiante e
+        WHERE cs.id_control_semanal = asis.id_control_semanal
+        AND e.id_estudiante = asis.id_estudiante
+        AND cs.id_control_semanal = ?
+        ORDER BY e.id_estudiante ASC", array($id_semana));
+        return $consulta;
+    }
+
+
     private static function getEstudiantes($id_hito)
     {
         $consulta = DB::select("SELECT e.id_estudiante, e.nombre_estudiante, e.apellido_estudiante FROM estudiante e, estudiante_grupoempresa ege, grupo_empresa ge, proyecto pr, hito h 
