@@ -140,6 +140,7 @@
                 <thead class="table-info">
                     <tr>
                         <th>Semana</th>
+                        <th>Fecha registro</th>
                         <th>Ver y editar</th>
                     </tr>
                 </thead>
@@ -149,6 +150,7 @@
 
                     <tr>
                         <td>Semana {{$item->numero_semana}}</td>
+                        <td>{{$item->fecha_registro_semanal}}</td>
                         <td>
                             <button class="btn btn-info openEdit" data-id="{{$item->id_control_semanal}}">
                                 <i class="fa fa-edit"></i>
@@ -210,7 +212,7 @@
     <div id="popupForm-edit">
         <div class="contenedor-mini-formulario">
             <header class="header-mini-formulario">
-                <h1 class="h1-mini-formulario">Semana Editar</h1>
+                <h1 class="h1-mini-formulario">Semana</h1>
             </header>
             <main class="main-mini-formulario">
                 <h3>Asistencia</h3>
@@ -354,6 +356,7 @@
                                 template += `
                                     <tr>
                                         <td> Semana ${arreglo_semanas[i].numero_semana}</td>
+                                        <td>${arreglo_semanas[i].fecha_registro_semanal}</td>
                                         <td>
                                             <button class="btn btn-info openEdit" data-id="${arreglo_semanas[i].id_control_semanal}">
                                                 <i class="fa fa-edit"></i>

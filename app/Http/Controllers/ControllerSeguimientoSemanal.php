@@ -30,7 +30,11 @@ class ControllerSeguimientoSemanal extends Controller
         $estudiantes_con_asistencias = $request->input('asistencias', []);
         $estudiantes_con_faltas = $request->input('faltas', []);
 
-        $semana_insertada = DB::insert("INSERT INTO control_semanal (control_semanal, fecha_ini_semana, fecha_fin_semana,fecha_registro_semanal, id_hito) VALUES (?,?,?,?,?)", array($descripcion, '01-01-2000', '02-01-2000', '01-01-2024', $id_hito));
+        date_default_timezone_set('America/La_Paz');
+        // Obtener la fecha actual
+        $fechaActual = date('Y-m-d');
+
+        $semana_insertada = DB::insert("INSERT INTO control_semanal (control_semanal, fecha_ini_semana, fecha_fin_semana,fecha_registro_semanal, id_hito) VALUES (?,?,?,?,?)", array($descripcion, '01-01-2000', '02-01-2000', $fechaActual, $id_hito));
         if ($semana_insertada) {
             $id_semana_actual_insertada = DB::select("SELECT max(id_control_semanal) as id_control_semanal FROM control_semanal");
             self::registroDeAsistencias($estudiantes_con_asistencias, $estudiantes_con_faltas, $id_semana_actual_insertada);
@@ -109,7 +113,7 @@ class ControllerSeguimientoSemanal extends Controller
     private static function getSemanasRegistradas($id_hito)
     {
         //esto puede ir cambiando depende los datos que necesitemos en la tabla de semanas
-        $semanas = DB::select("SELECT row_number() OVER (ORDER BY cs.id_control_semanal) AS numero_semana, cs.control_semanal, h.id_hito, cs.id_control_semanal
+        $semanas = DB::select("SELECT row_number() OVER (ORDER BY cs.id_control_semanal) AS numero_semana, cs.control_semanal, h.id_hito, cs.id_control_semanal, cs.fecha_registro_semanal
         FROM control_semanal cs, hito h 
         WHERE cs.id_hito = h.id_hito
         AND h.id_hito = ?", array($id_hito));
