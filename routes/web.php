@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ControllerTablaPlanificacion;
+//use App\Http\Controllers\ControllerTablaPlanificacion;
 use App\Http\Controllers\ControllerSeguimientoSemanal;
 
 /*
@@ -15,13 +15,16 @@ use App\Http\Controllers\ControllerSeguimientoSemanal;
 |
 */
 
-Route::get('/', [ControllerTablaPlanificacion::class, 'getTabla']);
+//Route::get('/', [ControllerTablaPlanificacion::class, 'getTabla']);
 Route::post('/seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'cargarSS']);
 
 Route::post('/registro_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'registroSemana']);
 
-/*
+
 Route::get('/', function () {
     return view('welcome');
 });
-*/
+
+Route::get('/registro_objetivo', function () {
+    return view('registro_objetivo');
+});
