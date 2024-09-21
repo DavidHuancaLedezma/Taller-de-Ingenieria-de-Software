@@ -28,6 +28,12 @@
             font-size: 30px;
         }
 
+        .btn-info{
+            background-color: #357CA5 !important;
+            border-color: #357CA5 !important;
+            color : white ; 
+        }
+
 
         /*inicio mini formulario*/
 
@@ -239,7 +245,6 @@
             <footer class="footer-mini-formulario">
                 <button id="boton-guardar-seguimiento-semanal-edit" class="btn btn-info">Editar</button>
                 <button class="btn btn-danger" id="cancelBtn-edit">Cancelar</button>
-                    
             </footer>
         </div>
     </div>
@@ -269,6 +274,16 @@
                 descripcionError.textContent = 'Por favor, completa la descripción.';
                 descripcionError.style.display = 'block';
                 areaTextoDescripcion.classList.add('error');
+            }else if (descripcion.length < 30) {
+                // Mostrar el mensaje de error si es menor a 30 caracteres
+                descripcionError.textContent = 'La descripción debe tener al menos 30 caracteres.';
+                descripcionError.style.display = 'block';
+                areaTextoDescripcion.classList.add('error');  // Añadir clase para el borde rojo
+            } else if (descripcion.length > 500) {
+                // Mostrar el mensaje de error si supera los 500 caracteres
+                descripcionError.textContent = 'La descripción no debe exceder los 500 caracteres.';
+                descripcionError.style.display = 'block';
+                areaTextoDescripcion.classList.add('error'); 
             } else {
                 // Si no está vacío, ocultar el mensaje de error, quitar la clase 'error' y cerrar el formulario
                 descripcionError.style.display = 'none';
@@ -277,6 +292,7 @@
                 overlay.style.display = 'none';
             }
         });
+
 
         // Ocultar el formulario y el fondo oscuro al presionar cancelar
         cancelBtn.addEventListener('click', () => {
@@ -322,7 +338,8 @@
             });
             $('#boton-guardar-seguimiento-semanal').on('click', function() {
 
-                if($('#descripcion').val() != ''){
+                if($('#descripcion').val() != '' && $('#descripcion').val().length > 30 && $('#descripcion').val().length < 500){
+                    
                     let estudiantesConAsistencia = [];
                     let estudiantesSinAsistencia = [];
                     // Recorrer los checkboxes y recoger los seleccionados y no seleccionados
@@ -378,7 +395,8 @@
 
             //Modificar el seguimiento semanal de la semana seleccionda
             $('#boton-guardar-seguimiento-semanal-edit').on('click', function() {
-                if($('#descripcion-edit').val() != ''){
+                if($('#descripcion-edit').val() != '' && $('#descripcion-edit').val().length > 30 && $('#descripcion-edit').val().length < 500){
+                    
                     let estudiantesConAsistencia = [];
                     let estudiantesSinAsistencia = [];
                     let idDescripcionSemana = $('#id_control_semanal-edit').val();
@@ -451,6 +469,18 @@
                         descripcionError.text('Por favor, completa la descripción para editar los datos.');
                         descripcionError.css('display', 'block');
                         $('#descripcion-edit').addClass('error');
+                    
+                    }else if (descripcion.length < 30) {
+                        // Mostrar el mensaje de error y resaltar el campo de texto
+                        descripcionError.text('La descripción debe tener al menos 30 caracteres.');
+                        descripcionError.css('display', 'block');
+                        $('#descripcion-edit').addClass('error');
+                    }else if (descripcion.length > 500) {
+                        // Mostrar el mensaje de error y resaltar el campo de texto
+                        descripcionError.text('La descripción no debe exceder los 500 caracteres.');
+                        descripcionError.css('display', 'block');
+                        $('#descripcion-edit').addClass('error');
+
                     } else {
                         // Si no está vacío, ocultar el mensaje de error, quitar la clase 'error' y cerrar el formulario
                         $('#descripcion-edit').removeClass('error');

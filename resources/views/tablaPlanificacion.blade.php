@@ -14,7 +14,19 @@
         .contenedor{
             display: flex;
             justify-content: center;
-        } 
+        }
+        
+        /* Cambiar color de los botones */
+        .btn-info {
+            background-color: #357CA5 !important;
+            border-color: #357CA5 !important;
+            color : white ; 
+        }
+        .btn-info:hover {
+            background-color: #357CA5 !important; /* Un color un poco más oscuro para el hover */
+            border-color: #357CA5 !important;
+            color : white ; 
+        }
     </style>
 
 </head>
