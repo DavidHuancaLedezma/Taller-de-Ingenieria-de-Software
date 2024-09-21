@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Asistencia extends Model
 {
-    use HasFactory;
+    protected $table = 'asistencia';
+    protected $primaryKey = 'id_asistencia';
+    public $timestamps = false;
+
+    protected $fillable = ['id_usuario', 'fecha_asistencia', 'presente'];
+
+    // Relación con Usuario
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'id_usuario');
+    }
 }
