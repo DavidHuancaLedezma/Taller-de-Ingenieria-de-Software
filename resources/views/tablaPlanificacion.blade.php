@@ -53,7 +53,10 @@
                     <td>{{$item->fecha_inicio_hito}}</td>
                     <td>{{$item->fecha_fin_hito}}</td>
                     <td>
-                        <button class="btn btn-info">objetivos</button>
+                        <form action="{{ url('/cargar_objetivos') }}" method="POST">
+                            {{ csrf_field() }}
+                            <button class="btn btn-info" type="submit" value="{{$item->id_hito}}" name="id_hito">objetivos</button>
+                        </form>
                     </td>
                     <td>
                         <form action="{{ url('/seguimiento_semanal')}}" method="POST">

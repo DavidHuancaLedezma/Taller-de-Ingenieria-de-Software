@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ControllerTablaPlanificacion;
 use App\Http\Controllers\ControllerSeguimientoSemanal;
+use App\Http\Controllers\ControllerObjetivos;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +18,17 @@ use App\Http\Controllers\ControllerSeguimientoSemanal;
 */
 
 Route::get('/', [ControllerTablaPlanificacion::class, 'getTabla']);
-Route::post('/seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'cargarSS']);
 
+//Rutas para seguimiento semanal
+Route::post('/seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'cargarSS']);
 Route::post('/registro_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'registroSemana']);
 Route::post('/recuperar_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'recuperarSemana']);
 Route::post('/actualizar_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'actualizarSemana']);
+
+//Rutas para objetivos
+
+Route::post('/cargar_objetivos', [ControllerObjetivos::class, 'cargarObjetivos']);
+Route::post('/obtener_actividades', [ControllerObjetivos::class, 'getActividades']);
 
 /*
 Route::get('/', function () {
