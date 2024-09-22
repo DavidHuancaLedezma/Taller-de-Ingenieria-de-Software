@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+use App\Http\Controllers\GrupoEmpresaController;
+
+Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'showForm']);
+Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'create'])->name('grupo_empresa.create');
+Route::post('/registro-grupo-empresa', [GrupoEmpresaController::class, 'store'])->name('grupo_empresa.store');
+Route::get('/registro-grupo-empresa/success', [GrupoEmpresaController::class, 'success'])->name('grupo_empresa.success');
