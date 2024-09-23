@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registro objetivo</title>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <style>
         /* Estilos generales */
         body, html {
@@ -80,6 +81,7 @@
         .date-group {
             display: flex;
             justify-content: space-around;
+            margin-bottom: 20px; 
     
         }
         select {
@@ -101,6 +103,21 @@
             
         }
        
+        .acti_criAcep{
+            display: flex;
+            gap: 20%;
+        }
+        a{
+            color: black;
+            font-size: 23px;
+            text-decoration:none;
+            padding: 5px;
+            margin-bottom: 10px;
+            
+            }
+        a:hover{
+            color: #118CD9;
+        }
 
         label {
             margin-right: 10px;
@@ -118,7 +135,44 @@
         input[type="date"]:focus{
             border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
             outline: none; 
-        }        
+        }   
+        .botones {
+            display: flex;
+            gap: 50px; /* Espacio entre los botones */
+            position: fixed;
+            bottom: 20px;  /* Alinea los botones 20px arriba del borde inferior */
+            left: 50%;
+            transform: translateX(-50%);
+        }     
+        .botones button{
+            cursor: pointer;
+            background-color: transparent;
+            border: 2px solid #118CD9;
+            width: fit-content;
+            display: block;
+            margin: 20px auto;
+            padding: 10px 22px;
+            font-size: 16px;
+            color: black;
+            position: relative;
+            z-index: 10;
+        
+        }
+        .botones button .overplay{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: #367FA9;
+            color: white;
+            z-index: -1;
+            transition: 1s;
+        }
+        .botones button:hover .overplay{
+            width: 100%;
+          
+        }
 
     </style>
 </head>
@@ -168,7 +222,20 @@
                     <input type="date">
                 </div>
             </div>
-          
+           <div class= acti_criAcep>
+            <a href="#">Actividad <i class="bi bi-plus-circle"></i></a>
+            <a href="#">Criterios de aceptación <i class="bi bi-plus-circle"></i></a>
+           </div>
+           <div class="botones">
+           <button>
+                Aceptar <i class="bi bi-rocket-takeoff-fill"></i>
+                <span class="overplay"></span>
+            </button>
+            <button>
+                Cancelar <i class="bi bi-x-circle-fill"></i>
+                <span class="overplay"></span>
+            </button>
+           </div>
         </div>
     </div>
 </body>
