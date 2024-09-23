@@ -181,63 +181,85 @@
     <div class="content">
         <div class="container">
             <h1>Registro de Planificación</h1>
-            <h5>Objetivo</h5>
-            <input type="text" placeholder="Escribe tu objetivo" required>
-            <div class="select_priori_group">
-            <div>
-            <h5>Seleccione Hito</h5>
-            <select name="hito">
-                <option value="hito1">hito1</option>
-                <option value="hito2">hito2</option>
-                <option value="hito3">hito3</option>
-            </select>
-            </div>
-            <div>
-            <h5>Prioridad</h5>
-            <div class="radio-group"> 
+            
+            @if(session('success'))
+                <div style="color: green">{{ session('success') }}</div>
+            @endif
 
-                <label class="custom-radio">
-                <input type="radio" name="Prioridad" />
-                <span class="radio-mark"></span> Alta
-                </label>
-                <label class="custom-radio">
-                    <input type="radio" name="Prioridad" />
-                    <span class="radio-mark"></span> Media
-                </label>
-                <label class="custom-radio">
-                    <input type="radio" name="Prioridad" />
-                    <span class="radio-mark"></span> Baja
-                </label>
+            <form action="{{ route('objetivo.store') }}" method="POST">
+                @csrf
+                <!-- Campo para el objetivo -->
+                <h5>Objetivo</h5>
+                <input type="text" name="objetivo" placeholder="Escribe tu objetivo" value="{{ old('objetivo') }}" required>
 
-            </div>
-            </div>
-            </div>
-            <div class="date-group">
-                <div>
-                    <h5>Fecha Inicio</h5>
-                    <input type="date">
+                <div class="select_priori_group">
+                    <div>
+                        <h5>Seleccione Hito</h5>
+                        <select name="hito">
+                            @foreach($hitos as $hito)
+                                <option value="{{ $hito->id_hito }}">{{ $hito->nombre_hito }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Selección de prioridad -->
+                    <div>
+                        <h5>Prioridad</h5>
+                        <div class="radio-group"> 
+                            <label>
+                                <input type="radio" name="prioridad" value="Alta" {{ old('prioridad') == 'Alta' ? 'checked' : '' }}> Alta
+                            </label>
+                            <label>
+                                <input type="radio" name="prioridad" value="Media" {{ old('prioridad') == 'Media' ? 'checked' : '' }}> Media
+                            </label>
+                            <label>
+                                <input type="radio" name="prioridad" value="Baja" {{ old('prioridad') == 'Baja' ? 'checked' : '' }}> Baja
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h5>Fecha Fin</h5>
-                    <input type="date">
+
+                <!-- Fecha de inicio y fin -->
+                <div class="date-group">
+                    <div>
+                        <h5>Fecha Inicio</h5>
+                        <input type="date" name="fecha_inicio" value="{{ old('fecha_inicio') }}" required>
+                    </div>
+                    <div>
+                        <h5>Fecha Fin</h5>
+                        <input type="date" name="fecha_fin" value="{{ old('fecha_fin') }}" required>
+                    </div>
                 </div>
-            </div>
-           <div class= acti_criAcep>
-            <a href="#">Actividad <i class="bi bi-plus-circle"></i></a>
-            <a href="#">Criterios de aceptación <i class="bi bi-plus-circle"></i></a>
-           </div>
-           <div class="botones">
-           <button>
-                Aceptar <i class="bi bi-rocket-takeoff-fill"></i>
-                <span class="overplay"></span>
-            </button>
-            <button>
-                Cancelar <i class="bi bi-x-circle-fill"></i>
-                <span class="overplay"></span>
-            </button>
-           </div>
+
+                <!-- Botones de Aceptar y Cancelar -->
+                <div class="botones">
+                    <button type="submit">
+                        Aceptar <i class="bi bi-rocket-takeoff-fill"></i>
+                        <span class="overplay"></span>
+                    </button>
+
+                    <!-- Cambia route() por url() si sigues teniendo problemas con route() -->
+                    <button type="button" onclick="window.location.href='{{ url('/') }}'">
+                        Cancelar <i class="bi bi-x-circle-fill"></i>
+                        <span class="overplay"></span>
+                    </button>
+                </div>
+
+                <!-- Mostrar errores de validación -->
+                @if ($errors->any())
+                    <div style="color: red">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+            </form>
         </div>
     </div>
 </body>
+
 </html>
 
