@@ -8,13 +8,16 @@ use App\Models\Objetivo;
 
 class ObjetivoController extends Controller
 {
-    // Mostrar el formulario
-    public function create()
-    {
-        // Obtener todos los hitos desde la base de datos para el desplegable
-        $hitos = Hito::all();
-        return view('objetivo.create', compact('hitos')); // Pasamos los hitos a la vista
-    }
+        // Mostrar el formulario de creación de objetivos
+        public function create()
+        {
+            // Obtener todos los hitos desde la base de datos para el desplegable
+            $hitos = Hito::all();
+            
+            // Pasamos los hitos a la vista de registro_objetivo.blade.php
+            return view('registro_objetivo', compact('hitos'));
+        }
+    
 
     // Guardar el objetivo
     public function store(Request $request)
