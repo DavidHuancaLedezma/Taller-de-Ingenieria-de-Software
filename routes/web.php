@@ -29,6 +29,7 @@ Route::post('/actualizar_seguimiento_semanal', [ControllerSeguimientoSemanal::cl
 
 Route::post('/cargar_objetivos', [ControllerObjetivos::class, 'cargarObjetivos']);
 Route::post('/obtener_actividades', [ControllerObjetivos::class, 'getActividades']);
+Route::post('/editar_actividades_realizadas', [ControllerObjetivos::class, 'editarActividadesRealizadas']);
 
 /*
 Route::get('/', function () {

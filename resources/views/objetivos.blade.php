@@ -47,7 +47,6 @@
 
         .primerContenedor {
             display: flex;
-            height: 30%;
             flex-direction: column;
             /border: 2px solid red;/
             gap: 20px;
@@ -79,7 +78,7 @@
         .contenedorObjetivos .buttons {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 3px;
 
         }
 
@@ -92,10 +91,14 @@
             padding-top: 10px;
             background-color: #D9D9D9;
             border-radius: 10px;
+            gap: 20px ; 
+        }
+        #btn-guardar{
+            visibility: hidden;
         }
 
+        
         .tabla {
-            height: 70%;
             width: 90%;
             border-collapse: collapse;
             border: 2px solid rgb(140 140 140);
@@ -167,36 +170,18 @@
                         <th scope="col">Actividades</th>
                         <th scope="col">Responsable</th>
                         <th scope="col">Resultado</th>
+                        <th scope="col">Realizado</th>
                     </tr>
                 </thead>
-                <tbody id="tabla-actividades">
-                    <tr>
-                        <td></th>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></th>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></th>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></th>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    
+                <tbody id="tabla-actividades">      
                 </tbody>
             </table>
+            <button id="btn-guardar">Guardar</button>
         </div>
     <main>
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script>
         $(document).ready(function(){
 
@@ -218,20 +203,56 @@
                     }
                     }).done(function(res){
                         let arregloActividades = JSON.parse(res);
-
+        
                         let template = "";
                         for(let i=0; i<arregloActividades.length; i++){
-                            template += `
-                                <tr>
-                                    <td>${arregloActividades[i].descripcion_actividad}</td>
-                                    <td>${arregloActividades[i].responsable}</td>
-                                    <td>No hay resultado aun</td>
-                                </tr>
-                            `;
+                            if(arregloActividades[i].realizado == true){
+                                template += `
+                                    <tr>
+                                        <td>${arregloActividades[i].descripcion_actividad}</td>
+                                        <td>${arregloActividades[i].responsable}</td>
+                                        <td>${arregloActividades[i].resultado}</td>
+                                        <td><input type="checkbox" value="${arregloActividades[i].id_actividad}" class="actividades" checked></td>
+                                    </tr>
+                                `;
+                            }else{
+                                template += `
+                                    <tr>
+                                        <td>${arregloActividades[i].descripcion_actividad}</td>
+                                        <td>${arregloActividades[i].responsable}</td>
+                                        <td>${arregloActividades[i].resultado}</td>
+                                        <td><input type="checkbox" value="${arregloActividades[i].id_actividad}" class="actividades"></td>
+                                    </tr>
+                                `;
+                            }
+                            
                             }
                         $("#tabla-actividades").html(template);
+                        $('#btn-guardar').css("visibility", "visible");
                     });
                     
+            });
+
+            $('#btn-guardar').on('click', function() {
+                let actividadRealizada = [];
+                let actividadNoRealizada = [];
+                $('.actividades').each(function() {
+                        if ($(this).is(':checked')) {
+                            actividadRealizada.push($(this).val());
+                        } else {
+                            actividadNoRealizada.push($(this).val());
+                        }
+                    });
+                $.ajax({
+                    url: 'editar_actividades_realizadas',
+                    method: 'POST',
+                    data: {
+                        idActividadRealizada: actividadRealizada,
+                        idActividadNoRealizado: actividadNoRealizada
+                    }
+                    });
+                alert("Actividades modificadas con exito!");
+            
             });
         });
     </script>
