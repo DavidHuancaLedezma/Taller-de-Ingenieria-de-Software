@@ -19,12 +19,13 @@
 
         /* Fondo con imagen y efecto blur */
         .background {
-            background-image: url('https://impulsapopular.com/wp-content/uploads/2014/09/iStock_66988435_LARGE.jpg'); /* Reemplaza con la URL de tu imagen */
+            /*background-image: url('https://i.pinimg.com/564x/84/4c/8e/844c8e710a5b94b7ef68294b20028051.jpg');*/
+            background-color: #D2D6DE;
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            filter: blur(10px); /* Ajusta el valor del blur según tu preferencia */
+            filter: blur(5px); /* Ajusta el valor del blur según tu preferencia */
             position: absolute;
             top: 0;
             left: 0;
@@ -187,7 +188,7 @@
     <div class="content">
         <div class="container">
             <h1>Registro de Planificación</h1>
-            
+          <!-- caja de Exito -->
             @if(session('success'))
                 <script>
                     Swal.fire({
@@ -203,7 +204,7 @@
                     });
                 </script>
             @endif
-
+                <!-- fin de codigo caja exito -->
             <form action="{{ route('objetivo.store') }}" method="POST">
                 @csrf
                 <!-- Campo para el objetivo -->
@@ -376,7 +377,7 @@
     }
 
     .btn.btn-danger {
-        background-color: red;
+        background-color: darkred;
         color: white;
     }
 </style>
