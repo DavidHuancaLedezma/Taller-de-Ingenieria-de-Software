@@ -51,4 +51,10 @@ class ObjetivoController extends Controller
     }
 }
 
+    public function registroActividadCriterio($id_objetivo)
+    {
+        $objetivo = Objetivo::findOrFail($id_objetivo);
+        return view('registro_actividad_criterioAcep', compact('objetivo'));
+    }
+
 }
