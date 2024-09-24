@@ -21,6 +21,7 @@ class ObjetivoController extends Controller
         
     public function store(Request $request)
 {
+    $hito = Hito::find($request->input('hito'));
     // Validar los datos del formulario
     $request->validate([
         'objetivo' => 'required|string|max:255',

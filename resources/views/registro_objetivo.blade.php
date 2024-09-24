@@ -284,7 +284,76 @@
             </form>
         </div>
     </div>
-    
+   <script>  
+    document.addEventListener('DOMContentLoaded', function () {
+    const hitos = @json($hitos); // Obtener los hitos en formato JSON desde Blade
+
+    const hitoSelect = document.getElementById('hitos');
+    const fechaInicioInput = document.querySelector('input[name="fecha_inicio"]');
+    const fechaFinInput = document.querySelector('input[name="fecha_fin"]');
+
+    let fechaInicioHandler, fechaFinHandler;
+
+    // Función para quitar listeners previos antes de agregar nuevos
+    function removePreviousHandlers() {
+        if (fechaInicioHandler) {
+            fechaInicioInput.removeEventListener('change', fechaInicioHandler);
+        }
+        if (fechaFinHandler) {
+            fechaFinInput.removeEventListener('change', fechaFinHandler);
+        }
+    }
+    // Función para obtener la fecha actual sin la hora
+    function obtenerFechaActual() {
+        const hoy = new Date();
+        return new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+    }
+
+    hitoSelect.addEventListener('change', function () {
+        const hitoSeleccionado = hitos.find(hito => hito.id_hito == this.value);
+
+        // Limpiar eventos previos al cambiar de hito
+        removePreviousHandlers();
+
+        if (hitoSeleccionado) {
+            // Convertir las fechas del hito a formato Date
+            const hitoFechaInicio = new Date(hitoSeleccionado.fecha_inicio_hito);
+            const hitoFechaFin = new Date(hitoSeleccionado.fecha_fin_hito);
+
+            // Validar la fecha de inicio del objetivo
+            fechaInicioHandler = function () {
+                const fechaInicio = new Date(this.value);
+                const fechaActual = obtenerFechaActual();
+                if (fechaInicio < hitoFechaInicio || fechaInicio > hitoFechaFin) {
+                    alert('La fecha de inicio debe estar dentro del rango del hito seleccionado.');
+                    this.value = ''; // Limpiar el campo si no es válido
+                }
+                // Validar si la fecha es actual 
+                else if (fechaInicio < fechaActual) {
+                    alert('La fecha de inicio no puede ser una fecha anterior la actual');
+                    this.value = ''; // Limpiar el campo si no es válido
+                }
+            };
+            fechaInicioInput.addEventListener('change', fechaInicioHandler);
+
+            // Validar la fecha de fin del objetivo
+            fechaFinHandler = function () {
+                const fechaFin = new Date(this.value);
+                const fechaInicio = new Date(fechaInicioInput.value); 
+                if (fechaFin < hitoFechaInicio || fechaFin > hitoFechaFin) {
+                    alert('La fecha de fin debe estar dentro del rango del hito seleccionado.');
+                    this.value = ''; // Limpiar el campo si no es válido
+                } else if (fechaFin < fechaInicio){
+                    alert('La fecha de fin no debe ser menro al rango de la fecha inicio.');
+                    this.value = '';
+                }
+            };
+            fechaFinInput.addEventListener('change', fechaFinHandler);
+        }
+    });
+});
+</script>
+
    <!-- Formulario emergente -->
 <div id="popupForm" class="popup-form">
     <div class="contenedor-mini-formulario">
