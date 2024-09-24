@@ -260,7 +260,10 @@
                         <span class="overplay"></span>
                     </button>
                 </div>
-
+                <div class= acti_criAcep>
+                    <a href="#">Actividad <i class="bi bi-plus-circle"></i></a>
+                    <a href="#">Criterios de aceptación <i class="bi bi-plus-circle"></i></a>
+                </div>
                 <!-- Mostrar errores de validación -->
                 @if ($errors->any())
                     <div style="color: red">
