@@ -18,4 +18,11 @@ class Hito extends Model
     {
         return $this->belongsTo(Proyecto::class, 'id_proyecto', 'id_proyecto');
     }
+      // Accessor para el campo 'NUMERO_HITO'
+    public function getNumeroHitoAttribute($value)
+    {
+          return 'Hito ' . $value;
+    }
+    
+
 }

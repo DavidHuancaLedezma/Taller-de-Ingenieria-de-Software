@@ -6,7 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registro objetivo</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         /* Estilos generales */
         body, html {
@@ -183,7 +185,19 @@
             <h1>Registro de Planificación</h1>
             
             @if(session('success'))
-                <div style="color: green">{{ session('success') }}</div>
+                <script>
+                    Swal.fire({
+                        title: '¡Registro exitoso!',
+                        text: 'Ojetivo registrado correctamente',
+                        icon: 'success',
+                        confirmButtonText: 'Ir al inicio',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ url('/') }}"; // Cambia la URL según tu necesidad
+                        }
+                    });
+                </script>
             @endif
 
             <form action="{{ route('objetivo.store') }}" method="POST">
@@ -194,10 +208,12 @@
 
                 <div class="select_priori_group">
                     <div>
-                        <h5>Seleccione Hito</h5>
-                        <select name="hito">
+                    <h5>Seleccione Hito</h5>
+                        <select name="hito" id="hitos" required>
+                            <option value="">-- Selecciona un Hito --</option>
                             @foreach($hitos as $hito)
-                                <option value="{{ $hito->id_hito }}">{{ $hito->nombre_hito }}</option>
+                                <option value="{{ $hito->id_hito }}">{{ 'Hito ' . $hito->numero_hito }}</option>
+
                             @endforeach
                         </select>
                     </div>
