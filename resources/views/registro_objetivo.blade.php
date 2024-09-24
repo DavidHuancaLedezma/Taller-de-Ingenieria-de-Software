@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link rel="stylesheet" href="css/actividad.css">
     <style>
         /* Estilos generales */
         body, html {
@@ -148,7 +148,7 @@
         }     
         .botones button{
             cursor: pointer;
-            background-color: transparent;
+            /*background-color: transparent;*/
             border: 2px solid #118CD9;
             width: fit-content;
             display: block;
@@ -158,22 +158,26 @@
             color: black;
             position: relative;
             z-index: 10;
+            border-radius: 8px; /* Bordes ligeramente curvados */
+            transition: background-color 0.5s, color 0.5s, border-color 0.5s;
         
         }
-        .botones button .overplay{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background-color: #367FA9;
-            color: white;
-            z-index: -1;
-            transition: 1s;
-        }
+   
         .botones button:hover .overplay{
             width: 100%;
           
+        }
+        .btn-aceptar:hover {
+            background-color: #118CD9;
+            color: white;
+            
+        }
+
+        /* Cambiar el color del texto y el fondo al pasar el mouse sobre el botón de Cancelar */
+        .btn-cancelar:hover {
+            background-color: darkred;
+            color: white;
+            border-color: darkred;
         }
 
     </style>
@@ -249,20 +253,21 @@
 
                 <!-- Botones de Aceptar y Cancelar -->
                 <div class="botones">
-                    <button type="submit">
+                    <button type="submit" class="btn-aceptar">
                         Aceptar <i class="bi bi-rocket-takeoff-fill"></i>
                         <span class="overplay"></span>
                     </button>
 
                     <!-- Cambia route() por url() si sigues teniendo problemas con route() -->
-                    <button type="button" onclick="window.location.href='{{ url('/') }}'">
+                    <button type="button"  class="btn-cancelar" onclick="window.location.href='{{ url('/') }}'">
                         Cancelar <i class="bi bi-x-circle-fill"></i>
                         <span class="overplay"></span>
                     </button>
                 </div>
                 <div class= acti_criAcep>
-                    <a href="#">Actividad <i class="bi bi-plus-circle"></i></a>
-                    <a href="#">Criterios de aceptación <i class="bi bi-plus-circle"></i></a>
+                <a href="#" id="add-activity">Actividad <i class="bi bi-plus-circle"></i></a>
+                <a href="#" id="add-criteria">Criterios de aceptación <i class="bi bi-plus-circle"></i></a>
+                </div>
                 </div>
                 <!-- Mostrar errores de validación -->
                 @if ($errors->any())
@@ -278,6 +283,147 @@
             </form>
         </div>
     </div>
+    
+   <!-- Formulario emergente -->
+<div id="popupForm" class="popup-form">
+    <div class="contenedor-mini-formulario">
+        <header class="header-mini-formulario">
+            <h1 class="h1-mini-formulario">Criterio de aceptación</h1>
+        </header>
+        <main class="main-mini-formulario">
+            <div class="form-group">
+                <label for="descripcionCriterio">Descripción</label>
+                <textarea name="descripcionCriterio" id="descripcionCriterio" cols="45" rows="4" class="form-control" placeholder="Descripción del criterio de aceptación"></textarea>
+                <span id="descripcionError" class="error-message"></span>
+            </div>
+        </main>
+        <footer class="footer-mini-formulario">
+            
+            <button id="boton-guardar-actividad" class="btn btn-info">Guardar</button>
+            <button class="btn btn-danger" id="cancelBtn">Cancelar</button>
+            
+        </footer>
+    </div>
+</div>
+
+<!-- Estilos CSS mejorados -->
+<style>
+    .popup-form {
+        display: none; /* Oculto por defecto */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .contenedor-mini-formulario {
+        background-color: #fff;
+        padding: 50px;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-mini-formulario {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .h1-mini-formulario {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    textarea.form-control {
+        width: 100%;
+        resize: none;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        display: none; /* Oculto por defecto */
+    }
+
+    .footer-mini-formulario {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .btn.btn-info {
+        background-color: #3F9BBF;
+        color: white;
+    }
+
+    .btn.btn-danger {
+        background-color: red;
+        color: white;
+    }
+</style>
+
+<!-- JavaScript para manejar la interacción del formulario -->
+<script>
+    // Obtener los elementos del DOM
+    const popupForm = document.getElementById('popupForm');
+    const addCriteriaBtn = document.getElementById('add-criteria');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const saveBtn = document.getElementById('boton-guardar-actividad');
+    const descripcionCriterio = document.getElementById('descripcionCriterio');
+    const descripcionError = document.getElementById('descripcionError');
+
+    // Mostrar el formulario emergente al hacer clic en "Criterios de aceptación"
+    addCriteriaBtn.addEventListener('click', function (e) {
+        e.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+        popupForm.style.display = 'flex';
+    });
+
+    // Cerrar el formulario emergente al hacer clic en "Cancelar"
+    cancelBtn.addEventListener('click', function () {
+        popupForm.style.display = 'none';
+    });
+
+    // Validar y guardar al hacer clic en "Guardar"
+    saveBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (descripcionCriterio.value.trim() === "") {
+            descripcionError.textContent = "La descripción es obligatoria.";
+            descripcionError.style.display = "block";
+        } else {
+            // Si la validación es correcta, ocultar el formulario
+            descripcionError.style.display = "none";
+            popupForm.style.display = 'none';
+            alert("Datos guardados correctamente"); // Aquí puedes agregar la lógica para guardar los datos
+        }
+    });
+
+    // También cerrar el modal si se hace clic fuera del formulario
+    window.addEventListener('click', function (e) {
+        if (e.target === popupForm) {
+            popupForm.style.display = 'none';
+        }
+    });
+</script>
+
 </body>
 
 </html>
