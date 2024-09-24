@@ -18,12 +18,13 @@ class GrupoEmpresaController extends Controller
 
     public function store(Request $request)
     {
+       
         // Validar los datos del formulario
         $validated = $request->validate([
             'nombre_largo' => 'required|string|max:60',
             'nombre_corto' => 'required|string|max:30',
             'direccion' => 'required|string|max:70',
-            'telefono' => 'nullable|string|max:15',
+            'telefono' => 'nullable|numeric',
             'correo' => 'required|string|email|max:70',
             'acepto_politica' => 'accepted',
             'acepto_terminos' => 'accepted',
@@ -38,9 +39,8 @@ class GrupoEmpresaController extends Controller
             'nombre_corto' => $validated['nombre_corto'],
             'direccion' => $validated['direccion'],
             'telefono_ge' => $validated['telefono'],
-            'correo_electronico_ge' => $validated['correo'],
-            'acepto_politica' => $request->has('acepto_politica'),
-            'acepto_terminos' => $request->has('acepto_terminos'),
+            'correo_eletronico_ge' => $validated['correo'],
+            
         ]);
         
 

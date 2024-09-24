@@ -14,12 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/grupo_empresa/registroGE');
 });
-
+use Illuminate\Support\Facades\DB;
+Route::get('/test-db', function () {
+    try {
+        $results = DB::select('SELECT version()');
+        return $results;
+    } catch (\Exception $e) {
+        return 'Error de conexión: ' . $e->getMessage();
+    }
+});
 use App\Http\Controllers\GrupoEmpresaController;
 
 Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'showForm']);
 Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'create'])->name('grupo_empresa.create');
-Route::post('/registro-grupo-empresa', [GrupoEmpresaController::class, 'store'])->name('grupo_empresa.store');
+Route::post('/registro-grupo-empresa/store', [GrupoEmpresaController::class, 'store'])->name('grupo_empresa.store');
 Route::get('/registro-grupo-empresa/success', [GrupoEmpresaController::class, 'success'])->name('grupo_empresa.success');

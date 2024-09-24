@@ -7,8 +7,8 @@ function RegistroGE() {
         nombre_largo: '',   
         nombre_corto: '',     
         direccion: '',     
-        telefono: '',       l
-        correo: '' 
+        telefono: '',       
+        correo: ''
     });
     
 
@@ -94,7 +94,7 @@ function RegistroGE() {
 
                 <div className="form-group mb-3">
                     <input
-                        type="text"
+                        type="tel"
                         name="telefono"
                         placeholder="Teléfono"
                         value={formData.telefono}
@@ -163,3 +163,4 @@ if (rootElement) {
     const root = createRoot(rootElement); // Aquí usamos createRoot
     root.render(<RegistroGE/>); // Renderiza el componente usando createRoot
 }
+

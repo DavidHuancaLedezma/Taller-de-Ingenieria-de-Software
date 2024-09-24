@@ -20,7 +20,7 @@ class GrupoEmpresa extends Model
     protected $keyType = 'int';
 
     // Indicar que las marcas de tiempo (created_at, updated_at) están activadas
-    public $timestamps = true;
+    public $timestamps = false;  // Desactivar timestamps
 
     // Definir los campos que se pueden asignar masivamente
     protected $fillable = [
@@ -28,7 +28,7 @@ class GrupoEmpresa extends Model
         'nombre_largo',
         'nombre_corto',
         'direccion',
-        'correo_electronico_ge',
+        'correo_eletronico_ge',
         'telefono_ge'
     ];
 }
