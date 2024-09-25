@@ -18,25 +18,54 @@ class ObjetivoController extends Controller
             // Pasamos los hitos a la vista de registro_objetivo.blade.php
         return view('registro_objetivo', compact('hitos'));
     }
+   /* public function create($id_proyecto)
+    {
+        // Validar que el proyecto exista
+        $proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+        if (!$proyecto) {
+            return redirect()->back()->withErrors('El proyecto no existe.');
+        }
+
+        // Obtener los hitos asociados al proyecto
+        $hitos = DB::select("
+            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+            FROM hito h
+            WHERE h.id_proyecto = ?", [$id_proyecto]);
+
+        // Pasar los hitos a la vista de registro_objetivo.blade.php
+        return view('registro_objetivo', compact('hitos', 'id_proyecto'));
+    }
+*/
         
     public function store(Request $request)
 {
-    $hito = Hito::find($request->input('hito'));
+   // dd($request->all());
+   // $hito = Hito::find($request->input('hito'));
     // Validar los datos del formulario
     $request->validate([
+        //'id_proyecto_ob' => 'required|integer|exists:proyecto,id_proyecto', 
         'objetivo' => 'required|string|max:255',
-        'hito' => 'required|exists:hito,id_hito', // Verifica que el hito exista
+        //'hito' => 'required|exists:hito,id_hito', // Verifica que el hito exista
+        //'id_proyecto' => 'required|exists:proyecto,id_proyecto',
+        'hito' => 'required|integer|exists:hito,id_hito',
+           
         'prioridad' => 'required|in:Alta,Media,Baja',
         'fecha_inicio' => 'required|date',
         'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
     ]);
-
+    
+    if (is_array($request->input('objetivo'))) {
+        return redirect()->back()->withErrors(['objetivo' => 'El objetivo no debe ser un array.']);
+    }
+    
        // Ejecutar la consulta para insertar el objetivo
        $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, prioridad, fecha_ini_objetivo, fecha_fin_objetivo) 
        VALUES (?, ?, ?, ?, ?, ?)", [
+            //$request->input('id_proyecto_ob'),
             $request->input('objetivo'),
             $request->input('hito'),
             1, // Valor por defecto para id_proyecto
+            
             $request->input('prioridad'),
             $request->input('fecha_inicio'),
             $request->input('fecha_fin'),

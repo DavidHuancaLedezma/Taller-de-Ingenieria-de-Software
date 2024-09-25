@@ -29,12 +29,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/*Route::get('/registro_objetivo', function () {
-    return view('registro_objetivo');
-});*/
 
 // Ruta para la vista de registro de objetivo (usando registro_objetivo.blade.php)
 Route::get('/registro_objetivo', [ObjetivoController::class, 'create'])->name('registro_objetivo');
+//Route::get('/registro_objetivo/{id_proyecto}', [ObjetivoController::class, 'create'])->name('registro_objetivo');
+
 
 // Ruta para almacenar el nuevo objetivo
 Route::post('/objetivo/store', [ObjetivoController::class, 'store'])->name('objetivo.store');

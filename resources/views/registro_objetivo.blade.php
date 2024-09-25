@@ -265,10 +265,6 @@
                         <span class="overplay"></span>
                     </button>
                 </div>
-                <div class= acti_criAcep>
-                <a href="#" id="add-activity">Actividad <i class="bi bi-plus-circle"></i></a>
-                <a href="#" id="add-criteria">Criterios de aceptación <i class="bi bi-plus-circle"></i></a>
-                </div>
                 </div>
                 <!-- Mostrar errores de validación -->
                 @if ($errors->any())
@@ -323,16 +319,16 @@
             // Validar la fecha de inicio del objetivo
             fechaInicioHandler = function () {
                 const fechaInicio = new Date(this.value);
-                const fechaActual = obtenerFechaActual();
+                //const fechaActual = obtenerFechaActual();
                 if (fechaInicio < hitoFechaInicio || fechaInicio > hitoFechaFin) {
                     alert('La fecha de inicio debe estar dentro del rango del hito seleccionado.');
                     this.value = ''; // Limpiar el campo si no es válido
                 }
                 // Validar si la fecha es actual 
-                else if (fechaInicio < fechaActual) {
+               /* else if (fechaInicio < fechaActual) {
                     alert('La fecha de inicio no puede ser una fecha anterior la actual');
                     this.value = ''; // Limpiar el campo si no es válido
-                }
+                }*/
             };
             fechaInicioInput.addEventListener('change', fechaInicioHandler);
 
@@ -352,146 +348,6 @@
         }
     });
 });
-</script>
-
-   <!-- Formulario emergente -->
-<div id="popupForm" class="popup-form">
-    <div class="contenedor-mini-formulario">
-        <header class="header-mini-formulario">
-            <h1 class="h1-mini-formulario">Criterio de aceptación</h1>
-        </header>
-        <main class="main-mini-formulario">
-            <div class="form-group">
-                <label for="descripcionCriterio">Descripción</label>
-                <textarea name="descripcionCriterio" id="descripcionCriterio" cols="45" rows="4" class="form-control" placeholder="Descripción del criterio de aceptación"></textarea>
-                <span id="descripcionError" class="error-message"></span>
-            </div>
-        </main>
-        <footer class="footer-mini-formulario">
-            
-            <button id="boton-guardar-actividad" class="btn btn-info">Guardar</button>
-            <button class="btn btn-danger" id="cancelBtn">Cancelar</button>
-            
-        </footer>
-    </div>
-</div>
-
-<!-- Estilos CSS mejorados -->
-<style>
-    .popup-form {
-        display: none; /* Oculto por defecto */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
-
-    .contenedor-mini-formulario {
-        background-color: #fff;
-        padding: 50px;
-        border-radius: 10px;
-        width: 400px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .header-mini-formulario {
-        text-align: center;
-        margin-bottom: 50px;
-    }
-
-    .h1-mini-formulario {
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    textarea.form-control {
-        width: 100%;
-        resize: none;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-
-    .error-message {
-        color: red;
-        font-size: 12px;
-        display: none; /* Oculto por defecto */
-    }
-
-    .footer-mini-formulario {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .btn {
-        padding: 10px 15px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-
-    .btn.btn-info {
-        background-color: #3F9BBF;
-        color: white;
-    }
-
-    .btn.btn-danger {
-        background-color: darkred;
-        color: white;
-    }
-</style>
-
-<!-- JavaScript para manejar la interacción del formulario -->
-<script>
-    // Obtener los elementos del DOM
-    const popupForm = document.getElementById('popupForm');
-    const addCriteriaBtn = document.getElementById('add-criteria');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const saveBtn = document.getElementById('boton-guardar-actividad');
-    const descripcionCriterio = document.getElementById('descripcionCriterio');
-    const descripcionError = document.getElementById('descripcionError');
-
-    // Mostrar el formulario emergente al hacer clic en "Criterios de aceptación"
-    addCriteriaBtn.addEventListener('click', function (e) {
-        e.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
-        popupForm.style.display = 'flex';
-    });
-
-    // Cerrar el formulario emergente al hacer clic en "Cancelar"
-    cancelBtn.addEventListener('click', function () {
-        popupForm.style.display = 'none';
-    });
-
-    // Validar y guardar al hacer clic en "Guardar"
-    saveBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (descripcionCriterio.value.trim() === "") {
-            descripcionError.textContent = "La descripción es obligatoria.";
-            descripcionError.style.display = "block";
-        } else {
-            // Si la validación es correcta, ocultar el formulario
-            descripcionError.style.display = "none";
-            popupForm.style.display = 'none';
-            alert("Datos guardados correctamente"); // Aquí puedes agregar la lógica para guardar los datos
-        }
-    });
-
-    // También cerrar el modal si se hace clic fuera del formulario
-    window.addEventListener('click', function (e) {
-        if (e.target === popupForm) {
-            popupForm.style.display = 'none';
-        }
-    });
 </script>
 
 </body>
