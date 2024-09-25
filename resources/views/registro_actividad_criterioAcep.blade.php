@@ -256,23 +256,28 @@
 
     <!-- Formulario emergente para Criterio de Aceptación -->
     <div id="popupCriteriaForm" class="popup-form">
-        <div class="contenedor-mini-formulario">
-            <header class="header-mini-formulario">
-                <h1 class="h1-mini-formulario">Criterio de aceptación</h1>
-            </header>
-            <main class="main-mini-formulario">
+    <div class="contenedor-mini-formulario">
+        <header class="header-mini-formulario">
+            <h1 class="h1-mini-formulario">Criterio de aceptación</h1>
+        </header>
+        <main class="main-mini-formulario">
+        <form action="{{ route('criterio_aceptacion.store') }}" method="POST">
+                @csrf <!-- Incluye el token CSRF -->
+                <input type="hidden" name="objetivo_id" value="{{ $objetivo->id_objetivo }}">
                 <div class="form-group">
                     <label for="descripcionCriterio">Descripción</label>
                     <textarea name="descripcionCriterio" id="descripcionCriterio" cols="45" rows="4" class="form-control" placeholder="Descripción del criterio de aceptación"></textarea>
                     <span id="descripcionError" class="error-message"></span>
                 </div>
+                <footer class="footer-mini-formulario">
+                    <button type="submit" class="btn btn-info">Guardar</button>
+                    <button type="button" class="btn btn-danger" id="cancelCriteria">Cancelar</button>
+                 </footer>
+        </form>
             </main>
-            <footer class="footer-mini-formulario">
-                <button id="boton-guardar-criterio" class="btn btn-info">Guardar</button>
-                <button class="btn btn-danger" id="cancelCriteria">Cancelar</button>
-            </footer>
         </div>
     </div>
+
     
     <!-- Formulario emergente para Actividad -->
     <div id="popupActivityForm" class="popup-form">
@@ -349,21 +354,6 @@
         // Cerrar formulario de Actividad
         cancelActivityBtn.addEventListener('click', function () {
             popupActivityForm.style.display = 'none'; // Ocultar el formulario
-        });
-
-        // Guardar Criterio de Aceptación
-        botonGuardarCriterio.addEventListener('click', function () {
-            const descripcion = descripcionCriterio.value.trim();
-            if (descripcion === '') {
-                descripcionError.textContent = 'La descripción no puede estar vacía';
-                descripcionError.style.display = 'block';
-            } else {
-                descripcionError.style.display = 'none';
-                // Aquí puedes agregar el código para enviar el formulario o realizar otra acción
-                Swal.fire('Criterio de aceptación guardado correctamente');
-                popupCriteriaForm.style.display = 'none'; // Ocultar el formulario
-                descripcionCriterio.value = ''; // Limpiar el campo
-            }
         });
     </script>
 </body>
