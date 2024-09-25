@@ -53,8 +53,42 @@ class ObjetivoController extends Controller
 
     public function registroActividadCriterio($id_objetivo)
     {
-        $objetivo = Objetivo::findOrFail($id_objetivo);
-        return view('registro_actividad_criterioAcep', compact('objetivo'));
+        // Obtener el objetivo junto con su descripción
+        $objetivo = DB::table('objetivo')
+                    ->select('id_objetivo', 'descrip_objetivo') // Seleccionar ambos campos
+                    ->where('id_objetivo', $id_objetivo)
+                    ->first(); // Obtiene el primer resultado como un objeto
+
+         // Asegurarse de que el objetivo existe
+         if (!$objetivo) {
+            return redirect()->back()->withErrors('El objetivo no existe.');
+        }
+
+        // Implementación de la consulta solicitada con el constructor de consultas de Laravel
+        $estudiantes = DB::table('estudiante')
+                        ->join(DB::raw('(select eg.id_usuario
+                                        from estudiante_grupoempresa eg
+                                        join (
+                                            select id_grupo_empresa
+                                            from proyecto
+                                            join (
+                                                select id_proyecto
+                                                from objetivo
+                                                where objetivo.id_objetivo = ?
+                                            ) e on proyecto.id_proyecto = e.id_proyecto
+                                        ) b on eg.id_grupo_empresa = b.id_grupo_empresa) a'), 'a.id_usuario', '=', 'estudiante.id_usuario')
+                        ->select('estudiante.id_usuario', 'estudiante.nombre_estudiante')
+                        ->setBindings([$id_objetivo]) // Pasar el valor de $id_objetivo al query
+                        ->get();
+
+        // Si no hay estudiantes, podríamos manejarlo con un mensaje
+        if ($estudiantes->isEmpty()) {
+            return redirect()->back()->withErrors('No hay estudiantes relacionados con este objetivo.');
+        }
+
+        return view('registro_actividad_criterioAcep', compact('objetivo', 'estudiantes'));
+
+        //return view('registro_actividad_criterioAcep', compact('objetivo'));
     }
 
 }
