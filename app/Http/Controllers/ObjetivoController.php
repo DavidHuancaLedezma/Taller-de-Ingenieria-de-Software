@@ -81,12 +81,27 @@ class ObjetivoController extends Controller
                         ->setBindings([$id_objetivo]) // Pasar el valor de $id_objetivo al query
                         ->get();
 
+                
+            // Obtener las actividades relacionadas con el objetivo
+        $actividades = DB::table('actividad')
+            ->where('id_objetivo', $id_objetivo)
+            ->select('descripcion_actividad', 'id_usuario')
+            ->get();
+
+        // Obtener los criterios de aceptación relacionados con el objetivo
+        $criterios_aceptacion = DB::table('criterio_aceptacion')
+                    ->where('id_objetivo', $id_objetivo)
+                    ->select('descripcion_ca')
+                    ->get();
+
         // Si no hay estudiantes, podríamos manejarlo con un mensaje
         if ($estudiantes->isEmpty()) {
-            return redirect()->back()->withErrors('No hay estudiantes relacionados con este objetivo.');
+        return redirect()->back()->withErrors('No hay estudiantes relacionados con este objetivo.');
         }
 
-        return view('registro_actividad_criterioAcep', compact('objetivo', 'estudiantes'));
+        // Pasar las actividades, criterios de aceptación y estudiantes a la vista
+        return view('registro_actividad_criterioAcep', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
+
 
         //return view('registro_actividad_criterioAcep', compact('objetivo'));
     }

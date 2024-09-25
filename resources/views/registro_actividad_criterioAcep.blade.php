@@ -211,6 +211,15 @@
             background-color: darkred;
             color: white;
         }
+        .lista-actividades li, .lista-criterios li {
+            font-size: 0.7em; /* Ajusta el tamaño de la fuente, por ejemplo, 90% del tamaño normal */
+            line-height: 1.2em; /* Ajusta el espaciado entre las líneas para que se vea más compacto */
+        }
+
+        .lista-actividades strong, .lista-criterios strong {
+            font-size: 1em; /* Mantener el texto en negrita ligeramente más grande */
+        }
+
     </style>
 </head>
 <body>
@@ -223,8 +232,43 @@
             <!-- Subtítulos -->
             <div class="subtitles">
                 <a href="#" id="add-activity">Actividad <i class="bi bi-plus-circle"></i></a>
+                   <!-- Mostrar actividades -->
+                    <div class="actividades">
+                        @if($actividades->isNotEmpty())
+                            <ul class="lista-actividades">
+                                @foreach($actividades as $actividad)
+                                    <li>
+                                        <strong>Descripción:</strong> {{ $actividad->descripcion_actividad }}<br>
+                                        <strong>Estudiante responsable:</strong> 
+                                        @php
+                                            $estudiante = $estudiantes->firstWhere('id_usuario', $actividad->id_usuario);
+                                        @endphp
+                                        {{ $estudiante ? $estudiante->nombre_estudiante : 'No asignado' }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p>No hay actividades registradas para este objetivo.</p>
+                        @endif
+                    </div>
                 <a href="#" id="add-criteria">Criterio de Aceptación <i class="bi bi-plus-circle"></i></a>
+                <!-- Mostrar criterios de aceptación -->
+                <div class="criterios-aceptacion">
+                    @if($criterios_aceptacion->isNotEmpty())
+                        <ul class="lista-criterios">
+                            @foreach($criterios_aceptacion as $criterio)
+                                <li>
+                                    <strong>Descripción:</strong> {{ $criterio->descripcion_ca }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>No hay criterios de aceptación registrados para este objetivo.</p>
+                    @endif
+                </div>
+
             </div>
+
             <div class="botones">
                 <button type="button"  class="btn-aceptar" onclick="window.location.href='{{ url('/') }}'">
                     Aceptar <i class="bi bi-check-circle-fill"></i>
