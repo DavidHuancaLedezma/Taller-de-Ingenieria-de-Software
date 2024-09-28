@@ -40,7 +40,8 @@ Route::post('/objetivo/store', [ObjetivoController::class, 'store'])->name('obje
 
 
 
-Route::get('/registro_actividad_criterioAcep/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
+//Route::get('/registro_actividad_criterioAcep/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
+Route::get('/actividad_criterioAceptacion/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
 
 // Ruta para añadir actividad
 Route::post('/actividad/store', [ActividadController::class, 'store'])->name('actividad.store');

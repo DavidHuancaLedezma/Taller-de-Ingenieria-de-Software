@@ -114,7 +114,7 @@ class ObjetivoController extends Controller
             // Obtener las actividades relacionadas con el objetivo
         $actividades = DB::table('actividad')
             ->where('id_objetivo', $id_objetivo)
-            ->select('descripcion_actividad', 'id_usuario')
+            ->select('descripcion_actividad', 'resultado', 'id_usuario')
             ->get();
 
         // Obtener los criterios de aceptación relacionados con el objetivo
@@ -129,10 +129,12 @@ class ObjetivoController extends Controller
         }
 
         // Pasar las actividades, criterios de aceptación y estudiantes a la vista
-        return view('registro_actividad_criterioAcep', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
+        return view('actividad_criterioAceptacion', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
+        //return view('registro_actividad_criterioAcep', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
 
 
-        //return view('registro_actividad_criterioAcep', compact('objetivo'));
+
+        //return view('actividad_criterioAceptacion', compact('objetivo'));
     }
 
 }
