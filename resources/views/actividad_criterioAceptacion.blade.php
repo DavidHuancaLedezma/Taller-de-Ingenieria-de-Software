@@ -46,8 +46,8 @@
 
         .tab-button {
            /* background-color: #cbe3f4;*/
-           background-color: #daedfa;
-            color: black;
+           background-color: #4682b4;
+            color: white;
             /*border: none;*/
            
             border: 2px solid #118CD9;
@@ -59,7 +59,7 @@
             transition: background-color 0.5s, color 0.5s, border-color 0.5s;
         }
         .tab-button:hover{
-            background-color: #4682b4;
+            background-color: #222D32;
             color: white;
         }
 

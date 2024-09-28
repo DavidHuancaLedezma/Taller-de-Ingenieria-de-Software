@@ -25,7 +25,7 @@
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            filter: blur(5px); /* Ajusta el valor del blur según tu preferencia */
+            filter: blur(5px);  /*Ajusta el valor del blur según tu preferencia */
             position: absolute;
             top: 0;
             left: 0;
@@ -38,7 +38,7 @@
         .content {
             position: relative;
             z-index: 1;
-            text-align: center;
+           text-align: center;
             top: 40%;
             transform: translateY(-50%);
             color: black;
@@ -60,8 +60,9 @@
         .container h1, .container p {
             margin: 0 100 10px;
             padding: 0;
+    
         }
-
+        
         /* Estilos específicos para los inputs */
         input[type="text"],select, input[type="date"] {
             background-color: rgba(150, 150, 150, 0.3); /* Color plomo más suave */
@@ -74,6 +75,8 @@
             margin-bottom: 10px;
             width: calc(100%); /* Ajusta el ancho considerando el padding */
             box-sizing: border-box; /* Asegura que el padding no se agregue al tamaño total del input */
+            border-left: 5px solid #4682b4; /* Borde izquierdo más grueso */
+            padding-left: 10px; /* Añade espacio interior para que el texto no quede pegado al borde */
             
         }
         .select_priori_group{
@@ -92,13 +95,18 @@
             height: 40px;
         }
 
-
+        .input[type="text"]{
+            height: 70px;
+        }
         input[type="date"] {
             color:rgba(80,80,80);
             width: calc(95% - 8px); /* Ajusta el ancho de los campos de fecha */
             margin-right: 2%;
         }
-
+        
+        #fecha-inicio-group {
+            margin-left: -50px; /* Ajusta este valor según lo que necesites */
+        }
         /* Estilo para las etiquetas de radio */
         .radio-group {
             display: flex;
@@ -187,7 +195,7 @@
     <div class="background"></div>
     <div class="content">
         <div class="container">
-            <h1>Registro de Planificación</h1>
+            <h1>Registro de Objetivo</h1>
           <!-- caja de Exito -->
             @if(session('success'))
                 <script>
@@ -242,9 +250,9 @@
 
                 <!-- Fecha de inicio y fin -->
                 <div class="date-group">
-                    <div>
+                    <div id="fecha-inicio-group">
                         <h5>Fecha Inicio</h5>
-                        <input type="date" name="fecha_inicio" value="{{ old('fecha_inicio') }}" required>
+                        <input type="date"  id="fecha_inicio" name="fecha_inicio" value="{{ old('fecha_inicio') }}" required>
                     </div>
                     <div>
                         <h5>Fecha Fin</h5>
@@ -255,7 +263,7 @@
                 <!-- Botones de Aceptar y Cancelar -->
                 <div class="botones">
                     <button type="submit" class="btn-aceptar">
-                        Aceptar <i class="bi bi-rocket-takeoff-fill"></i>
+                        Registrar <i class="bi bi-rocket-takeoff-fill"></i>
                         <span class="overplay"></span>
                     </button>
 
