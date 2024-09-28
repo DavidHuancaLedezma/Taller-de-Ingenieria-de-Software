@@ -14,10 +14,8 @@
         body, html {
             height: 100%;
         }
+
         .card {
-            width: 50%;
-            margin: auto;
-            margin-top: 5cm;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             background-color: white;
@@ -29,6 +27,7 @@
             align-items: center;
             height: 100vh;
             background: #D2D6DE;
+            padding: 20px;
         }
 
         .btn-custom {
@@ -46,7 +45,7 @@
 <body>
 
     <div class="my-container">
-        <div class="card">
+        <div class="card col-12 col-md-8 col-lg-6">
             <h2 class="mb-4 text-center text-primary">Registrar Grupo Empresa</h2>
 
             <form method="POST" action="{{ route('grupo_empresa.store') }}">
