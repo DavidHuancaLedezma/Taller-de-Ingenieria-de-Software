@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\DB;
 class ObjetivoController extends Controller
 {
         // Mostrar el formulario de creación de objetivos
-    public function create()
+   /* public function create()
     {
             // Obtener todos los hitos desde la base de datos para el desplegable
         $hitos = DB::select("SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito FROM hito h, proyecto pr WHERE h.id_proyecto = pr.id_proyecto AND pr.id_proyecto = 1");
         
             // Pasamos los hitos a la vista de registro_objetivo.blade.php
         return view('registro_objetivo', compact('hitos'));
-    }
-   /* public function create($id_proyecto)
+    }*/
+    public function create($id_proyecto)
     {
         // Validar que el proyecto exista
         $proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
@@ -35,7 +35,7 @@ class ObjetivoController extends Controller
         // Pasar los hitos a la vista de registro_objetivo.blade.php
         return view('registro_objetivo', compact('hitos', 'id_proyecto'));
     }
-*/
+
         
     public function store(Request $request)
 {
@@ -74,9 +74,10 @@ class ObjetivoController extends Controller
 
     // Verificar si la inserción fue exitosa
     if ($inserted) {
-        return redirect()->route('registro_objetivo')->with('success', 'Objetivo registrado correctamente.');
+        //return redirect()->route('registro_objetivo')->with('success', 'Objetivo registrado correctamente.');
+        return redirect()->back()->with('success', 'Objetivo registrado correctamente');
     } else {
-        return redirect()->route('registro_objetivo')->with('error', 'Error al registrar el objetivo.');
+        return redirect()->back()->with('error', 'Error al registrar el objetivo.');
     }
 }
 
@@ -130,9 +131,6 @@ class ObjetivoController extends Controller
 
         // Pasar las actividades, criterios de aceptación y estudiantes a la vista
         return view('actividad_criterioAceptacion', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
-        //return view('registro_actividad_criterioAcep', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
-
-
 
         //return view('actividad_criterioAceptacion', compact('objetivo'));
     }

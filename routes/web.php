@@ -31,16 +31,14 @@ Route::get('/', function () {
 
 
 // Ruta para la vista de registro de objetivo (usando registro_objetivo.blade.php)
-Route::get('/registro_objetivo', [ObjetivoController::class, 'create'])->name('registro_objetivo');
-//Route::get('/registro_objetivo/{id_proyecto}', [ObjetivoController::class, 'create'])->name('registro_objetivo');
+//Route::get('/registro_objetivo', [ObjetivoController::class, 'create'])->name('registro_objetivo');
+Route::get('/registro_objetivo/{id_proyecto}', [ObjetivoController::class, 'create'])->name('registro_objetivo');
 
 
 // Ruta para almacenar el nuevo objetivo
 Route::post('/objetivo/store', [ObjetivoController::class, 'store'])->name('objetivo.store');
 
-
-
-//Route::get('/registro_actividad_criterioAcep/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
+//Ruta para la visualizacion de añadir actividad y criterio de aceptación
 Route::get('/actividad_criterioAceptacion/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
 
 // Ruta para añadir actividad
