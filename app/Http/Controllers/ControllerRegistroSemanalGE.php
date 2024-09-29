@@ -15,6 +15,7 @@ class ControllerRegistroSemanalGE extends Controller
     {
         // 6 y 7 test
         try {
+            //Todo funciona unicamente con el id de un hito
             $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
             $objetivos = self::getObjetivos($idHito);
             $nombreEstudiante = self::getEstudiantes($idHito);
@@ -27,7 +28,7 @@ class ControllerRegistroSemanalGE extends Controller
 
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'nombreEstudiante' => $nombreEstudiante, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito]);
         } catch (\Exception $e) {
-            return "ID DE HITO NO VALIDO";
+            return "ERROR 404";
         }
     }
     public function registrarSeguimiento(Request $request)

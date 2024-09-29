@@ -2,11 +2,9 @@
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ControllerTablaPlanificacion;
-use App\Http\Controllers\ControllerSeguimientoSemanal;
-use App\Http\Controllers\ControllerObjetivos;
 
 use App\Http\Controllers\ControllerRegistroSemanalGE;
+use App\Http\Controllers\ControllerVisualizarPlanillaDePlanificacion;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +17,8 @@ use App\Http\Controllers\ControllerRegistroSemanalGE;
 |
 */
 //-------------------------------------------------------------------------------------------------------------
-Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+Route::get('/cargar_registro_semanal/{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
 Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
+//-------------------------------------------------------------------------------------------------------------
+Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
 //-------------------------------------------------------------------------------------------------------------
