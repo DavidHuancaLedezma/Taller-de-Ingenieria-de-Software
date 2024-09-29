@@ -14,22 +14,23 @@ class ControllerRegistroSemanalGE extends Controller
     public function cargarRegistroSemanal($parametroHito)
     {
         // 6 y 7 test
-        try {
-            //Todo funciona unicamente con el id de un hito
-            $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
-            $objetivos = self::getObjetivos($idHito);
-            $nombreEstudiante = self::getEstudiantes($idHito);
-            $semanas = self::getSemanasDivididas($idHito);
+        //try {
+        //Todo funciona unicamente con el id de un hito
+        $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
+        $objetivos = self::getObjetivos($idHito);
+        $nombreEstudiante = self::getEstudiantes($idHito);
+        $estudianteEnAlerta = self::getEstudiantesConFaltas($nombreEstudiante);
+        $semanas = self::getSemanasDivididas($idHito);
 
-            $enProgreso = self::getSemanaActual($semanas, $idHito);
-            $numeroColor = self::numeroColoreado($semanas, $idHito);
-            $nombreCorto = self::getNombreEmpresa($idHito);
-            $numeroDeHito = self::getNumeroDeHito($idHito);
+        $enProgreso = self::getSemanaActual($semanas, $idHito);
+        $numeroColor = self::numeroColoreado($semanas, $idHito);
+        $nombreCorto = self::getNombreEmpresa($idHito);
+        $numeroDeHito = self::getNumeroDeHito($idHito);
 
-            return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'nombreEstudiante' => $nombreEstudiante, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito]);
-        } catch (\Exception $e) {
-            return "ERROR 404";
-        }
+        return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito]);
+        //} catch (\Exception $e) {
+        //    return "ERROR 404";
+        //}
     }
     public function registrarSeguimiento(Request $request)
     {
@@ -46,15 +47,15 @@ class ControllerRegistroSemanalGE extends Controller
             $registrado = self::verificarSemanaRegistrada($idHito, $verificarSemana);
             if ($registrado == false) {
                 self::registrarSeguimientoDB($idHito, $descripcion, $asistencias, $faltas, $verificarSemana[0], $verificarSemana[1]);
-                $respuesta = "Registro exitoso en la semana: " . $verificarSemana[0] . " al " . $verificarSemana[1];
+                $respuesta = "Registro semanal guardado en fecha: " . $verificarSemana[0] . " al " . $verificarSemana[1] . "1";
             } else {
-                $respuesta = "Error la semana " . $verificarSemana[0] . " al " . $verificarSemana[1] . " ya fue registrada";
+                $respuesta = "La semana en fecha: " . $verificarSemana[0] . " al " . $verificarSemana[1] . " ya fue registrada2";
             }
         } else {
             if ($verificarSemana[0] == "Hito no iniciado") {
-                $respuesta = "El hito no inicio, por lo cual no puede registrar el seguimiento";
+                $respuesta = "El hito no inicio, por lo cual no puede registrar el seguimiento2";
             } else {
-                $respuesta = "El hito finalizo, no es posible hacer el registro del seguimiento";
+                $respuesta = "El hito finalizo, no es posible hacer el registro del seguimiento2";
             }
         }
         //fin del codigo
@@ -267,5 +268,24 @@ class ControllerRegistroSemanalGE extends Controller
         AND pr.id_proyecto = h.id_proyecto
         AND h.id_hito = ?", array($idHito));
         return $consulta;
+    }
+
+    private static function getEstudiantesConFaltas($estudiante)
+    {
+        $estudianteAsistencias = [];
+        foreach ($estudiante as $est) {
+            $consulta = DB::select("SELECT count(asistio) as numero_de_faltas, asistio FROM asistencia 
+            WHERE id_usuario = ?
+            AND asistio = FALSE
+            GROUP BY asistio", array($est->id_usuario));
+
+
+            if (count($consulta) > 0) {
+                $estudianteAsistencias[] = array($est->nombre_completo, $consulta[0]->numero_de_faltas, $est->id_usuario);
+            } else {
+                $estudianteAsistencias[] = array($est->nombre_completo, 0, $est->id_usuario);
+            }
+        }
+        return $estudianteAsistencias;
     }
 }

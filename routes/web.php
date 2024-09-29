@@ -17,7 +17,7 @@ use App\Http\Controllers\ControllerVisualizarPlanillaDePlanificacion;
 |
 */
 //-------------------------------------------------------------------------------------------------------------
-Route::get('/cargar_registro_semanal/{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
 Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
 //-------------------------------------------------------------------------------------------------------------
 Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);

@@ -188,10 +188,18 @@
                 <table class="control-de-asistencia">
                     <tbody>
 
-                        @foreach ($nombreEstudiante as $estudiante)
+                        @foreach ($estudianteEnAlerta as $estudiante)
                             <tr>
-                                <td>{{$estudiante->nombre_completo}}</td>
-                                <td><input name="asistencia[]" value="{{$estudiante->id_usuario}}" type="checkbox" class="asistencia" checked></td>
+                                
+                                @if ($estudiante[1] >= 3)
+                                    <td style="color:red">{{$estudiante[0]}}</td>
+                                @else
+                                    <td>{{$estudiante[0]}}</td>
+                                @endif
+
+
+
+                                <td><input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" checked></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -210,6 +218,8 @@
 
     </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     const guardarBtn = document.getElementById('boton-guardar-seguimiento-semanal');
     const areaTextoDescripcion = document.getElementById('descripcion');
@@ -294,11 +304,33 @@
                     verificarSemana: arrayDeSemanas
                 }
                 }).done(function(res){
-                    alert(res); // mensaje sobre el registro
+                    
+                    let mensaje = JSON.parse(res);
+                    let tipoMensaje = mensaje[mensaje.length - 1];
+                    mensaje = mensaje.substring(0, mensaje.length - 1);
+
+                    if(tipoMensaje === "2"){
+                        //Mensaje de error
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: mensaje
+                        });
+                    }else{
+                        //Mensaje de exito
+                        Swal.fire({
+                            title: "Exito",
+                            text: mensaje,
+                            icon: "success"
+                        });
+
+                    }
+                    
+
+
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     console.error('Error en la solicitud:', textStatus, errorThrown);
                     console.error('Detalles del error:', jqXHR.responseText);
-                    alert('Error: ' + jqXHR.responseText); // muestra el mensaje de error del servidor
                 });
                 $('#descripcion').val('');
                 
