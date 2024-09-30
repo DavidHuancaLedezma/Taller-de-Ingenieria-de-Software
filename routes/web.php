@@ -29,3 +29,4 @@ Route::get('/', function () {
 
 Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHitos'])->name('proyecto.hitos');
 
+Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
