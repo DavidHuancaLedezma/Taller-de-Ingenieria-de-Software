@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ControllerTablaPlanificacion;
 use App\Http\Controllers\ControllerSeguimientoSemanal;
+use App\Http\Controllers\HitoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 */
+
+Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHitos'])->name('proyecto.hitos');
+
