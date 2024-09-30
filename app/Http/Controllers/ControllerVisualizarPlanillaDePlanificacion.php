@@ -45,7 +45,7 @@ class ControllerVisualizarPlanillaDePlanificacion extends Controller
     private static function getDetalleDePlanilla($idProyecto)
     {
         //capturar el porcentaje de cobro de la base de datos
-        $consulta = DB::select("SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, ('20') as porcentaje_cobro  
+        $consulta = DB::select("SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, h.porcentaje_cobro  
         FROM proyecto pr, hito h
         WHERE pr.id_proyecto = h.id_proyecto
         AND h.id_proyecto = ?", array($idProyecto));
