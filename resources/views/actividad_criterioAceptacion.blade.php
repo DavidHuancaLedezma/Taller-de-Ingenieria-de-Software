@@ -34,10 +34,17 @@
             color: white;
             background-color: #4682b4;
             padding: 20px;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+        }
+        .header h2 {
+            text-align: left;
+            color: white;
+            background-color: #4682b4;
+            padding: 10px;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
-
         .tabs {
             display: flex;
             justify-content: space-between;
@@ -192,8 +199,18 @@
 <body>
     <div class="container">
         <div class="header">
+            <h2>Objetivo:</h2>
             <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
         </div>
+        @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: "{{ session('success') }}",
+            });
+        </script>
+        @endif
         <div class="tabs">
             <button id="add-activity" class="tab-button">Actividades +</button>
            
@@ -257,12 +274,12 @@
                     <input type="hidden" name="objetivo_id" value="{{ $objetivo->id_objetivo }}">
                     <div class="form-group">
                         <label for="descripcionActividad">Descripción de la Actividad</label>
-                        <textarea name="descripcion" id="descripcionActividad" class="form-control" placeholder="Descripción de la actividad"></textarea>
+                        <textarea name="descripcion" id="descripcionActividad" class="form-control" placeholder="Descripción de la actividad" required></textarea>
                         <span id="descripcionActividadError" class="error-message"></span>
                     </div>
                     <div class="form-group">
                         <label for="resultadoEsperado">Resultado Esperado</label>
-                        <textarea name="resultado" id="resultadoEsperado" class="form-control" placeholder="Resultado esperado"></textarea>
+                        <textarea name="resultado" id="resultadoEsperado" class="form-control" placeholder="Resultado esperado" required></textarea>
                         <span id="resultadoEsperadoError" class="error-message"></span>
                     </div>
                     <div class="form-group">
@@ -280,8 +297,8 @@
                         <span id="estudianteError" class="error-message"></span>
                     </div>
                     <footer class="footer-mini-formulario">
-                        <button type="submit" class="btn btn-info">Guardar</button>
-                        <button type="button" class="btn btn-danger" id="cancelActivity">Cancelar</button>
+                        <button type="submit" class="btn btn-info">Añadir <i class="bi bi-rocket-takeoff-fill"></i></button>
+                        <button type="button" class="btn btn-danger" id="cancelActivity">Cancelar <i class="bi bi-x-circle-fill"></i></button>
                     </footer>
                 </form>
             </main>
@@ -304,8 +321,8 @@
                         <span id="descripcionCriterioError" class="error-message"></span>
                     </div>
                     <footer class="footer-mini-formulario">
-                        <button type="submit" class="btn btn-info">Guardar</button>
-                        <button type="button" class="btn btn-danger" id="cancelCriteria">Cancelar</button>
+                        <button type="submit" class="btn btn-info">Añadir <i class="bi bi-rocket-takeoff-fill"></i></button>
+                        <button type="button" class="btn btn-danger" id="cancelCriteria">Cancelar <i class="bi bi-x-circle-fill"></i></button>
                     </footer>
                 </form>
             </main>
@@ -313,11 +330,11 @@
     </div>
 
     <script>
-        // Obtener elementos del DOM
+    // Obtener elementos del DOM
         const popupActivityForm = document.getElementById('popupActivityForm');
         const addActivityBtn = document.getElementById('add-activity');
         const cancelActivityBtn = document.getElementById('cancelActivity');
-        //const activityForm = document.getElementById('activityForm');
+        const activityForm = document.getElementById('activityForm');
 
         const popupCriteriaForm = document.getElementById('popupCriteriaForm');
         const addCriteriaBtn = document.getElementById('add-criteria');
@@ -329,8 +346,6 @@
             e.preventDefault(); // Prevenir la acción por defecto
             popupActivityForm.style.display = 'flex'; // Mostrar el formulario
         });
-
-
 
         // Cerrar formulario de Actividad
         cancelActivityBtn.addEventListener('click', function () {
@@ -359,12 +374,18 @@
             if (descripcion === '') {
                 document.getElementById('descripcionActividadError').textContent = 'La descripción de la actividad es obligatoria.';
                 isValid = false;
+            } else if (descripcion.length < 20) {
+                document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 20 caracteres.';
+                isValid = false;
             } else {
                 document.getElementById('descripcionActividadError').textContent = '';
             }
 
             if (resultado === '') {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado es obligatorio.';
+                isValid = false;
+            } else if (resultado.length < 20) {
+                document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 20 caracteres.';
                 isValid = false;
             } else {
                 document.getElementById('resultadoEsperadoError').textContent = '';
@@ -382,6 +403,19 @@
             }
         });
 
+        // Eliminar el mensaje de error al hacer clic en el campo
+        document.getElementById('descripcionActividad').addEventListener('focus', function () {
+            document.getElementById('descripcionActividadError').textContent = '';
+        });
+
+        document.getElementById('resultadoEsperado').addEventListener('focus', function () {
+            document.getElementById('resultadoEsperadoError').textContent = '';
+        });
+
+        document.getElementById('estudiante').addEventListener('focus', function () {
+            document.getElementById('estudianteError').textContent = '';
+        });
+
         // Validar el formulario de Criterio de Aceptación antes de enviar
         criteriaForm.addEventListener('submit', function (e) {
             let isValid = true;
@@ -391,6 +425,9 @@
             if (descripcionCriterio === '') {
                 document.getElementById('descripcionCriterioError').textContent = 'La descripción del criterio de aceptación es obligatoria.';
                 isValid = false;
+            } else if (descripcionCriterio.length < 20) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción debe tener más de 20 caracteres.';
+                isValid = false;
             } else {
                 document.getElementById('descripcionCriterioError').textContent = '';
             }
@@ -399,8 +436,14 @@
                 e.preventDefault(); // Prevenir el envío del formulario si hay errores
             }
         });
+
+        // Eliminar el mensaje de error al hacer clic en el campo
+        document.getElementById('descripcionCriterio').addEventListener('focus', function () {
+            document.getElementById('descripcionCriterioError').textContent = '';
+        });
     </script>
-</body>
+
+ </body>
 
 
 </html>
