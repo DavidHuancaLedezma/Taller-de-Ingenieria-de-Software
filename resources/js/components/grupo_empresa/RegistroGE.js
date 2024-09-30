@@ -26,12 +26,33 @@ function RegistroGE() {
     const validateForm = () => {
         const { nombreLargo, nombreCorto, representante, direccion, telefono, correo } = formData;
         const newErrors = {};
+        // Expresión regular para validar que el teléfono solo contenga números
+    const soloNumerosRegex = /^[0-9]+$/;
+    const tieneLetrasRegex = /[a-zA-Z]/;
 
-        if (!nombreLargo.trim()) newErrors.nombreLargo = "El nombre largo es obligatorio.";
-        if (!nombreCorto.trim()) newErrors.nombreCorto = "El nombre corto es obligatorio.";
+        // Validaciones para nombreLargo
+    if (!nombreLargo.trim()) {
+        newErrors.nombreLargo = "El nombre largo es obligatorio.";
+    } else if (!tieneLetrasRegex.test(nombreLargo)) {
+        newErrors.nombreLargo = "El nombre largo debe contener al menos una letra.";
+    }
+
+    // Validaciones para nombreCorto
+    if (!nombreCorto.trim()) {
+        newErrors.nombreCorto = "El nombre corto es obligatorio.";
+    } else if (!tieneLetrasRegex.test(nombreCorto)) {
+        newErrors.nombreCorto = "El nombre corto debe contener al menos una letra.";
+    }
+    if (!telefono.trim()) {
+        newErrors.telefono = "El teléfono es obligatorio.";
+    } else if (!soloNumerosRegex.test(telefono)) {
+        newErrors.telefono = "El teléfono solo debe contener números.";
+    }
+
+       
         if (!representante.trim()) newErrors.representante = "El representante legal es obligatorio.";
         if (!direccion.trim()) newErrors.direccion = "La dirección es obligatoria.";
-        if (!telefono.trim()) newErrors.telefono = "El teléfono es obligatorio.";
+        
         if (!correo.trim()) newErrors.correo = "El correo es obligatorio.";
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) newErrors.correo = "El correo no es válido.";
         setErrors(newErrors);
@@ -74,6 +95,7 @@ function RegistroGE() {
                         value={formData.nombreLargo}
                         onChange={handleChange}
                         className={`form-control ${errors.nombreLargo ? 'is-invalid' : ''}`}
+                        
                         required
                     />
                     {errors.nombreLargo && <div className="invalid-feedback">{errors.nombreLargo}</div>}
@@ -154,7 +176,11 @@ function RegistroGE() {
         </div>
     );
 }
-
+function soloLetrasYEspacios(event) {
+    const input = event.target;
+    // Expresión regular que solo permite letras y espacios
+    input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+}
 export default RegistroGE;
 
 // Montar el componente usando createRoot en lugar de render
