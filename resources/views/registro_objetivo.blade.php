@@ -56,13 +56,22 @@
             box-sizing: border-box; /* Asegura que el padding no se agregue al tamaño total del contenedor */
             text-align: left; /* Alinea el contenido a la izquierda */
         }
-
-        .container h1, .container p {
-            margin: 0 100 10px;
-            padding: 0;
-    
-        }
         
+       /* Estilos para la cabecera completa */
+        .header {
+            background-color: #4682b4; /* Color de fondo para toda la parte superior */
+            padding: 30px; /* Espaciado alrededor del contenido */
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            text-align: center; /* Centrar el contenido */
+        }
+
+        .header h1 {
+            color: white; /* Color del texto del h1 */
+            margin: 0; /* Elimina los márgenes por defecto del h1 para que no agregue espacios indeseados */
+        }
+
+
         /* Estilos específicos para los inputs */
         input[type="text"],select, input[type="date"] {
             background-color: rgba(150, 150, 150, 0.3); /* Color plomo más suave */
@@ -129,7 +138,9 @@
         a:hover{
             color: #118CD9;
         }
-
+        p{
+            font-size: 14px;
+        }
         label {
             margin-right: 10px;
             color: black;
@@ -195,7 +206,9 @@
     <div class="background"></div>
     <div class="content">
         <div class="container">
-            <h1>Registro de Objetivo</h1>
+            <div class="header">
+                <h1>Registro de Objetivo</h1>
+            </div>
           <!-- caja de Exito -->
             @if(session('success'))
                 <script>
@@ -218,7 +231,7 @@
                 <!-- Campo para el objetivo -->
                 <h5>Objetivo</h5>
                 <input type="text" name="objetivo" placeholder="Escribe tu objetivo" value="{{ old('objetivo') }}" required>
-
+                <p id="error-objetivo" style="color:red; display:none;">El objetivo debe tener al menos 20 caracteres.</p>
                 <div class="select_priori_group">
                     <div>
                     <h5>Seleccione Hito</h5>
@@ -245,6 +258,7 @@
                                 <input type="radio" name="prioridad" value="Baja" {{ old('prioridad') == 'Baja' ? 'checked' : '' }}> Baja
                             </label>
                         </div>
+                        <p id="error-prioridad" style="color:red; display:none;">Debes seleccionar una prioridad.</p>
                     </div>
                 </div>
 
@@ -273,9 +287,9 @@
                         <span class="overplay"></span>
                     </button>
                 </div>
-                </div>
-                <!-- Mostrar errores de validación -->
-                @if ($errors->any())
+         </form>
+          <!-- Mostrar errores de validación -->
+          @if ($errors->any())
                     <div style="color: red">
                         <ul>
                             @foreach ($errors->all() as $error)
@@ -284,79 +298,124 @@
                         </ul>
                     </div>
                 @endif
-
-            </form>
         </div>
     </div>
-   <script>  
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const hitos = @json($hitos); // Obtener los hitos en formato JSON desde Blade
+        const hitos = @json($hitos); // Obtener los hitos en formato JSON desde Blade
 
-    const hitoSelect = document.getElementById('hitos');
-    const fechaInicioInput = document.querySelector('input[name="fecha_inicio"]');
-    const fechaFinInput = document.querySelector('input[name="fecha_fin"]');
+        const hitoSelect = document.getElementById('hitos');
+        const fechaInicioInput = document.querySelector('input[name="fecha_inicio"]');
+        const fechaFinInput = document.querySelector('input[name="fecha_fin"]');
+        const objetivoInput = document.querySelector('input[name="objetivo"]');
+        const errorObjetivo = document.getElementById('error-objetivo');
+        const prioridadRadios = document.querySelectorAll('input[name="prioridad"]');
+        const errorPrioridad = document.getElementById('error-prioridad');
 
-    let fechaInicioHandler, fechaFinHandler;
+        let fechaInicioHandler, fechaFinHandler;
 
-    // Función para quitar listeners previos antes de agregar nuevos
-    function removePreviousHandlers() {
-        if (fechaInicioHandler) {
-            fechaInicioInput.removeEventListener('change', fechaInicioHandler);
-        }
-        if (fechaFinHandler) {
-            fechaFinInput.removeEventListener('change', fechaFinHandler);
-        }
-    }
-    // Función para obtener la fecha actual sin la hora
-    function obtenerFechaActual() {
-        const hoy = new Date();
-        return new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-    }
+        // Validación del campo "Objetivo"
+        objetivoInput.addEventListener('input', function () {
+            if (this.value.length < 20) {
+                errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
+            } else {
+                errorObjetivo.style.display = 'none'; // Ocultar error si cumple la longitud
+            }
+        });
 
-    hitoSelect.addEventListener('change', function () {
-        const hitoSeleccionado = hitos.find(hito => hito.id_hito == this.value);
+        // Validación de la prioridad
+        prioridadRadios.forEach(function (radio) {
+            radio.addEventListener('click', function () {
+                errorPrioridad.style.display = 'none'; // Ocultar error al seleccionar prioridad
+            });
+        });
 
-        // Limpiar eventos previos al cambiar de hito
-        removePreviousHandlers();
-
-        if (hitoSeleccionado) {
-            // Convertir las fechas del hito a formato Date
-            const hitoFechaInicio = new Date(hitoSeleccionado.fecha_inicio_hito);
-            const hitoFechaFin = new Date(hitoSeleccionado.fecha_fin_hito);
-
-            // Validar la fecha de inicio del objetivo
-            fechaInicioHandler = function () {
-                const fechaInicio = new Date(this.value);
-                //const fechaActual = obtenerFechaActual();
-                if (fechaInicio < hitoFechaInicio || fechaInicio > hitoFechaFin) {
-                    alert('La fecha de inicio debe estar dentro del rango del hito seleccionado.');
-                    this.value = ''; // Limpiar el campo si no es válido
+        // Validar si se selecciona alguna prioridad al enviar el formulario
+        document.querySelector('form').addEventListener('submit', function (e) {
+            let prioridadSeleccionada = false;
+            prioridadRadios.forEach(function (radio) {
+                if (radio.checked) {
+                    prioridadSeleccionada = true;
                 }
-                // Validar si la fecha es actual 
-               /* else if (fechaInicio < fechaActual) {
-                    alert('La fecha de inicio no puede ser una fecha anterior la actual');
-                    this.value = ''; // Limpiar el campo si no es válido
-                }*/
-            };
-            fechaInicioInput.addEventListener('change', fechaInicioHandler);
+            });
+            if (!prioridadSeleccionada) {
+                e.preventDefault(); // Evitar envío si no hay prioridad seleccionada
+                errorPrioridad.style.display = 'block'; // Mostrar error
+            }
 
-            // Validar la fecha de fin del objetivo
-            fechaFinHandler = function () {
-                const fechaFin = new Date(this.value);
-                const fechaInicio = new Date(fechaInicioInput.value); 
-                if (fechaFin < hitoFechaInicio || fechaFin > hitoFechaFin) {
-                    alert('La fecha de fin debe estar dentro del rango del hito seleccionado.');
-                    this.value = ''; // Limpiar el campo si no es válido
-                } else if (fechaFin < fechaInicio){
-                    alert('La fecha de fin no debe ser menro al rango de la fecha inicio.');
-                    this.value = '';
-                }
-            };
-            fechaFinInput.addEventListener('change', fechaFinHandler);
+            // Validación final del campo de objetivo
+            if (objetivoInput.value.length < 20) {
+                e.preventDefault(); // Evitar envío si el objetivo es muy corto
+                errorObjetivo.style.display = 'block'; // Mostrar error
+            }
+        });
+
+        // Función para quitar listeners previos antes de agregar nuevos
+        function removePreviousHandlers() {
+            if (fechaInicioHandler) {
+                fechaInicioInput.removeEventListener('change', fechaInicioHandler);
+            }
+            if (fechaFinHandler) {
+                fechaFinInput.removeEventListener('change', fechaFinHandler);
+            }
         }
+
+        hitoSelect.addEventListener('change', function () {
+            const hitoSeleccionado = hitos.find(hito => hito.id_hito == this.value);
+
+            // Limpiar eventos previos al cambiar de hito
+            removePreviousHandlers();
+
+            if (hitoSeleccionado) {
+                // Convertir las fechas del hito a formato Date
+                const hitoFechaInicio = new Date(hitoSeleccionado.fecha_inicio_hito);
+                const hitoFechaFin = new Date(hitoSeleccionado.fecha_fin_hito);
+
+                // Validar la fecha de inicio del objetivo
+                fechaInicioHandler = function () {
+                    const fechaInicio = new Date(this.value);
+
+                    // Validar que la fecha esté dentro del rango del hito seleccionado
+                    if (fechaInicio < hitoFechaInicio || fechaInicio > hitoFechaFin) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fecha fuera de rango',
+                            text: `La fecha de inicio debe estar dentro del rango del hito seleccionado (${hitoFechaInicio.toLocaleDateString()} - ${hitoFechaFin.toLocaleDateString()}).`,
+                        });
+                       
+                        this.value = ''; // Limpiar el campo si no es válido
+                    }
+                };
+                fechaInicioInput.addEventListener('change', fechaInicioHandler);
+
+                // Validar la fecha de fin del objetivo
+                fechaFinHandler = function () {
+                    const fechaFin = new Date(this.value);
+                    const fechaInicio = new Date(fechaInicioInput.value); // Obtener la fecha de inicio seleccionada
+
+                    // Validar que la fecha de fin esté dentro del rango del hito
+                    if (fechaFin < hitoFechaInicio || fechaFin > hitoFechaFin) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fecha fuera de rango',
+                            text: `La fecha de fin debe estar dentro del rango del hito seleccionado (${hitoFechaInicio.toLocaleDateString()} - ${hitoFechaFin.toLocaleDateString()}).`,
+                        });
+                        this.value = ''; // Limpiar el campo si no es válido
+                    } else if (fechaFin < fechaInicio) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fecha inválida',
+                            text: `La fecha de fin no debe ser anterior a la fecha de inicio (${fechaInicio.toLocaleDateString()}).`,
+                        });
+                        this.value = ''; // Limpiar el campo si la fecha de fin es menor a la de inicio
+                    }
+                };
+                fechaFinInput.addEventListener('change', fechaFinHandler);
+            }
+        });
     });
-});
 </script>
+
 
 </body>
 
