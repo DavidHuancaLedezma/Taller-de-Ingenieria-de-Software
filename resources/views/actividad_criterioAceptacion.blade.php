@@ -45,6 +45,8 @@
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
+       
+
         .tabs {
             display: flex;
             justify-content: space-between;
@@ -199,7 +201,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>Objetivo:</h2>
+        <h2 class="titulo-objetivo">Objetivo:</h2>
             <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
         </div>
         @if(session('success'))
