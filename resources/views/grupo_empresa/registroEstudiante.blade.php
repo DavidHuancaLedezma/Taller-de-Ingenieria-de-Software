@@ -7,6 +7,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body{
+            background-color: #D2D6DE;
+        }
         .toggle-password {
             cursor: pointer;
         }
@@ -14,7 +17,7 @@
             margin-left: 0.5rem;
         }
         .custom-container {
-            background-color: #edf0f5;
+            background-color: white;
             padding: 50px;
             border-radius: 10px;
         }
@@ -94,7 +97,7 @@
             <div class="form-check mb-3">
                 <input class="form-check-input" value="1" type="checkbox" value="" id="privacy_policy" name="privacy_policy" required>
                 <label class="form-check-label" for="privacy_policy">
-                    He leído y acepto el aviso legal y la Política de privacidad. *
+                    He leído y acepto el aviso legal y la política de privacidad. *
                 </label>
             </div>
             <div class="form-check mb-4">
@@ -106,7 +109,7 @@
 
             <!-- Botón de registro -->
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-custom">REGISTRARSE</button>
+                <button type="submit" class="btn btn-custom">Registrarse</button>
             </div>
         </form>
     </div>
@@ -133,6 +136,7 @@
         }
     }
 </script>
+<script src="grupo_empresa/Re"></script>
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -148,6 +152,7 @@
         {{ session('success') }}
     </div>
 @endif
+<script src="{{ asset('js/RegistroEstudiante.js') }}"></script>
 
 </body>
 </html>
