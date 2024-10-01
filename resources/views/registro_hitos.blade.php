@@ -35,9 +35,18 @@
             color: white;
             background-color: #4682b4;
             padding: 20px;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+        }
+        .header h2{
+            text-align: left;
+            color: white;
+            background-color: #4682b4;
+            padding: 20px;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
+
         .header_2 {
             background-color: #4682b4;
             padding: 3px;
@@ -123,7 +132,8 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Registro de Hitos para {{ $proyecto->nombre_proyecto }}</h1>
+        <h2>Proyecto: {{ $proyecto->nombre_proyecto }}</h2>
+        <h1>Registro de Hitos </h1>
     </div>
     @if($errors->any())
         <script>
