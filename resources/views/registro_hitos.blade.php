@@ -92,7 +92,8 @@
             margin-bottom: 10px;
             width: calc(60%); /* Ajusta el ancho considerando el padding */
             box-sizing: border-box; /* Asegura que el padding no se agregue al tamaño total del input */
-                    
+            border-left: 5px solid #4682b4; /* Borde izquierdo más grueso */       
+
         }
         /* Estilo para los campos de fecha */
         .date-group {
