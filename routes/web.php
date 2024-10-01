@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-//use App\Http\Controllers\ControllerTablaPlanificacion;
-use App\Http\Controllers\ControllerSeguimientoSemanal;
 use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\CriterioAceptacionController;
 
+
+use App\Http\Controllers\ControllerRegistroSemanalGE;
+use App\Http\Controllers\ControllerVisualizarPlanillaDePlanificacion;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,16 +20,6 @@ use App\Http\Controllers\CriterioAceptacionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//Route::get('/', [ControllerTablaPlanificacion::class, 'getTabla']);
-Route::post('/seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'cargarSS']);
-
-Route::post('/registro_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'registroSemana']);
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 // Ruta para la vista de registro de objetivo (usando registro_objetivo.blade.php)
@@ -46,3 +38,11 @@ Route::post('/actividad/store', [ActividadController::class, 'store'])->name('ac
 
 // Ruta para añadir criterio de aceptación
 Route::post('/criterio_aceptacion/store', [CriterioAceptacionController::class, 'store'])->name('criterio_aceptacion.store');
+
+
+//-------------------------------------------------------------------------------------------------------------
+Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
+//-------------------------------------------------------------------------------------------------------------
+Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
+//-------------------------------------------------------------------------------------------------------------
