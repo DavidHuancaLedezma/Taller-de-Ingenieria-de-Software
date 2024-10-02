@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\ControllerTablaPlanificacion;
 use App\Http\Controllers\ControllerSeguimientoSemanal;
+
 use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\CriterioAceptacionController;
 
+use App\Http\Controllers\HitoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +48,9 @@ Route::post('/actividad/store', [ActividadController::class, 'store'])->name('ac
 
 // Ruta para añadir criterio de aceptación
 Route::post('/criterio_aceptacion/store', [CriterioAceptacionController::class, 'store'])->name('criterio_aceptacion.store');
+
+
+Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHitos'])->name('proyecto.hitos');
+
+Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
+
