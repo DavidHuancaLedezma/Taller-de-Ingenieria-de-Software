@@ -177,6 +177,10 @@
                 @endforeach
             </tbody>
         </table>
+        <!-- Mensaje de alerta -->
+        <div id="mensaje" style="color: red; display: none; text-align: center;">
+            Ya no se puede añadir hito, la suma de los porcentajes de cobro llegó a 100%.
+        </div>
         <br>
             <h3>Añadir nuevo Hito</h3>
             <div class="header_2">
@@ -201,6 +205,37 @@
 </div>
 
 <script>
+     // Función que calcula la suma de los porcentajes de cobro
+     function calcularSumaPorcentajes() {
+        const rows = document.querySelectorAll('#hitoTable tr');
+        let suma = 0;
+
+        rows.forEach(row => {
+            const porcentaje = parseFloat(row.cells[3].innerText); // Suponiendo que el porcentaje está en la cuarta columna
+            suma += isNaN(porcentaje) ? 0 : porcentaje; // Sumar solo si es un número
+        });
+
+        return suma;
+    }
+
+    // Función para manejar la visibilidad del botón y el mensaje
+    function actualizarEstadoBoton() {
+        const sumaPorcentajes = calcularSumaPorcentajes();
+        const addHitoBtn = document.getElementById('addHitoBtn');
+        const mensaje = document.getElementById('mensaje');
+
+        if (sumaPorcentajes >= 100) {
+            addHitoBtn.style.display = 'none'; // Ocultar el botón
+            mensaje.style.display = 'block'; // Mostrar el mensaje
+        } else {
+            addHitoBtn.style.display = 'inline-block'; // Mostrar el botón
+            mensaje.style.display = 'none'; // Ocultar el mensaje
+        }
+    }
+
+    // Ejecutar al cargar la página y cada vez que se agrega un nuevo hito
+    document.addEventListener('DOMContentLoaded', actualizarEstadoBoton);
+
     document.getElementById('hitoForm').addEventListener('submit', function(e) {
         var porcentajeCobro = document.getElementById('porcentaje_cobro').value;
         var fechaInicio = new Date(document.getElementById('fecha_inicio_hito').value);
@@ -241,6 +276,8 @@
             });
         }
     });
+      // Llama a la función al cargar la página para establecer el estado inicial
+    window.onload = actualizarEstadoBoton;
 </script>
 
 
