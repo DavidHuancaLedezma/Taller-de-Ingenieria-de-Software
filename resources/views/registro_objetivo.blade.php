@@ -199,6 +199,12 @@
             color: white;
             border-color: darkred;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: s5px;
+            display: block;
+        }
 
     </style>
 </head>
@@ -232,6 +238,8 @@
                 <h5>Objetivo</h5>
                 <input type="text" name="objetivo" placeholder="Escribe tu objetivo" value="{{ old('objetivo') }}" required>
                 <p id="error-objetivo" style="color:red; display:none;">El objetivo debe tener al menos 20 caracteres.</p>
+                <p id="error-caracteres" style="color:red; display:none;">El objetivo no puede exceder 500 caracteres y debe contener como máximo 10 caracteres especiales o números.</p>
+                
                 <div class="select_priori_group">
                     <div>
                     <h5>Seleccione Hito</h5>
@@ -309,17 +317,33 @@
         const fechaFinInput = document.querySelector('input[name="fecha_fin"]');
         const objetivoInput = document.querySelector('input[name="objetivo"]');
         const errorObjetivo = document.getElementById('error-objetivo');
+        const errorCaracteres = document.getElementById('error-caracteres');
         const prioridadRadios = document.querySelectorAll('input[name="prioridad"]');
         const errorPrioridad = document.getElementById('error-prioridad');
 
         let fechaInicioHandler, fechaFinHandler;
 
-        // Validación del campo "Objetivo"
+          // Función para contar caracteres especiales y números
+        function countSpecialCharsAndNumbers(str) {
+            const regex = /[0-9!@#$%^&*(),.?":{}|/<>]/g; // Carácteres especiales y números
+            const matches = str.match(regex);
+            return matches ? matches.length : 0;
+        }
+         // Validación del campo "Objetivo"
         objetivoInput.addEventListener('input', function () {
-            if (this.value.length < 20) {
+            const objetivoLength = this.value.length;
+            const specialCharCount = countSpecialCharsAndNumbers(this.value);
+
+            if (objetivoLength < 20) {
                 errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
             } else {
                 errorObjetivo.style.display = 'none'; // Ocultar error si cumple la longitud
+            }
+
+            if (objetivoLength > 500 || specialCharCount > 10) {
+                errorCaracteres.style.display = 'block'; // Mostrar error si excede el límite de caracteres o especiales
+            } else {
+                errorCaracteres.style.display = 'none'; // Ocultar error si cumple los límites
             }
         });
 
@@ -343,10 +367,19 @@
                 errorPrioridad.style.display = 'block'; // Mostrar error
             }
 
+            
             // Validación final del campo de objetivo
-            if (objetivoInput.value.length < 20) {
-                e.preventDefault(); // Evitar envío si el objetivo es muy corto
-                errorObjetivo.style.display = 'block'; // Mostrar error
+            const objetivoLength = objetivoInput.value.length;
+            const specialCharCount = countSpecialCharsAndNumbers(objetivoInput.value);
+
+            if (objetivoLength < 20 || objetivoLength > 500 || specialCharCount > 10) {
+                e.preventDefault(); // Evitar envío si no cumple las validaciones
+                if (objetivoLength < 20) {
+                    errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
+                }
+                if (objetivoLength > 500 || specialCharCount > 10) {
+                    errorCaracteres.style.display = 'block'; // Mostrar error si excede el límite de caracteres o especiales
+                }
             }
         });
 

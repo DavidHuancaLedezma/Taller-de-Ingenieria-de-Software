@@ -367,7 +367,7 @@
 
           // Función para contar caracteres especiales y números
         function countSpecialCharsAndNumbers(str) {
-            const regex = /[0-9!@#$%^&*(),.?":{}|<>]/g; // Carácteres especiales y números
+            const regex = /[0-9!@#$%^&*(),.?":{}/|<>]/g; // Carácteres especiales y números
             const matches = str.match(regex);
             return matches ? matches.length : 0;
         }
