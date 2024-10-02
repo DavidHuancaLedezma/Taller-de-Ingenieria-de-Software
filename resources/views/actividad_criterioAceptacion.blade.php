@@ -365,6 +365,12 @@
             popupCriteriaForm.style.display = 'none'; // Ocultar el formulario
         });
 
+          // Función para contar caracteres especiales y números
+        function countSpecialCharsAndNumbers(str) {
+            const regex = /[0-9!@#$%^&*(),.?":{}|<>]/g; // Carácteres especiales y números
+            const matches = str.match(regex);
+            return matches ? matches.length : 0;
+        }
         // Validar el formulario de Actividad antes de enviar
         activityForm.addEventListener('submit', function (e) {
             let isValid = true;
@@ -379,6 +385,15 @@
             } else if (descripcion.length < 20) {
                 document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 20 caracteres.';
                 isValid = false;
+            } else if (descripcion.length > 500) {
+                document.getElementById('descripcionActividadError').textContent = 'La descripción no puede exceder los 500 caracteres.';
+                isValid = false;
+            } else if (countSpecialCharsAndNumbers(descripcion) > 10) {
+                document.getElementById('descripcionActividadError').textContent = 'La descripción no puede contener más de 10 caracteres especiales o números.';
+                isValid = false;
+            } else if (/^[0-9]+$/.test(descripcion) || /^[^a-zA-Z0-9]+$/.test(descripcion)) {
+                document.getElementById('descripcionActividadError').textContent = 'La descripción no puede contener solo números o caracteres especiales.';
+                isValid = false;
             } else {
                 document.getElementById('descripcionActividadError').textContent = '';
             }
@@ -388,6 +403,15 @@
                 isValid = false;
             } else if (resultado.length < 20) {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 20 caracteres.';
+                isValid = false;
+            } else if (resultado.length > 500) {
+                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede exceder los 500 caracteres.';
+                isValid = false;
+            } else if (countSpecialCharsAndNumbers(resultado) > 10) {
+                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede contener más de 10 caracteres especiales o números.';
+                isValid = false;
+            } else if (/^[0-9]+$/.test(resultado) || /^[^a-zA-Z0-9]+$/.test(resultado)) {
+                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede contener solo números o caracteres especiales.';
                 isValid = false;
             } else {
                 document.getElementById('resultadoEsperadoError').textContent = '';
@@ -429,6 +453,15 @@
                 isValid = false;
             } else if (descripcionCriterio.length < 20) {
                 document.getElementById('descripcionCriterioError').textContent = 'La descripción debe tener más de 20 caracteres.';
+                isValid = false;
+            } else if (descripcionCriterio.length > 500) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede exceder los 500 caracteres.';
+                isValid = false;
+            } else if (countSpecialCharsAndNumbers(descripcionCriterio) > 10) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede contener más de 10 caracteres especiales o números.';
+                isValid = false;
+            } else if (/^[0-9]+$/.test(descripcionCriterio) || /^[^a-zA-Z0-9]+$/.test(descripcionCriterio)) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede contener solo números o caracteres especiales.';
                 isValid = false;
             } else {
                 document.getElementById('descripcionCriterioError').textContent = '';
