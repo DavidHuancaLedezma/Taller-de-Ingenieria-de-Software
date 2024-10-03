@@ -213,6 +213,15 @@
             });
         </script>
         @endif
+        @if(session('error'))
+        <script>
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "{{ session('error') }}",
+            });
+        </script>
+        @endif
         <div class="tabs">
             <button id="add-activity" class="tab-button">Actividades +</button>
            

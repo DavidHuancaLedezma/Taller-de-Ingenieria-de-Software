@@ -20,6 +20,18 @@ class ActividadController extends Controller
             'objetivo_id' => 'required|exists:objetivo,id_objetivo', // Verifica que el objetivo exista
             
         ]);
+        // Verificar si ya existe una actividad con la misma descripción y resultado para el objetivo
+        $existeActividad = DB::table('actividad')
+            ->where('descripcion_actividad', $request->input('descripcion'))
+            ->where('resultado', $request->input('resultado'))
+            ->where('id_objetivo', $request->input('objetivo_id'))
+            ->exists();  // Verifica si existe un registro que cumpla con estos criterios
+
+        // Si ya existe, retornar con un mensaje de error
+        if ($existeActividad) {
+            return redirect()->back()->with('error', 'La actividad con este resultado ya existe para este objetivo.');
+        }
+
 
         $realizado_ac = FALSE;
         // Ejecutar la consulta para insertar la actividad
