@@ -26,12 +26,29 @@ class ActividadController extends Controller
             ->where('resultado', $request->input('resultado'))
             ->where('id_objetivo', $request->input('objetivo_id'))
             ->exists();  // Verifica si existe un registro que cumpla con estos criterios
-
+       // Verificar si ya existe una descripción de actividad con un resultado diferente para el mismo objetivo
+        $existeDescripcionConDiferenteResultado = DB::table('actividad')
+            ->where('descripcion_actividad', $request->input('descripcion'))
+            ->where('resultado', '!=', $request->input('resultado'))
+            ->where('id_objetivo', $request->input('objetivo_id'))
+            ->exists();
+       // Verificar si ya existe un resultado esperado con una descripción diferente para el mismo objetivo
+        $existeResultadoConDiferenteDescripcion = DB::table('actividad')
+            ->where('resultado', $request->input('resultado'))
+            ->where('id_objetivo', $request->input('objetivo_id'))
+            ->where('descripcion_actividad', '!=', $request->input('descripcion'))
+            ->exists();
         // Si ya existe, retornar con un mensaje de error
         if ($existeActividad) {
             return redirect()->back()->with('error', 'La actividad con este resultado ya existe para este objetivo.');
         }
-
+        // Si ya existe una descripción con un resultado diferente, retornar con un mensaje de error
+        if ($existeDescripcionConDiferenteResultado) {
+            return redirect()->back()->with('error', 'Ya existe una actividad con esta descripción para este objetivo.');
+        }
+        if ($existeResultadoConDiferenteDescripcion) {
+            return redirect()->back()->with('error', 'El resultado esperado ya está asociado a otra actividad para este objetivo.');
+        }
 
         $realizado_ac = FALSE;
         // Ejecutar la consulta para insertar la actividad

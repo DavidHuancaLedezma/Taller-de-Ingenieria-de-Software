@@ -410,7 +410,7 @@
             if (resultado === '') {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado es obligatorio.';
                 isValid = false;
-            } else if (resultado.length < 20) {
+            } else if (resultado.length < 5) {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 20 caracteres.';
                 isValid = false;
             } else if (resultado.length > 500) {
