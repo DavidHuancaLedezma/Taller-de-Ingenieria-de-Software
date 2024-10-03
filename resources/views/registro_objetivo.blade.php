@@ -231,9 +231,19 @@
                     });
                 </script>
             @endif
+            @if(session('error'))
+                <script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "{{ session('error') }}",
+                        });
+                </script>
+            @endif
                 <!-- fin de codigo caja exito -->
             <form action="{{ route('objetivo.store') }}" method="POST">
                 @csrf
+                <input type="hidden" name="proyecto_id" value="{{ $id_proyecto }}">
                 <!-- Campo para el objetivo -->
                 <h5>Objetivo</h5>
                 <input type="text" name="objetivo" placeholder="Escribe tu objetivo" value="{{ old('objetivo') }}" required>

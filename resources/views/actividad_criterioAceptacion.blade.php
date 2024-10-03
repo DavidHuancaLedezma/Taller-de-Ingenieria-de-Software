@@ -213,6 +213,15 @@
             });
         </script>
         @endif
+        @if(session('error'))
+        <script>
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "{{ session('error') }}",
+            });
+        </script>
+        @endif
         <div class="tabs">
             <button id="add-activity" class="tab-button">Actividades +</button>
            
@@ -401,7 +410,7 @@
             if (resultado === '') {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado es obligatorio.';
                 isValid = false;
-            } else if (resultado.length < 20) {
+            } else if (resultado.length < 5) {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 20 caracteres.';
                 isValid = false;
             } else if (resultado.length > 500) {
