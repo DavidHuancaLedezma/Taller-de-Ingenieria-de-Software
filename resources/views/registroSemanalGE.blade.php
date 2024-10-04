@@ -150,6 +150,7 @@
     <input id="id-hito" type="hidden" value="{{$idHito}}">
     <input id="id-color" type="hidden" value="{{$numeroColor}}">
     <input id="id-semana-registro" type="hidden" value="{{ json_encode($enProgreso) }}">
+    <input id="ocultar-componente-semana" type="hidden" value="{{$mostrarMensaje}}">
 
 
     <div class="margen">
@@ -176,6 +177,8 @@
             @else
                 <h3 class="control-hoy">{{$enProgreso[0]}}</h3>
             @endif
+
+
            
             <div class="contenedor-objetivos">
                 <h4>Objetivos:</h4>
@@ -196,14 +199,16 @@
                                 @else
                                     <td>{{$estudiante[0]}}</td>
                                 @endif
-
-
-
                                 <td><input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" checked></td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                
+                @if ($mostrarMensaje)
+                    <h2 style="color: red">Esta semana ya fue registrada</h2>
+                @endif
+                
                 <div class="contenedor-descripcion">
                     <textarea name="descripcion" id="descripcion" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
                     <span id="descripcionError" class="error-message"></span>
@@ -232,12 +237,12 @@
             descripcionError.textContent = 'Por favor, completa la descripción.';
             descripcionError.style.display = 'block';
             areaTextoDescripcion.classList.add('error');
-        }else if (descripcion.length < 30) {
+        }else if (descripcion.length < 5) {
                 // Mostrar el mensaje de error si es menor a 30 caracteres
-            descripcionError.textContent = 'La descripción debe tener al menos 30 caracteres.';
+            descripcionError.textContent = 'La descripción debe tener al menos 5 caracteres.';
             descripcionError.style.display = 'block';
             areaTextoDescripcion.classList.add('error');  // Añadir clase para el borde rojo
-        } else if (descripcion.length > 500) {
+        } else if (descripcion.length >= 500) {
             // Mostrar el mensaje de error si supera los 500 caracteres
             descripcionError.textContent = 'La descripción no debe exceder los 500 caracteres.';
             descripcionError.style.display = 'block';
@@ -264,6 +269,24 @@
     }
     const numero = document.getElementById("id-color").value.trim();
     setProgress(numero);
+
+    //Esconder botones cuando esta semana ya fue registrada
+    document.addEventListener("DOMContentLoaded", function() {
+    const guardarBtn = document.getElementById('boton-guardar-seguimiento-semanal');
+    const ocultarComponenteSemana = document.getElementById('ocultar-componente-semana').value;
+    console.log(ocultarComponenteSemana); // eliminar
+    // Convertir el valor en un booleano si es necesario
+    const mostrarMensaje = ocultarComponenteSemana ; // Ajustar según cómo pase PHP el valor
+
+    // Mostrar u ocultar el botón según el valor de mostrarMensaje
+    if (mostrarMensaje) {
+        guardarBtn.style.display = 'none';
+        areaTextoDescripcion.style.display = 'none'
+    } else {
+        guardarBtn.style.display = 'block';
+        areaTextoDescripcion.style.display = 'block'
+    }
+});
 </script>
 
 <script>
@@ -278,8 +301,8 @@
 
 
         $('#boton-guardar-seguimiento-semanal').on('click', function() {
-
-            if($('#descripcion').val() != '' && $('#descripcion').val().length > 30 && $('#descripcion').val().length < 500){
+            
+            if($('#descripcion').val() != '' && $('#descripcion').val().length > 4 && $('#descripcion').val().length < 500){
                 let estudiantesConAsistencia = [];
                 let estudiantesSinAsistencia = [];
                 // Recorrer los checkboxes y recoger los seleccionados y no seleccionados
@@ -323,6 +346,13 @@
                             text: mensaje,
                             icon: "success"
                         });
+
+                       let template = `
+                        Semana: ${arrayDeSemanas[0]} al ${arrayDeSemanas[1]} / Esta semana ya fue registrada
+                       `;
+                       $('.control-hoy').html(template);
+
+
 
                     }
                     

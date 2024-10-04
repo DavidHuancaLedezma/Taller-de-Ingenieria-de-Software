@@ -14,23 +14,24 @@ class ControllerRegistroSemanalGE extends Controller
     public function cargarRegistroSemanal($parametroHito)
     {
         // 6 y 7 test
-        //try {
-        //Todo funciona unicamente con el id de un hito
-        $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
-        $objetivos = self::getObjetivos($idHito);
-        $nombreEstudiante = self::getEstudiantes($idHito);
-        $estudianteEnAlerta = self::getEstudiantesConFaltas($nombreEstudiante);
-        $semanas = self::getSemanasDivididas($idHito);
+        try {
+            //Todo funciona unicamente con el id de un hito
+            $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
+            $objetivos = self::getObjetivos($idHito);
+            $nombreEstudiante = self::getEstudiantes($idHito);
+            $estudianteEnAlerta = self::getEstudiantesConFaltas($nombreEstudiante);
+            $semanas = self::getSemanasDivididas($idHito);
 
-        $enProgreso = self::getSemanaActual($semanas, $idHito);
-        $numeroColor = self::numeroColoreado($semanas, $idHito);
-        $nombreCorto = self::getNombreEmpresa($idHito);
-        $numeroDeHito = self::getNumeroDeHito($idHito);
+            $enProgreso = self::getSemanaActual($semanas, $idHito);
+            $numeroColor = self::numeroColoreado($semanas, $idHito);
+            $nombreCorto = self::getNombreEmpresa($idHito);
+            $numeroDeHito = self::getNumeroDeHito($idHito);
 
-        return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito]);
-        //} catch (\Exception $e) {
-        //    return "ERROR 404";
-        //}
+            $mostrarMensaje = self::verificarSemanaCalificadaMensaje($idHito, $enProgreso);
+            return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
+        } catch (\Exception $e) {
+            return "ERROR 404";
+        }
     }
     public function registrarSeguimiento(Request $request)
     {
@@ -63,6 +64,16 @@ class ControllerRegistroSemanalGE extends Controller
         return response(json_encode($respuesta), 200)->header('Content-type', 'text/plain');
 
         //self::registrarSeguimientoDB($idHito, $descripcion, $asistencias, $faltas);
+    }
+
+    private static function verificarSemanaCalificadaMensaje($idHito, $verificarSemana)
+    {
+        //Determina si mostrar el mensaje para una semana que ya fue calificada
+        $registrado = false;
+        if (count($verificarSemana) == 2) {
+            $registrado = self::verificarSemanaRegistrada($idHito, $verificarSemana);
+        }
+        return $registrado;
     }
 
     private static function getNumeroDeHito($idHito)
