@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ControllerRegistroSemanalGE;
 use App\Http\Controllers\ControllerVisualizarPlanillaDePlanificacion;
+use App\Http\Controllers\ControllerPlanillaDelProyecto;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,5 @@ Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'regi
 //-------------------------------------------------------------------------------------------------------------
 Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
 //-------------------------------------------------------------------------------------------------------------
+Route::get('/datos_planilla_de_proyecto/{idGrupoEmpresa}', [ControllerPlanillaDelProyecto::class, 'datosDePlanillaDeProyecto']);
+//--------------------------------------------------------------------------------------------------------------

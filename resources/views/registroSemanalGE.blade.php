@@ -154,9 +154,7 @@
 
 
     <div class="margen">
-
         <header class="registro-semanal-GE"><h2>Registro Semanal {{$nombreCorto}}</h2></header>
-
         <main>
             <!--<div class="espacio-para-barra-de-progreso"></div>-->
             <h4 class="nroHito">Hito {{$numeroDeHito}}</h4>

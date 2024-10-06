@@ -91,9 +91,13 @@
                         <td>{{$filas[0]->fecha_fin_hito}}</td>
                         <td>{{$filas[0]->porcentaje_cobro}}%</td>
                         <td>
-                            @foreach ($filas[1] as $item)
-                                <p>- {{$item->descrip_objetivo}}</p>
-                            @endforeach
+                            @if (count($filas[1]) > 0)
+                                @foreach ($filas[1] as $item)
+                                    <p>- {{$item->descrip_objetivo}}</p>
+                                @endforeach
+                            @else
+                                <p>- Ninguno</p>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
