@@ -78,8 +78,6 @@ class ControllerHome extends Controller
             'fechasSemestre'=>$fechasSemestre, 
             'fecha_ini_semestre'=>$fecha_ini_semestre,
             'fecha_fin_semestre'=>$fecha_fin_semestre]);
-
-        ]);
     }
     private function getnombreEstudiante($idEstudiante)
     {

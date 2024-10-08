@@ -17,8 +17,6 @@ class ControllerHomeDocente extends Controller
         $grupoEmpresas = self::getGrupoEmpresas($idDocente);
 
         $fechasDesarrollo = self::etapaDeDesarrollo($idDocente);
-
-        $fechasDesarrolloPlanificacion = self::etapaDeDesarrolloPlanificacion($idDocente);
         $fechasSemestre = self::getFechaSemestre($idDocente);
         $fecha_ini_semestre = $fechasSemestre ? $fechasSemestre->fecha_inicio_semestre : null;
         $fecha_fin_semestre = $fechasSemestre ? $fechasSemestre->fecha_fin_semestre : null;
@@ -31,11 +29,10 @@ class ControllerHomeDocente extends Controller
             'fechaActual' => $fechaActual,
             'grupoEmpresas' => $grupoEmpresas,
             'fechasDesarrollo' => $fechasDesarrollo,
-            'fechasDesarrolloPlanificacion' => $fechasDesarrolloPlanificacion,
             'fechasSemestre'=>$fechasSemestre,
             'fecha_ini_semestre'=>$fecha_ini_semestre,
             'fecha_fin_semestre'=>$fecha_fin_semestre,
-             'fechasDePlanificacion' => $fechasDePlanificacion
+            'fechasDePlanificacion' => $fechasDePlanificacion
 
         ]);
     }
