@@ -10,6 +10,7 @@
         *{
             margin : 0px ; 
             padding : 0px ; 
+            box-sizing : border-box ; /*+*/
         }
         body{
             margin: 0;
@@ -17,23 +18,32 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #D2D6DE ; /**/ 
-
+            background-color: #D2D6DE ; 
         }
         .margen{
-            border: 2px solid black;
-            width: 700px;
-            background-color : white;/**/
+            border: 2px solid #ccc  ;
+            border-radius: 10px ; /**/
+            width: 70% ;
+            background-color : white ;
             padding : 0px ; 
         }
         .margen .registro-semanal-GE{
-            min-height:60px ;
             background-color: #367FA9 ;
-            display: flex ; 
-            justify-content : center ; 
-            align-items: center ; 
             color : white ; 
+            text-align : center ; 
+            padding: 20px ; 
+            border-radius: 10px 10px 0 0 ; 
         }
+
+        .margen .registro-semanal-GE h1{
+            font-size: 24px ;
+        }
+
+        .margen .registro-semanal-GE h2{
+            font-size: 18px ;
+            margin-top: 10px ;
+        }
+
         .control-hoy{
             margin-left: 20px ; 
         }
@@ -49,9 +59,38 @@
             display: flex;
             flex-direction: column ; 
             justify-content: center;
-            align-items: center ;
-            gap: 10px ; 
+            align-items: center ; 
         }
+
+        .contenedor-descripcion textarea{
+            width: 100%;
+            height: 100px ; 
+            padding: 10px ; 
+            border: 1px solid #ccc ; 
+            border-radius: 0 0 5px 5px ; 
+            margin: 0px ; 
+        }
+
+        .contenedor-asistencia-check, .contenedor-descripcion{
+            width: 48% ; 
+            background-color: white ;
+        }
+
+        .contenedor-asistencia-check h3, .contenedor-descripcion h3{
+            color : white ; 
+            background-color: #40759e ;
+            padding: 10px  ; 
+            text-align: center ; 
+            border-radius: 5px 5px 0 0 ;
+            margin: 0px ; 
+            width: 100% ; 
+
+        }
+
+        #descripcion{
+            height: 120px ; 
+        }
+
         .contenedor-asistencia{
             border: 1px solid #F5F5F5;
             border-radius: 20px;
@@ -59,13 +98,12 @@
             margin : 0px 20px ;
             padding: 20px ; 
             display : flex ; 
-            flex-direction : column ; 
-            justify-content: center ;
+            flex-direction : row ; 
+            justify-content: space-between ;
             align-items: center ;  
             gap : 10px ; 
 
         }
-
 
         .margen-footer{
             display: flex;
@@ -101,8 +139,6 @@
         #boton-guardar-seguimiento-semanal:hover .overlay {
             width: 100%;
         }      
-
-
         /*---Error---*/
         .error-message {
             color: red;
@@ -116,22 +152,24 @@
 
         /*----grafica de semanas-----*/
         .progress-container{
-            border: 2px solid rgb(0, 68, 255) ;
             display: flex;
             width : 90% ;
             margin: 5px 35px;
-            min-height : 20px ;  
+            min-height : 20px ; 
+            gap : 10px ;  
         }
 
         .progress-container .step{
-            border: 2px solid rgb(0, 0, 0) ;
             padding: 0px ;text-align: center;
             flex-grow: 1;
+            border: 1px solid rgb(160, 225, 245) ; 
+            border-radius: 5px ; 
+            
         }
 
         .step p {
             font-size: 12px;  /* Tamaño del texto más pequeño */
-            margin: 5px 0;
+            margin: 5px 0 ; 
         }
 
         .completed {
@@ -142,7 +180,13 @@
             margin : 3px 0px 0px 20px ;  
         }
         main .progreso{
-            margin : 0px 0px 0px 20px ;  
+            margin : 10px 0px 0px 20px ;  
+        }
+        /*---mensaje de semana ya registrada----*/
+        .Mensaje-de-semana-registrada{
+            position: absolute; 
+            z-index: 100;
+            margin-left: 500px ; 
         }
     </style>
 </head>
@@ -154,30 +198,27 @@
 
 
     <div class="margen">
-        <header class="registro-semanal-GE"><h2>Registro Semanal {{$nombreCorto}}</h2></header>
+        <header class="registro-semanal-GE">
+            <h1>Registro Semanal {{$nombreCorto}}</h1>
+            <h2 class="nroHito">Hito {{$numeroDeHito}}</h2>
+        </header>
         <main>
             <!--<div class="espacio-para-barra-de-progreso"></div>-->
-            <h4 class="nroHito">Hito {{$numeroDeHito}}</h4>
+            
             <p class="progreso">Progreso de las semanas del hito</p>
             <div class="progress-container">
-                
                 @foreach ($semanas as $item)
-                    <div class="step active">
+                    <div class="step">
                         <p>{{$item['inicio']}}</p>
                         <p>{{$item['fin']}}</p>
                     </div>
                 @endforeach
-
-
             </div>
             @if (count($enProgreso) == 2)
                 <h3 class="control-hoy">Semana: {{$enProgreso[0]}} al {{$enProgreso[1]}}</h3>
             @else
                 <h3 class="control-hoy">{{$enProgreso[0]}}</h3>
             @endif
-
-
-           
             <div class="contenedor-objetivos">
                 <h4>Objetivos:</h4>
                 @foreach ($objetivos as $objetivo)
@@ -185,32 +226,31 @@
                 @endforeach
             </div>
             <div class="contenedor-asistencia">
-                <h4>Asistencia</h4>
-                <table class="control-de-asistencia">
-                    <tbody>
-
-                        @foreach ($estudianteEnAlerta as $estudiante)
-                            <tr>
-                                
-                                @if ($estudiante[1] >= 3)
-                                    <td style="color:red">{{$estudiante[0]}}</td>
-                                @else
-                                    <td>{{$estudiante[0]}}</td>
-                                @endif
-                                <td><input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" checked></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                
+                <div class="contenedor-asistencia-check">
+                    <h3>Asistencia</h3>
+                    <table class="control-de-asistencia">
+                        <tbody>
+                            @foreach ($estudianteEnAlerta as $estudiante)
+                                <tr> 
+                                    @if ($estudiante[1] >= 3)
+                                        <td style="color:red">{{$estudiante[0]}}</td>
+                                    @else
+                                        <td>{{$estudiante[0]}}</td>
+                                    @endif
+                                    <td><input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" checked></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
                 @if ($mostrarMensaje)
-                    <h2 style="color: red">Esta semana ya fue registrada</h2>
-                @endif
-                
+                    <h2 class="Mensaje-de-semana-registrada" style="color: red">Esta semana ya fue registrada</h2>
+                @endif 
                 <div class="contenedor-descripcion">
+                    <h3 id="tituloDescripcion">Descripción</h3>
                     <textarea name="descripcion" id="descripcion" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
                     <span id="descripcionError" class="error-message"></span>
-                </div> 
+                </div>
             </div>
         </main>
         <footer class="margen-footer">
@@ -224,14 +264,44 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+
+    //------------------------------------------------------------------
+    //let descripcion = $('#descripcion').val();
+        
+    // Expresión regular: Verifica que no sea solo números
+   // let soloNumeros = /^[0-9]+$/;
+    //let validacionNumeros ;
+
+    //if (soloNumeros.test(descripcion)) {
+    //    validacionNumeros = false;
+   // }
+    //-------------------------------------------------------------------
+
+
+
+
     const guardarBtn = document.getElementById('boton-guardar-seguimiento-semanal');
     const areaTextoDescripcion = document.getElementById('descripcion');
+    const tituloDescripcion = document.getElementById('tituloDescripcion')
     guardarBtn.addEventListener('click', () => {
         const descripcionError = document.getElementById('descripcionError');
         const descripcion = areaTextoDescripcion.value.trim();
         // Verificar si el campo de descripción está vacío
+        const regexEspeciales = /[a-zA-Z0-9]/;
+
+        // Expresión regular para verificar si son solo números
+        const regexSoloNumeros = /^[0-9]+$/;
+        const regexSoloNumerosYEspeciales = /^[0-9\W]+$/;
+
+        // maximo 20 caracteres especiales
+        const regexCaracteresEspeciales =/[^\w\s]/g;  // Coincide con cualquier carácter que no sea letra ni número (caracteres especiales)
+
+        // Contar caracteres especiales en la descripción
+        const caracteresEspeciales = descripcion.match(regexCaracteresEspeciales) || []; // Si no hay coincidencias, devolver array vacío
+        const cantidadCaracteresEspeciales = caracteresEspeciales.length;
+
         if (descripcion === '') {
-                // Mostrar el mensaje de error y resaltar el campo de texto
+            // Mostrar el mensaje de error y resaltar el campo de texto
             descripcionError.textContent = 'Por favor, completa la descripción.';
             descripcionError.style.display = 'block';
             areaTextoDescripcion.classList.add('error');
@@ -240,13 +310,29 @@
             descripcionError.textContent = 'La descripción debe tener al menos 5 caracteres.';
             descripcionError.style.display = 'block';
             areaTextoDescripcion.classList.add('error');  // Añadir clase para el borde rojo
-        } else if (descripcion.length >= 500) {
-            // Mostrar el mensaje de error si supera los 500 caracteres
-            descripcionError.textContent = 'La descripción no debe exceder los 500 caracteres.';
+        } else if (regexSoloNumeros.test(descripcion)) {
+            // Mostrar error si la descripción contiene solo números
+            descripcionError.textContent = 'La descripción no debe ser solo números.';
             descripcionError.style.display = 'block';
-            areaTextoDescripcion.classList.add('error'); 
+            areaTextoDescripcion.classList.add('error');
+        } else if (!regexEspeciales.test(descripcion)) {
+            // Mostrar error si la descripción contiene solo caracteres especiales
+            descripcionError.textContent = 'La descripción no debe contener solo caracteres especiales.';
+            descripcionError.style.display = 'block';
+            areaTextoDescripcion.classList.add('error');
+            
+        } else if (regexSoloNumerosYEspeciales.test(descripcion)) {
+            // Mostrar error si la descripción contiene solo números y caracteres especiales
+            descripcionError.textContent = 'La descripción no debe contener solo números y caracteres especiales.';
+            descripcionError.style.display = 'block';
+            areaTextoDescripcion.classList.add('error');
+        } else if (cantidadCaracteresEspeciales > 20) {
+            // Mostrar error si hay más de 20 caracteres especiales
+            descripcionError.textContent = 'Los caracteres especiales no deben exceder los 20.';
+            descripcionError.style.display = 'block';
+            areaTextoDescripcion.classList.add('error');
         } else {
-                // Si no está vacío, ocultar el mensaje de error, quitar la clase 'error' y cerrar el formulario
+            // Si no está vacío, ocultar el mensaje de error, quitar la clase 'error' y cerrar el formulario
             descripcionError.style.display = 'none';
             areaTextoDescripcion.classList.remove('error');
         }
@@ -279,10 +365,13 @@
     // Mostrar u ocultar el botón según el valor de mostrarMensaje
     if (mostrarMensaje) {
         guardarBtn.style.display = 'none';
-        areaTextoDescripcion.style.display = 'none'
+        areaTextoDescripcion.style.display = 'none';
+        tituloDescripcion.style.display = 'none' ; 
+        
     } else {
         guardarBtn.style.display = 'block';
-        areaTextoDescripcion.style.display = 'block'
+        areaTextoDescripcion.style.display = 'block';
+        tituloDescripcion.style.display = 'block' ;
     }
 });
 </script>
@@ -298,11 +387,28 @@
         });
 
 
+
         $('#boton-guardar-seguimiento-semanal').on('click', function() {
+            // Verificar si el campo de descripción está vacío
+            const regexSoloNumerosYEspeciales = /^[0-9\W]+$/;
+            let descripcion = $('#descripcion').val();
+
             
-            if($('#descripcion').val() != '' && $('#descripcion').val().length > 4 && $('#descripcion').val().length < 500){
+            const regexCaracteresEspeciales =/[^\w\s]/g; 
+            const caracteresEspeciales = descripcion.match(regexCaracteresEspeciales) || []; // Si no hay coincidencias, devolver array vacío
+            const cantidadCaracteresEspeciales = caracteresEspeciales.length;
+            console.log(cantidadCaracteresEspeciales + " <----- son estos");
+            
+
+            console.log("numero y caracter .-" + !regexSoloNumerosYEspeciales.test(descripcion))
+            
+            
+            if($('#descripcion').val() != '' && $('#descripcion').val().length > 4 && $('#descripcion').val().length < 500 && !regexSoloNumerosYEspeciales.test(descripcion) && cantidadCaracteresEspeciales<=20){
+                
+                
                 let estudiantesConAsistencia = [];
                 let estudiantesSinAsistencia = [];
+
                 // Recorrer los checkboxes y recoger los seleccionados y no seleccionados
                 $('.asistencia').each(function() {
                     if ($(this).is(':checked')) {
@@ -342,7 +448,13 @@
                         Swal.fire({
                             title: "Exito",
                             text: mensaje,
-                            icon: "success"
+                            icon: "success",
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Recarga la página después de presionar "OK"
+                                location.reload();
+                            }
                         });
 
                        let template = `
@@ -350,8 +462,7 @@
                        `;
                        $('.control-hoy').html(template);
 
-
-
+                       
                     }
                     
 

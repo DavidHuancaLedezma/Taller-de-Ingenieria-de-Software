@@ -17,11 +17,11 @@ use App\Http\Controllers\ControllerPlanillaDelProyecto;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//-------------------------------------------------------------------------------------------------------------
+
+
+//registro del control semanal con asistencias
 Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
 Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
-//-------------------------------------------------------------------------------------------------------------
+
+//visialización de la planilla de planificación
 Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
-//-------------------------------------------------------------------------------------------------------------
-Route::get('/datos_planilla_de_proyecto/{idGrupoEmpresa}', [ControllerPlanillaDelProyecto::class, 'datosDePlanillaDeProyecto']);
-//--------------------------------------------------------------------------------------------------------------
