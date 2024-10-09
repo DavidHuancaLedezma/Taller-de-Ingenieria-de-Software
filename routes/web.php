@@ -1,8 +1,16 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+
+
+use App\Http\Controllers\ControllerRegistroSemanalGE;
+use App\Http\Controllers\ControllerVisualizarPlanillaDePlanificacion;
+use App\Http\Controllers\ControllerPlanillaDelProyecto;
+
 //use App\Http\Controllers\ControllerTablaPlanificacion;
 use App\Http\Controllers\ControllerSeguimientoSemanal;
+
 
 use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\ActividadController;
@@ -21,10 +29,18 @@ use App\Http\Controllers\HitoController;
 |
 */
 
-//Route::get('/', [ControllerTablaPlanificacion::class, 'getTabla']);
-Route::post('/seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'cargarSS']);
 
-Route::post('/registro_seguimiento_semanal', [ControllerSeguimientoSemanal::class, 'registroSemana']);
+
+
+
+
+//registro del control semanal con asistencias
+Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
+
+
+//visialización de la planilla de planificación
+Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
 
 
 Route::get('/', function () {
@@ -37,6 +53,7 @@ Route::get('/estudiante', function () {
 Route::get('/objetivos', function () {
     return view('/objetivos/visualizarObjetivos');
 });
+
 use App\Http\Controllers\GrupoEmpresaController;
 
 Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'showForm']);
@@ -80,5 +97,3 @@ Route::post('/criterio_aceptacion/store', [CriterioAceptacionController::class, 
 Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHitos'])->name('proyecto.hitos');
 
 Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
-
-
