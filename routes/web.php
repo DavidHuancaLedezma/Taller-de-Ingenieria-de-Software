@@ -19,7 +19,9 @@ Route::get('/', function () {
 Route::get('/estudiante', function () {
     return view('/grupo_empresa/registroEstudiante');
 });
-
+Route::get('/objetivos', function () {
+    return view('/objetivos/visualizarObjetivos');
+});
 use App\Http\Controllers\GrupoEmpresaController;
 
 Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'showForm']);

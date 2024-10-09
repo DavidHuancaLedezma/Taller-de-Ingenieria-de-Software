@@ -144,7 +144,7 @@ return [
     'digits' => 'El teléfono debe tener 8 dígitos.',
     'unique' => 'Este correo ya está registrado.',
     'regex' => 'formato inválido.',
-    'correo.ends_with' => 'El correo debe ser una dirección de Gmail válida.',
+    'ends_with' => 'El correo debe ser una dirección de Gmail válida.',
 
     'min' => [
         'string' => ' debe contener al menos 3 caracteres',
