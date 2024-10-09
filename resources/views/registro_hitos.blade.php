@@ -189,15 +189,15 @@
         <div class="date-group">
             <div>
                 <label for="fecha_inicio_hito">Fecha Inicio:</label>
-                <input type="date" name="fecha_inicio_hito" id="fecha_inicio_hito" required>
+                <input type="date" name="fecha_inicio_hito" id="fecha_inicio_hito" value="{{ old('fecha_inicio_hito') }}" required>
             </div>
             <div>
                 <label for="fecha_fin_hito">Fecha Fin:</label>
-                <input type="date" name="fecha_fin_hito" id="fecha_fin_hito" required>
+                <input type="date" name="fecha_fin_hito" id="fecha_fin_hito" value="{{ old('fecha_fin_hito') }}" required>
             </div>
             <div>
                 <label for="porcentaje_cobro">Porcentaje de Cobro (%):</label>
-                <input type="text" name="porcentaje_cobro" id="porcentaje_cobro" placeholder="Porcentaje de cobro %" required>
+                <input type="text" name="porcentaje_cobro" id="porcentaje_cobro" placeholder="Porcentaje de cobro %" value="{{ old('porcentaje_cobro') }}" required>
             </div>
         </div>   
         <button type="submit" id="addHitoBtn" class="tab-button">Añadir Hito <i class="bi bi-rocket-takeoff-fill"></i> </button>

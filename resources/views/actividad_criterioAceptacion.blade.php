@@ -391,8 +391,8 @@
             if (descripcion === '') {
                 document.getElementById('descripcionActividadError').textContent = 'La descripción de la actividad es obligatoria.';
                 isValid = false;
-            } else if (descripcion.length < 20) {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 20 caracteres.';
+            } else if (descripcion.length < 5) {
+                document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 5 caracteres.';
                 isValid = false;
             } else if (descripcion.length > 500) {
                 document.getElementById('descripcionActividadError').textContent = 'La descripción no puede exceder los 500 caracteres.';
@@ -411,7 +411,7 @@
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado es obligatorio.';
                 isValid = false;
             } else if (resultado.length < 5) {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 20 caracteres.';
+                document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 5 caracteres.';
                 isValid = false;
             } else if (resultado.length > 500) {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede exceder los 500 caracteres.';
