@@ -51,7 +51,7 @@
 
 <div class="container d-flex justify-content-center mt-5">
     <div class="custom-container">
-        <h4 class="text-center mb-4">Registro Estudiante</h4>
+        <h4 class="text-center mb-4">Registro Docente</h4>
         <form action="{{ route('registro_estudiante.store') }}"  method="POST">
             @csrf
             <div class="row">
