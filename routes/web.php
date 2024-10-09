@@ -28,8 +28,35 @@ Route::post('/registro_seguimiento_semanal', [ControllerSeguimientoSemanal::clas
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/grupo_empresa/registroGE');
 });
+
+Route::get('/estudiante', function () {
+    return view('/grupo_empresa/registroEstudiante');
+});
+Route::get('/objetivos', function () {
+    return view('/objetivos/visualizarObjetivos');
+});
+use App\Http\Controllers\GrupoEmpresaController;
+
+Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'showForm']);
+Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'create'])->name('grupo_empresa.create');
+Route::post('/registro-grupo-empresa/store', [GrupoEmpresaController::class, 'store'])->name('grupo_empresa.store');
+Route::get('/registro-grupo-empresa/success', [GrupoEmpresaController::class, 'success'])->name('grupo_empresa.success');
+
+use App\Http\Controllers\RegistroEstudianteController;
+// Ruta para mostrar el formulario de registro
+Route::get('/registro-estudiante', [RegistroEstudianteController::class, 'create'])->name('registro_estudiante.form');
+
+// Ruta para manejar el envío del formulario de registro
+Route::post('/registro-estudiante', [RegistroEstudianteController::class, 'store'])->name('registro_estudiante.store');
+Route::get('/registro-estudiante', [RegistroEstudianteController::class, 'create'])->name('registro_estudiante.create');
+
+// Ruta para redirigir en caso de éxito (puedes cambiar el nombre a success2 si lo prefieres)
+Route::get('/registro-success', function () {
+    return view('success2'); // Asegúrate de tener una vista 'success2.blade.php'
+})->name('registro.success');
+
 
 
 // Ruta para la vista de registro de objetivo (usando registro_objetivo.blade.php)
@@ -53,4 +80,5 @@ Route::post('/criterio_aceptacion/store', [CriterioAceptacionController::class, 
 Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHitos'])->name('proyecto.hitos');
 
 Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
+
 

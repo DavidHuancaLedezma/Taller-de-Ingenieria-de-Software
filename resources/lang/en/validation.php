@@ -140,10 +140,29 @@ return [
     | specify a specific custom language line for a given attribute rule.
     |
     */
+    'confirmed' => 'La contraseña no coincide',
+    'digits' => 'El teléfono debe tener 8 dígitos.',
+    'unique' => 'Este correo ya está registrado.',
+    'regex' => 'formato inválido.',
+    'ends_with' => 'El correo debe ser una dirección de Gmail válida.',
 
+    'min' => [
+        'string' => ' debe contener al menos 3 caracteres',
+    ],
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'nombre_largo' => [
+            'required' => 'El nombre largo es obligatorio.',
+            'unique' => 'Este nombre largo ya está en uso.',
+        ],
+        'nombre_corto'=>[
+            'unique' => 'El nombre corto ya esta en uso',
+            'different' => 'El nombre corto no puede ser igual al nombre largo.',
+        ],
+        'telefono' => [
+            'digits' => 'El teléfono debe tener  8 dígitos.'
+        ],
+        'correo' => [
+            'unique' => 'Este correo ya está registrado.',
         ],
     ],
 
