@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GrupoEmpresa extends Model
 {
+
     use HasFactory;
 
     // Nombre de la tabla (si no sigue la convención de nombres de Laravel)
@@ -31,4 +32,10 @@ class GrupoEmpresa extends Model
         'correo_electronico_ge',
         'telefono_ge'
     ];
+    // Relación con Proyecto
+    public function proyectos()
+    {
+        return $this->hasMany(Proyecto::class, 'id_grupo_empresa', 'id_grupo_empresa');
+    }
+
 }
