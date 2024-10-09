@@ -217,7 +217,7 @@
             @if (count($enProgreso) == 2)
                 <h3 class="control-hoy">Semana: {{$enProgreso[0]}} al {{$enProgreso[1]}}</h3>
             @else
-                <h3 class="control-hoy">{{$enProgreso[0]}}</h3>
+                <h3 class="control-hoy" style="color:red">{{$enProgreso[0]}}</h3>
             @endif
             <div class="contenedor-objetivos">
                 <h4>Objetivos:</h4>
@@ -358,7 +358,7 @@
     document.addEventListener("DOMContentLoaded", function() {
     const guardarBtn = document.getElementById('boton-guardar-seguimiento-semanal');
     const ocultarComponenteSemana = document.getElementById('ocultar-componente-semana').value;
-    console.log(ocultarComponenteSemana); // eliminar
+    
     // Convertir el valor en un booleano si es necesario
     const mostrarMensaje = ocultarComponenteSemana ; // Ajustar según cómo pase PHP el valor
 
@@ -372,6 +372,18 @@
         guardarBtn.style.display = 'block';
         areaTextoDescripcion.style.display = 'block';
         tituloDescripcion.style.display = 'block' ;
+
+        let arrayDeSemanas = JSON.parse(document.getElementById('id-semana-registro').value);
+        console.log(arrayDeSemanas);
+        if(arrayDeSemanas[0] === "Hito finalizado" || arrayDeSemanas[0] === "Hito no iniciado"){
+            guardarBtn.style.display = 'none';
+            areaTextoDescripcion.style.display = 'none';
+            tituloDescripcion.style.display = 'none' ; 
+        }else{
+            guardarBtn.style.display = 'block';
+            areaTextoDescripcion.style.display = 'block';
+            tituloDescripcion.style.display = 'block' ;
+        }
     }
 });
 </script>
