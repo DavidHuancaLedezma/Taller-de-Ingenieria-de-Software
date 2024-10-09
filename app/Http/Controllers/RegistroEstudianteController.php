@@ -18,9 +18,9 @@ class RegistroEstudianteController extends Controller
         
         // Validar los datos del formulario
         $validated = $request->validate([
-            'nombre_usuario' => 'required|string|max:50',
-            'apellido_estudiante' => 'required|string|max:60',
-            'telefono_usuario' => 'required|numeric',
+            'nombre_usuario' => 'required|string|min:3|max:50|regex:/[a-zA-Z]+$/',
+            'apellido_estudiante' => 'required|string|min:3|max:60|regex:/[a-zA-Z]+$/',
+            'telefono_usuario' => 'required|digits:8',
             'correo_electronico_user' => 'required|string|email|max:70|unique:usuario,correo_electronico_user',
             'contrasena' => 'required|string|confirmed|min:8|max:8',  // Mínimo y máximo de 8 caracteres por tu definición de DB
             'programa_academico' => 'nullable|string|max:50',
@@ -54,7 +54,7 @@ class RegistroEstudianteController extends Controller
             DB::commit();
 
             // Redirigir o mostrar un mensaje de éxito
-            return redirect()->route('registro_estudiante.create')->with('status', 'Registro completado exitosamente');
+            return redirect()->route('registro_estudiante.create')->with('success2', 'Registro completado exitosamente');
         } catch (\Exception $e) {
             // Si ocurre algún error, revertimos la transacción
             DB::rollback();

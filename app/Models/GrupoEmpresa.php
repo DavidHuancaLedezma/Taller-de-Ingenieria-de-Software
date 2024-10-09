@@ -28,7 +28,7 @@ class GrupoEmpresa extends Model
         'nombre_largo',
         'nombre_corto',
         'direccion',
-        'correo_eletronico_ge',
+        'correo_electronico_ge',
         'telefono_ge'
     ];
 }

@@ -56,7 +56,10 @@
                         <div class="form-group">
                             <label for="nombreLargo">Nombre Largo: </label>
                             <input type="text" id="nombre_largo" name="nombre_largo" class="form-control"
-                                placeholder="Nombre largo" required>
+                                placeholder="Nombre largo" value="{{ old('nombre_largo') }}" required>
+                                @if ($errors->has('nombre_largo'))
+                                 <div class = "text-danger">{{ $errors->first('nombre_largo') }}</div>
+                     @endif
                         </div>
                     </div>
 
@@ -64,7 +67,10 @@
                         <div class="form-group">
                             <label for="nombreCorto">Nombre Corto: </label>
                             <input type="text" id="nombre_corto" name="nombre_corto" class="form-control"
-                                placeholder="Nombre corto" required>
+                                placeholder="Nombre corto" value="{{ old('nombre_corto') }}" required>
+                                @if ($errors->has('nombre_corto'))
+                          <div class="text-danger">{{ $errors->first('nombre_corto') }}</div>
+                         @endif
                         </div>
                     </div>
                 </div>
@@ -74,7 +80,10 @@
                         <div class="form-group">
                             <label for="direccion">Dirección grupo empresa:</label>
                             <input type="text" id="direccion" name="direccion" class="form-control"
-                                placeholder="Dirección de grupo empresa" required>
+                                placeholder="Dirección de grupo empresa" value="{{ old('direccion') }}" required>
+                                @if ($errors->has('direccion'))
+                                      <div class="text-danger">{{ $errors->first('direccion') }}</div>
+                                 @endif
                         </div>
                     </div>
 
@@ -82,7 +91,10 @@
                         <div class="form-group">
                             <label for="telefono">Teléfono: </label>
                             <input type="tel" id="telefono" name="telefono" class="form-control"
-                                placeholder="Teléfono" required>
+                                placeholder="Teléfono"   value="{{ old('telefono') }}" required>
+                                @if ($errors->has('telefono'))
+                                    <div class="text-danger">{{ $errors->first('telefono') }}</div>
+                                @endif
                         </div>
                     </div>
                 </div>
@@ -90,14 +102,18 @@
                 <div class="row mb-3">
                     <div class="form-group">
                         <label for="correo">Correo electrónico: </label>
-                        <input type="email" id="correo_electronico" name="correo" class="form-control"
-                            placeholder="Correo electrónico" required>
+                        <input type="email" id="correo" name="correo" class="form-control"
+                            placeholder="Correo electrónico" value="{{ old('correo') }}" required>
+                            @if ($errors->has('correo'))
+                                <div class="text-danger">{{ $errors->first('correo') }}</div>
+                             @endif
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <div class="form-check">
-                        <input type="checkbox" id="aviso-legal" name="acepto_politica" class="form-check-input" required>
+                        <input type="checkbox" id="aviso-legal" name="acepto_politica" class="form-check-input" 
+                        {{ old('acepto_politica') ? 'checked' : '' }} required>
                         <label class="form-check-label" for="aviso-legal">
                             He leído y acepto el <a href="{% url 'politicas' %}" target="_blank">aviso legal y la Política
                                 de privacidad</a>
@@ -107,7 +123,8 @@
 
                 <div class="mb-3">
                     <div class="form-check">
-                        <input type="checkbox" id="terminos" name="acepto_terminos" class="form-check-input" required>
+                        <input type="checkbox" id="terminos" name="acepto_terminos" class="form-check-input"
+                        {{ old('acepto_terminos') ? 'checked' : '' }}  required>
                         <label class="form-check-label" for="terminos">
                             Acepto los <a href="#" target="_blank">términos y condiciones</a>
                         </label>
@@ -120,6 +137,8 @@
             </form>
         </div>
     </div>
+  
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
