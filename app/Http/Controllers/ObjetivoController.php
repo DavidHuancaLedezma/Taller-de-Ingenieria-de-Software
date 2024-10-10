@@ -73,9 +73,9 @@ class ObjetivoController extends Controller
     // Verificar si la inserción fue exitosa
     if ($inserted) {
         //return redirect()->route('registro_objetivo')->with('success', 'Objetivo registrado correctamente.');
-        return redirect()->back()->with('success', 'Objetivo registrado correctamente');
+        return redirect()->back()->with('success', 'Entregable registrado correctamente');
     } else {
-        return redirect()->back()->with('error', 'Error al registrar el objetivo.');
+        return redirect()->back()->with('error', 'Error al registrar el Entregable.');
     }
 }
 
@@ -89,7 +89,7 @@ class ObjetivoController extends Controller
 
          // Asegurarse de que el objetivo existe
          if (!$objetivo) {
-            return redirect()->back()->withErrors('El objetivo no existe.');
+            return redirect()->back()->withErrors('El Entregable no existe.');
         }
 
         // Implementación de la consulta solicitada con el constructor de consultas de Laravel

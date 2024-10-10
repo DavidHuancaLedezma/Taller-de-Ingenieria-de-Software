@@ -201,7 +201,7 @@
 <body>
     <div class="container">
         <div class="header">
-        <h2 class="titulo-objetivo">Objetivo:</h2>
+        <h2 class="titulo-objetivo">Entregable:</h2>
             <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
         </div>
         @if(session('success'))
@@ -222,101 +222,73 @@
             });
         </script>
         @endif
-        <div class="tabs">
-            <button id="add-activity" class="tab-button">Actividades +</button>
-           
-        </div>
+        <br>
         <form action="process.php" method="post">
+            <button type="button" id="add-criteria" class="tab-button">Criterios de Aceptación +</button>
+           
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Descripción de actividad</th>
-                        <th>Resultado esperado</th>
-                        <th>Responsable</th>
+                        <th>Descripción de criterio de aceptación</th>
                     </tr>
                 </thead>
                 <tbody id="activityTable">
-                    @foreach($actividades as $actividad)
+                    @foreach($criterios_aceptacion as $criterio)
                     <tr>
-                        <td>{{$actividad-> descripcion_actividad}}</td>
-                        <td>{{$actividad-> resultado}}</td>
-                        <td>
-                            @php
-                                $estudiante = $estudiantes->firstWhere('id_usuario', $actividad->id_usuario);
-                            @endphp
-                                {{ $estudiante ? $estudiante->nombre_estudiante : 'No asignado' }}
-                        </td>
+                        <td>{{ $criterio->descripcion_ca }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-           
+ 
         </form>
 
     </div>
 
-    <!-- Formulario emergente para Actividad -->
-    <div id="popupActivityForm" class="popup-form" style="display: none;">
+   
+    <!-- Formulario emergente para Criterio de Aceptación -->
+    <div id="popupCriteriaForm" class="popup-form" style="display: none;">
         <div class="contenedor-mini-formulario">
             <header class="header-mini-formulario">
-                <h1 class="h1-mini-formulario">Actividad</h1>
+                <h1 class="h1-mini-formulario">Criterio de aceptación</h1>
             </header>
             <main class="main-mini-formulario">
-                <form id="activityForm" action="{{ route('actividad.store') }}" method="POST">
-                    @csrf
+                <form id="criteriaForm" action="{{ route('criterio_aceptacion.store') }}" method="POST">
+                    @csrf <!-- Incluye el token CSRF -->
                     <input type="hidden" name="objetivo_id" value="{{ $objetivo->id_objetivo }}">
                     <div class="form-group">
-                        <label for="descripcionActividad">Descripción de la Actividad</label>
-                        <textarea name="descripcion" id="descripcionActividad" class="form-control" placeholder="Descripción de la actividad" required></textarea>
-                        <span id="descripcionActividadError" class="error-message"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="resultadoEsperado">Resultado Esperado</label>
-                        <textarea name="resultado" id="resultadoEsperado" class="form-control" placeholder="Resultado esperado" required></textarea>
-                        <span id="resultadoEsperadoError" class="error-message"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="estudiante">Asignar a Estudiante</label>
-                        <select name="usuario_id" id="estudiante" class="form-control">
-                            <option value="">Selecciona un responsable</option>
-                            @if ($estudiantes->isNotEmpty())
-                                @foreach($estudiantes as $estudiante)
-                                    <option value="{{ $estudiante->id_usuario }}">{{ $estudiante->nombre_estudiante }}</option>
-                                @endforeach
-                            @else
-                                <option>No hay estudiantes disponibles</option>
-                            @endif
-                        </select>
-                        <span id="estudianteError" class="error-message"></span>
+                        <label for="descripcionCriterio">Descripción</label>
+                        <textarea name="descripcionCriterio" id="descripcionCriterio" cols="45" rows="4" class="form-control" placeholder="Descripción del criterio de aceptación"></textarea>
+                        <span id="descripcionCriterioError" class="error-message"></span>
                     </div>
                     <footer class="footer-mini-formulario">
                         <button type="submit" class="btn btn-info">Añadir <i class="bi bi-rocket-takeoff-fill"></i></button>
-                        <button type="button" class="btn btn-danger" id="cancelActivity">Cancelar <i class="bi bi-x-circle-fill"></i></button>
+                        <button type="button" class="btn btn-danger" id="cancelCriteria">Cancelar <i class="bi bi-x-circle-fill"></i></button>
                     </footer>
                 </form>
             </main>
         </div>
     </div>
 
-   
     <script>
     // Obtener elementos del DOM
-        const popupActivityForm = document.getElementById('popupActivityForm');
-        const addActivityBtn = document.getElementById('add-activity');
-        const cancelActivityBtn = document.getElementById('cancelActivity');
-        const activityForm = document.getElementById('activityForm');
+       
+        const popupCriteriaForm = document.getElementById('popupCriteriaForm');
+        const addCriteriaBtn = document.getElementById('add-criteria');
+        const cancelCriteriaBtn = document.getElementById('cancelCriteria');
+        const criteriaForm = document.getElementById('criteriaForm');
 
-        // Mostrar el formulario emergente para Actividad
-        addActivityBtn.addEventListener('click', function (e) {
+
+        // Mostrar el formulario emergente para Criterio de Aceptación
+        addCriteriaBtn.addEventListener('click', function (e) {
             e.preventDefault(); // Prevenir la acción por defecto
-            popupActivityForm.style.display = 'flex'; // Mostrar el formulario
+            popupCriteriaForm.style.display = 'flex'; // Mostrar el formulario
         });
 
-        // Cerrar formulario de Actividad
-        cancelActivityBtn.addEventListener('click', function () {
-            popupActivityForm.style.display = 'none'; // Ocultar el formulario
+        // Cerrar formulario de Criterio de Aceptación
+        cancelCriteriaBtn.addEventListener('click', function () {
+            popupCriteriaForm.style.display = 'none'; // Ocultar el formulario
         });
-
 
           // Función para contar caracteres especiales y números
         function countSpecialCharsAndNumbers(str) {
@@ -324,57 +296,30 @@
             const matches = str.match(regex);
             return matches ? matches.length : 0;
         }
-        // Validar el formulario de Actividad antes de enviar
-        activityForm.addEventListener('submit', function (e) {
+
+        // Validar el formulario de Criterio de Aceptación antes de enviar
+        criteriaForm.addEventListener('submit', function (e) {
             let isValid = true;
 
-            const descripcion = document.getElementById('descripcionActividad').value.trim();
-            const resultado = document.getElementById('resultadoEsperado').value.trim();
-            const estudiante = document.getElementById('estudiante').value;
+            const descripcionCriterio = document.getElementById('descripcionCriterio').value.trim();
 
-            if (descripcion === '') {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción de la actividad es obligatoria.';
+            if (descripcionCriterio === '') {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción del criterio de aceptación es obligatoria.';
                 isValid = false;
-            } else if (descripcion.length < 5) {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 5 caracteres.';
+            } else if (descripcionCriterio.length < 20) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción debe tener más de 20 caracteres.';
                 isValid = false;
-            } else if (descripcion.length > 500) {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción no puede exceder los 500 caracteres.';
+            } else if (descripcionCriterio.length > 500) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede exceder los 500 caracteres.';
                 isValid = false;
-            } else if (countSpecialCharsAndNumbers(descripcion) > 10) {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción no puede contener más de 10 caracteres especiales o números.';
+            } else if (countSpecialCharsAndNumbers(descripcionCriterio) > 10) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede contener más de 10 caracteres especiales o números.';
                 isValid = false;
-            } else if (/^[0-9]+$/.test(descripcion) || /^[^a-zA-Z0-9]+$/.test(descripcion)) {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción no puede contener solo números o caracteres especiales.';
+            } else if (/^[0-9]+$/.test(descripcionCriterio) || /^[^a-zA-Z0-9]+$/.test(descripcionCriterio)) {
+                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede contener solo números o caracteres especiales.';
                 isValid = false;
             } else {
-                document.getElementById('descripcionActividadError').textContent = '';
-            }
-
-            if (resultado === '') {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado es obligatorio.';
-                isValid = false;
-            } else if (resultado.length < 5) {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 5 caracteres.';
-                isValid = false;
-            } else if (resultado.length > 500) {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede exceder los 500 caracteres.';
-                isValid = false;
-            } else if (countSpecialCharsAndNumbers(resultado) > 10) {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede contener más de 10 caracteres especiales o números.';
-                isValid = false;
-            } else if (/^[0-9]+$/.test(resultado) || /^[^a-zA-Z0-9]+$/.test(resultado)) {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede contener solo números o caracteres especiales.';
-                isValid = false;
-            } else {
-                document.getElementById('resultadoEsperadoError').textContent = '';
-            }
-
-            if (estudiante === '') {
-                document.getElementById('estudianteError').textContent = 'Debes asignar un estudiante responsable.';
-                isValid = false;
-            } else {
-                document.getElementById('estudianteError').textContent = '';
+                document.getElementById('descripcionCriterioError').textContent = '';
             }
 
             if (!isValid) {
@@ -383,18 +328,9 @@
         });
 
         // Eliminar el mensaje de error al hacer clic en el campo
-        document.getElementById('descripcionActividad').addEventListener('focus', function () {
-            document.getElementById('descripcionActividadError').textContent = '';
+        document.getElementById('descripcionCriterio').addEventListener('focus', function () {
+            document.getElementById('descripcionCriterioError').textContent = '';
         });
-
-        document.getElementById('resultadoEsperado').addEventListener('focus', function () {
-            document.getElementById('resultadoEsperadoError').textContent = '';
-        });
-
-        document.getElementById('estudiante').addEventListener('focus', function () {
-            document.getElementById('estudianteError').textContent = '';
-        });
-
     </script>
 
  </body>

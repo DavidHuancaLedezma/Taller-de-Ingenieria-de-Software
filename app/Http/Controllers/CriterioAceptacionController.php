@@ -10,6 +10,32 @@ use Illuminate\Support\Facades\DB;
 
 class CriterioAceptacionController extends Controller
 {
+    public function registroCriterio($id_objetivo)
+    {
+        // Obtener el objetivo junto con su descripción
+        $objetivo = DB::table('objetivo')
+                    ->select('id_objetivo', 'descrip_objetivo') // Seleccionar ambos campos
+                    ->where('id_objetivo', $id_objetivo)
+                    ->first(); // Obtiene el primer resultado como un objeto
+
+         // Asegurarse de que el objetivo existe
+         if (!$objetivo) {
+            return redirect()->back()->withErrors('El Entregable no existe.');
+        }
+
+                
+        // Obtener los criterios de aceptación relacionados con el objetivo
+        $criterios_aceptacion = DB::table('criterio_aceptacion')
+                    ->where('id_objetivo', $id_objetivo)
+                    ->select('descripcion_ca')
+                    ->get();
+
+      
+        // Pasar las actividades, criterios de aceptación y estudiantes a la vista
+        return view('criterioAceptacion', compact('objetivo','criterios_aceptacion'));
+
+    }
+
     public function store(Request $request)
     {
         // Validar los datos del formulario
