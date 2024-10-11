@@ -59,7 +59,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="nombre_estudiante" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" 
+                        <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" tabindex="1
                         value="{{ old('nombre_usuario') }}" required placeholder="Nombre">
                     </div>
                     @if ($errors->has('nombre_usuario'))
@@ -67,7 +67,7 @@
                             @endif
                     <div class="mb-3">
                         <label for="telefono" class="form-label">Teléfono:</label>
-                        <input type="number" class="form-control" id="telefono_usuario" name="telefono_usuario" 
+                        <input type="number" class="form-control" id="telefono_usuario" name="telefono_usuario" tabindex="3
                         value="{{ old('telefono_usuario') }}" placeholder="Teléfono" required>
                         @if ($errors->has('telefono_usuario'))
                                     <div class="text-danger">{{ $errors->first('telefono_usuario') }}</div>
@@ -77,7 +77,7 @@
                     <div class="mb-3">
                         <label for="contrasena" class="form-label">Contraseña:</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="contrasena" name="contrasena" 
+                            <input type="password" class="form-control" id="contrasena" name="contrasena" tabindex="5"
                             value="{{ old('contrasena') }}" required minlength="8" placeholder="Contraseña">
                             <span class="input-group-text">
                                 <i class="fas fa-eye toggle-password" onclick="togglePassword('contrasena')"></i>
@@ -93,7 +93,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="apellido_estudiante" class="form-label">Apellidos:</label>
-                        <input type="text" class="form-control" id="apellido_estudiante" name="apellido_estudiante" 
+                        <input type="text" class="form-control" id="apellido_estudiante" name="apellido_estudiante" tabindex="2"
                         value="{{ old('apellido_estudiante') }}" required placeholder="Apellidos">
                     </div>
                     @if ($errors->has('apellido_estudiante'))
@@ -101,7 +101,7 @@
                             @endif
                     <div class="mb-3">
                         <label for="correo" class="form-label">Correo electronico:</label>
-                        <input type="email" class="form-control" id="correo_electronico_user"
+                        <input type="email" class="form-control" id="correo_electronico_user" tabindex="4"
                         value="{{ old('correo_electronico_user') }}" name="correo_electronico_user" required placeholder="Correo electronico">
                         @if ($errors->has('correo_electronico_user'))
                                     <div class="text-danger">{{ $errors->first('correo_electronico_user') }}</div>
@@ -111,7 +111,7 @@
                     <div class="mb-3">
                         <label for="confirmar_contrasena" class="form-label">Confirmar Contraseña:</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="contrasena_confirmation" name="contrasena_confirmation" 
+                            <input type="password" class="form-control" id="contrasena_confirmation" name="contrasena_confirmation" tabindex="6"
                             value="{{ old('contrasena_confirmation') }}" required placeholder="Confirmar contraseña">
 
                             <span class="input-group-text">
