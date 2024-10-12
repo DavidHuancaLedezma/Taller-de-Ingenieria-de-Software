@@ -84,8 +84,11 @@ Route::get('/registro_objetivo/{id_proyecto}', [ObjetivoController::class, 'crea
 // Ruta para almacenar el nuevo objetivo
 Route::post('/objetivo/store', [ObjetivoController::class, 'store'])->name('objetivo.store');
 
-//Ruta para la visualizacion de añadir actividad y criterio de aceptación
-Route::get('/actividad_criterioAceptacion/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
+//Ruta para la visualizacion de añadir actividad
+Route::get('/actividad/{id_objetivo}', [ObjetivoController::class, 'registroActividadCriterio'])->name('registro_actividad_criterioAcep');
+
+//Ruta para la visualizacion de añadir criterio de aceptación
+Route::get('/criterioAceptacion/{id_objetivo}', [CriterioAceptacionController::class, 'registroCriterio'])->name('registro_criterioAcep');
 
 // Ruta para añadir actividad
 Route::post('/actividad/store', [ActividadController::class, 'store'])->name('actividad.store');
