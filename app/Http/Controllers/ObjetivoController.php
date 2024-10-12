@@ -128,7 +128,7 @@ class ObjetivoController extends Controller
         }
 
         // Pasar las actividades, criterios de aceptación y estudiantes a la vista
-        return view('actividad_criterioAceptacion', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
+        return view('actividad', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
 
         //return view('actividad_criterioAceptacion', compact('objetivo'));
     }

@@ -201,7 +201,7 @@
 <body>
     <div class="container">
         <div class="header">
-        <h2 class="titulo-objetivo">Objetivo:</h2>
+        <h2 class="titulo-objetivo">Entregable:</h2>
             <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
         </div>
         @if(session('success'))
