@@ -28,6 +28,16 @@ class ControllerRegistroSemanalGE extends Controller
             $numeroDeHito = self::getNumeroDeHito($idHito);
 
             $mostrarMensaje = self::verificarSemanaCalificadaMensaje($idHito, $enProgreso);
+            // Verificar si es la última semana del hito
+            $semanaActual = self::getSemanaActual($semanas, $idHito);
+            $ultimaSemana = end($semanas); // Obtener la última semana del hito
+
+            if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
+                // Redirigir a la vista de evaluación final del hito
+                //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
+                return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
+                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'mostrarMensaje', 'nombreCorto'));
+            }
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
         } catch (\Exception $e) {
             return "ERROR 404";

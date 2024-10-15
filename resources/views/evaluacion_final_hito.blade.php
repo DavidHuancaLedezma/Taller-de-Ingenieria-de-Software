@@ -106,7 +106,6 @@
             display: flex;
             justify-content: space-between;
         }
-
         .description textarea {
             width: 100%;
             height: 100px;
@@ -179,15 +178,17 @@
             color: #2c3e50; /* Cambia el color cuando pasas el cursor sobre el enlace */
             text-decoration: underline; /* Opcional: muestra subrayado al pasar el cursor */
         }
-
-
+        textarea:focus {
+            border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
+            outline: none; /* Elimina el borde azul por defecto */
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Registro semanal</h1>
-            <h2>Evaluación final de Hito #</h2>
+            <h1>Registro semanal {{$nombreCorto}}</h1>
+            <h2>Evaluación final de Hito {{ $numeroDeHito ?? 'hito no disponible' }}</h2>
         </header>
         <section class="progress-section">
             <div class="progress-bar">
@@ -209,15 +210,21 @@
             <div class="attendance">
                 <h3>Asistencia</h3>
                 <ul>
-                    <li>Juan José <input type="checkbox"></li>
-                    <li>David <input type="checkbox"></li>
-                    <li>Alan <input type="checkbox"></li>
-                    <li>Rodrigo <input type="checkbox"></li>
-                </ul>
+                    @foreach ($estudianteEnAlerta as $estudiante)
+                        <li @if($estudiante[1] >= 3) style="color:red;" @endif>
+                            {{$estudiante[0]}} 
+                            <input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" @if($estudiante[2]) checked @endif>
+                        </li>
+                    @endforeach
+                </ul>   
             </div>
+            @if ($mostrarMensaje)
+                <h2 class="Mensaje-de-semana-registrada" style="color: red">Esta semana ya fue registrada</h2>
+            @endif 
             <div class="description">
                 <h3>Descripción</h3>
                 <textarea placeholder="Escribe descripción"></textarea>
+                <span id="descripcionError" class="error-message"></span>
             </div>
         </section>
         <section class="objectives-section">

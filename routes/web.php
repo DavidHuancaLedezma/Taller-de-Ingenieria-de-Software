@@ -100,3 +100,6 @@ Route::post('/criterio_aceptacion/store', [CriterioAceptacionController::class, 
 Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHitos'])->name('proyecto.hitos');
 
 Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
+
+//Ruta para la visualizacion de evaluacion final de hito
+Route::get('/evaluacion_final_hito/{id_hito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
