@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\ControllerTablaPlanificacion;
 use App\Http\Controllers\ControllerSeguimientoSemanal;
@@ -34,11 +34,9 @@ Route::get('/', function () {
 Route::get('/estudiante', function () {
     return view('/grupo_empresa/registroEstudiante');
 });
-Route::get('/objetivos', function () {
-    return view('/objetivos/visualizarObjetivos');
-});
+
 Route::get('/docente', function () {
-    return view('/docente/registrarDocente');
+    return view('/docente/registroDocente');
 });
 use App\Http\Controllers\GrupoEmpresaController;
 
@@ -60,6 +58,19 @@ Route::get('/registro-success', function () {
     return view('success2'); // Asegúrate de tener una vista 'success2.blade.php'
 })->name('registro.success');
 
+
+use App\Http\Controllers\RegistroDocenteController;
+
+// Ruta para mostrar el formulario
+Route::get('/registro-docente', [RegistroDocenteController::class, 'create'])->name('registro_docente.create');
+
+// Ruta para procesar el formulario
+Route::post('/registro-docente', [RegistroDocenteController::class, 'store'])->name('registro_docente.store');
+
+// Ruta para la vista de éxito después de registrar un docente
+Route::get('/registro-docente-success', function () {
+    return view('success'); // Vista de éxito para docentes
+})->name('registro_docente.success');
 
 
 // Ruta para la vista de registro de objetivo (usando registro_objetivo.blade.php)

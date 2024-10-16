@@ -19,6 +19,7 @@
             margin-left: 0.5rem;
         }
         .custom-container {
+            width: 60%;
             background-color: white;
             padding: 50px;
             border-radius: 10px;
@@ -33,6 +34,7 @@
             border-radius: 8px;
             padding: 10px 30px;
             font-weight: bold;
+            color: white;
         }
         .btn-custom:hover {
             background-color: #3a5f82;
@@ -43,8 +45,13 @@
              margin-top: 5px;
             margin-left: 2px;
             margin-bottom: 1px;
-            min-height: 20px; 
+            min-height: 20px;  /* Reservar espacio */
+            display: block;    /* Asegurar que siempre esté en bloque */
         }
+        .form-control, .form-label {
+        margin-bottom: 10px;
+}
+
     </style>
 </head>
 <body>
