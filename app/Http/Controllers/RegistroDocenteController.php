@@ -20,7 +20,7 @@ class RegistroDocenteController extends Controller
             'nombre_docente' => 'required|string|min:3|max:40|regex:/^[a-zA-Z\s]+$/',
             'apellido_docente' => 'required|string|min:3|max:60|regex:/^[a-zA-Z\s]+$/',
             'correo_docente' => 'required|string|email|max:70|unique:usuario,correo_electronico_user|ends_with:@gmail.com',
-            'contrasena' => 'required|string|confirmed|min:8|max:8',  // Basado en la longitud de la DB
+            'contrasena' => 'required|string|confirmed|min:8',  // Basado en la longitud de la DB
             'privacy_policy' => 'accepted',
             'terms_conditions' => 'accepted',
         ]);

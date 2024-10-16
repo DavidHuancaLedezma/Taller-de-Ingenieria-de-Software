@@ -45,12 +45,10 @@
              margin-top: 5px;
             margin-left: 2px;
             margin-bottom: 1px;
-            min-height: 20px;  /* Reservar espacio */
-            display: block;    /* Asegurar que siempre esté en bloque */
+             /* Reservar espacio */
+            /* Asegurar que siempre esté en bloque */
         }
-        .form-control, .form-label {
-        margin-bottom: 10px;
-}
+  
 
     </style>
 </head>
