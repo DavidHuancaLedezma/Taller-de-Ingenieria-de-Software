@@ -44,38 +44,53 @@
             font-size: 18px;
             margin-top: 10px;
         }
-
+        /*----grafica de semanas-----*/
         .progress-section {
-            margin: 30px 0;
+            /*display: flex;*/
+            justify-content: center; /* Centra el contenedor horizontalmente */
+            align-items: center;     /* Centra el contenedor verticalmente si es necesario */
+            /*min-height: 100vh;       /* Asegura que la sección ocupe el 100% de la altura de la ventana */
+        }
+        .progress-container{
+            display: flex;
+            width : 50% ;
+            margin: 5px 35px;
+            min-height : 20px ; 
+            gap : 10px ;  
+          
+        }
+
+        .progress-container .step{
+            padding: 0px ;text-align: center;
+            flex-grow: 1;
+            border: 1px solid rgb(160, 225, 245) ; 
+            border-radius: 5px ; 
+            justify-content: center;
+            
             
         }
 
-        .progress-bar {
-            display: flex;
-           /* justify-content: space-between;*/
-           gap: 5px;
-           justify-content: center; 
-        }
-
-        .progress {
-            width: 10%;
-            height: 35px;
-            background-color: #d0e7f5;
-            border-radius: 5px;
+        .step p {
+            font-size: 12px;  /* Tamaño del texto más pequeño */
+            margin: 5px 0 ; 
+           
         }
 
         .completed {
-            background-color: #89c2d9;
+            background-color: lightblue;
+            border-color: blue;
         }
-
-        .ongoing {
-            background-color: #a9d6e5;
+        .final-week {
+            background-color: darkred;
+            color: white;
         }
-
-        .not-completed {
-            background-color: #e63946;
+        main .nroHito{
+            margin : 3px 0px 0px 20px ;  
         }
-        
+        main .progreso{
+            margin : 10px 0px 0px 20px ;  
+        }
+       
 
         .main-content {
             display: flex;
@@ -139,17 +154,12 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
-        button.yes {
-            background-color: #89c2d9;
-            color: white;
+        .button-container {
+            display: flex;
+            gap: 10px; /* Espacio entre los botones */
         }
 
-        button.no {
-            background-color: #e63946;
-            color: white;
-        }
-        .submit-section {
+     .submit-section {
             text-align: center;
             margin-top: 20px;
         }
@@ -182,6 +192,30 @@
             border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
             outline: none; /* Elimina el borde azul por defecto */
         }
+        /* Aumentar el tamaño del checkbox y aplicar color personalizado */
+        .styled-checkbox {
+            width: 20px;
+            height: 20px;
+        /* accent-color: #89c2d9; /* Cambia el color del checkbox */
+            cursor: pointer;
+            
+        }
+
+        /* Ajustar la apariencia de la etiqueta asociada */
+        .checkbox-container label {
+            font-size: 16px; /* Tamaño del texto */
+            color: #333;     /* Color del texto */
+            display: flex;
+            align-items: center;
+            gap: 10px;       /* Espacio entre el checkbox y el texto */
+            flex-direction: row-reverse; /* ------Cambiar de posición de check--------------------*/
+        }
+
+        /* Opcional: Puedes ajustar el espaciado general entre elementos */
+        .checkbox-container {
+            padding: 5px 0;
+        }
+
     </style>
 </head>
 <body>
@@ -191,21 +225,20 @@
             <h2>Evaluación final de Hito {{ $numeroDeHito ?? 'hito no disponible' }}</h2>
         </header>
         <section class="progress-section">
-            <div class="progress-bar">
-                <div class="progress completed">
-                    <h6>semana 1</h6>
+            <div class="progress-container">
+                    @foreach ($semanas as $item)
+                        <div class="step">
+                            <p>{{$item['inicio']}}</p>
+                            <p>{{$item['fin']}}</p>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="progress ongoing">
-                    <h6>Semana 2</h6>
-                </div>
-                <div class="progress completed">
-                    <h6>Semana 3</h6>
-                </div>
-                <div class="progress not-completed">
-                    <h6>Semana fin</h6>
-                </div>
-            </div>
-        </section>
+                @if (count($enProgreso) == 2)
+                    <h3 class="control-hoy">Semana: {{$enProgreso[0]}} al {{$enProgreso[1]}}</h3>
+                @else
+                    <h3 class="control-hoy" style="color:red">{{$enProgreso[0]}}</h3>
+                @endif
+        </section>  
         <section class="main-content">
             <div class="attendance">
                 <h3>Asistencia</h3>
@@ -236,65 +269,58 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Objetivo 1 -->
-                    <tr>
-                        <td>Entregable 1</td>
-                        <td>
-                            <table class="nested-table">
-                                
-                                <tr>
-                                    <td>criterio 1 de objetivo 1</td>
-                                    <td>
-                                        <button class="yes">Sí</button>
-                                        <button class="no">No</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>criterio 2 de objetivo 1</td>
-                                    <td>
-                                        <button class="yes">Sí</button>
-                                        <button class="no">No</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <!-- Objetivo 2 -->
-                    <tr>
-                        <td>Entregable 2</td>
-                        <td>
-                            <table class="nested-table">
-                                <tr>
-                                    <td>criterio 1 de objetivo 2</td>
-                                    <td>
-                                        <button class="yes">Sí</button>
-                                        <button class="no">No</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>criterio 2 de objetivo 2</td>
-                                    <td>
-                                        <button class="yes">Sí</button>
-                                        <button class="no">No</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>criterio 3 de objetivo 2</td>
-                                    <td>
-                                        <button class="yes">Sí</button>
-                                        <button class="no">No</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                    @foreach ($objetivos as $objetivo)
+                        <tr>
+                            <td>{{ $objetivo->descrip_objetivo }}</td>
+                            <td>
+                                <table class="nested-table">
+                                    @foreach ($criteriosDeAceptacion as $criterio)
+                                        @if ($criterio->descrip_objetivo === $objetivo->descrip_objetivo)
+                                            <tr>
+                                                <td class="checkbox-container">
+                                                    <label>
+                                                        <input type="checkbox" name="criterio_{{ $criterio->id_criterio_aceptacion }}" class="styled-checkbox">
+                                                        <span>{{ $criterio->descripcion_ca }}</span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </table>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
-
             </table>
         </section>
+
         <div class="submit-section">
             <button class="save">Guardar <i class="bi bi-rocket-takeoff-fill"></i></button>
         </div>
     </div>
+    <script>
+        function setProgress(stepCount) {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                if (index < stepCount) {
+                    step.classList.add('completed'); 
+                } else {
+                    step.classList.remove('completed');
+                }
+            });
+        }
+
+        function highlightFinalWeek() {
+            const steps = document.querySelectorAll('.step');
+            if (steps.length > 0) {
+                const lastStep = steps[steps.length - 1];
+                lastStep.classList.add('final-week');
+            }
+        }
+
+        const numero =  '{{ $numeroColor }}'; // Reemplazar con valor dinámico
+        setProgress(numero);
+        highlightFinalWeek();
+    </script>
 </body>
 </html>

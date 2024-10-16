@@ -31,12 +31,13 @@ class ControllerRegistroSemanalGE extends Controller
             // Verificar si es la última semana del hito
             $semanaActual = self::getSemanaActual($semanas, $idHito);
             $ultimaSemana = end($semanas); // Obtener la última semana del hito
+            $criteriosDeAceptacion = self::getCriteriosDeAceptacion($idHito);
 
             if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
                 // Redirigir a la vista de evaluación final del hito
                 //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
                 return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
-                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'mostrarMensaje', 'nombreCorto'));
+                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'mostrarMensaje', 'nombreCorto', 'criteriosDeAceptacion'));
             }
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
         } catch (\Exception $e) {
@@ -309,4 +310,13 @@ class ControllerRegistroSemanalGE extends Controller
         }
         return $estudianteAsistencias;
     }
+    private static function getCriteriosDeAceptacion($idHito) {
+        return DB::select("
+            SELECT o.descrip_objetivo, ca.descripcion_ca, ca.id_criterio_aceptacion
+            FROM objetivo o
+            JOIN criterio_aceptacion ca ON o.id_objetivo = ca.id_objetivo
+            WHERE o.id_hito = ?
+        ", [$idHito]);
+    }
+    
 }
