@@ -27,7 +27,13 @@ class ControllerAutoevaluacion extends Controller
     private static function getParametrosDeEvaluacion($idProyecto)
     {
         $tipoEvaluacion = 1; // AUTOEVALUACIÓN
-        $parametrosDeEvaluacion = DB::select("SELECT pr.pregunta FROM evaluacion ev, pregunta pr WHERE pr.id_evaluacion = ev.id_evaluacion AND ev.id_tipo_evaluacion = ? AND ev.id_proyecto = ?", array($tipoEvaluacion, $idProyecto));
+        $parametrosDeEvaluacion = DB::select("SELECT ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, pe.escala_variable  
+        FROM evaluacion e, criterio_parametro_evaluacion cpe, parametro_evaluacion pe, criterio_evaluacion ce
+        WHERE e.id_evaluacion = cpe.id_evaluacion
+        AND ce.id_criterio_evaluacion = cpe.id_criterio_evaluacion
+        AND pe.id_parametro = cpe.id_parametro
+        AND e.id_tipo_evaluacion = ?
+        AND e.id_proyecto = ?", array($tipoEvaluacion, $idProyecto));
         return $parametrosDeEvaluacion;
     }
 
