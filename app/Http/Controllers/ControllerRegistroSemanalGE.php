@@ -32,12 +32,14 @@ class ControllerRegistroSemanalGE extends Controller
             $semanaActual = self::getSemanaActual($semanas, $idHito);
             $ultimaSemana = end($semanas); // Obtener la última semana del hito
             $criteriosDeAceptacion = self::getCriteriosDeAceptacion($idHito);
+            $historiaUsuario = self::getHistoriaUsuario($idHito);
 
             if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
                 // Redirigir a la vista de evaluación final del hito
                 //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
                 return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
-                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'mostrarMensaje', 'nombreCorto', 'criteriosDeAceptacion'));
+                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'mostrarMensaje', 'nombreCorto', 
+                            'criteriosDeAceptacion', 'historiaUsuario'));
             }
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
         } catch (\Exception $e) {
@@ -318,5 +320,15 @@ class ControllerRegistroSemanalGE extends Controller
             WHERE o.id_hito = ?
         ", [$idHito]);
     }
-    
+    private static function getHistoriaUsuario($idHito) {
+        return DB::select("
+            select * 
+                from historia_usuario,(
+                    select id_proyecto
+                    from hito
+                    where id_hito = ?
+                )a
+                where historia_usuario.id_proyecto = a.id_proyecto and done = 'False'
+        ", [$idHito]);
+    }
 }

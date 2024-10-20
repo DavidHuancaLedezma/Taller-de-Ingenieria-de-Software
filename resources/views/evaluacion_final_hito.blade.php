@@ -20,7 +20,7 @@
         }
 
         .container {
-            width: 70%;
+            width: 80%;
             margin: 30px auto;
             background-color: #fff;
             border: 1px solid #ccc;
@@ -144,9 +144,14 @@
             border: 1px solid #ccc;
         }
 
-        .objectives-section th {
-            background-color: #f2f2f2;
+        .entregable-column {
+            width: 80%; 
         }
+
+        .evaluar-column {
+            width: 20%; 
+        }
+
 
         button {
             padding: 10px;
@@ -166,13 +171,18 @@
 
         button.save {
             width: 20%;
-            background-color: #40759e;
+            background-color: #33789E;
             color: white;
             padding: 15px;
             font-size: 16px;
             margin-top: 20px;
             border-radius: 5px;
             
+        }
+        button.addHU{
+            
+            background-color: #33789E;
+            color: white;
         }
         h6{
             padding: 7px;
@@ -215,6 +225,67 @@
         .checkbox-container {
             padding: 5px 0;
         }
+        .seccion_dos {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .bloque_uno{
+            width: 70%;
+        }
+        .block_dos{
+            width: 30%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #40759e;
+            color: white;
+        }
+
+        td {
+            border: 1px solid #ccc;
+        }
+
+        .stile-text{
+            width: 100%;
+            padding: 5px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .btn-eliminar {
+            background-color: red; /* Color de fondo rojo */
+            color: white;          /* Texto blanco */
+            border: none;          /* Sin bordes */
+            padding: 5px 10px;     /* Espaciado interno */
+            border-radius: 5px;    /* Bordes redondeados */
+            cursor: pointer;       /* Cambiar cursor al pasar por encima */
+        }
+
+        .btn-eliminar:hover {
+            background-color: darkred; /* Cambia de color al pasar el ratón */
+        }
+        @media (max-width: 900px) {
+            .seccion_dos {
+                flex-direction: column; /* Cambia la disposición de los elementos a columna */
+            }
+
+            .sprint, .main-content {
+                padding: 10px;
+                width: 100%; /* Ambos bloques ocupan el 100% del ancho */
+            }
+        }
 
     </style>
 </head>
@@ -238,62 +309,83 @@
                 @else
                     <h3 class="control-hoy" style="color:red">{{$enProgreso[0]}}</h3>
                 @endif
-        </section>  
-        <section class="main-content">
-            <div class="attendance">
-                <h3>Asistencia</h3>
-                <ul>
-                    @foreach ($estudianteEnAlerta as $estudiante)
-                        <li @if($estudiante[1] >= 3) style="color:red;" @endif>
-                            {{$estudiante[0]}} 
-                            <input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" @if($estudiante[2]) checked @endif>
-                        </li>
-                    @endforeach
-                </ul>   
+        </section> 
+          <section class= "seccion_dos">
+            <div class="bloque_uno"> 
+                <section class="main-content">
+                    <div class="attendance">
+                        <h3>Asistencia</h3>
+                        <ul>
+                            @foreach ($estudianteEnAlerta as $estudiante)
+                                <li @if($estudiante[1] >= 3) style="color:red;" @endif>
+                                    {{$estudiante[0]}} 
+                                    <input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" @if($estudiante[2]) checked @endif>
+                                </li>
+                            @endforeach
+                        </ul>   
+                    </div>
+                    @if ($mostrarMensaje)
+                        <h2 class="Mensaje-de-semana-registrada" style="color: red">Esta semana ya fue registrada</h2>
+                    @endif 
+                    <div class="description">
+                        <h3>Descripción</h3>
+                        <textarea id="descripcion_control_semanal" placeholder="Escribe descripción" oninput="validarDescripcionControlSemanal()"></textarea>
+                        <span id="descripcionError" class="error"></span>
+                    </div>
+                </section>
+                <section class="objectives-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="entregable-column">Entregables</th>
+                                <th class="evaluar-column">Evaluar</th>                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($objetivos as $objetivo)
+                                <tr>
+                                    <td>{{ $objetivo->descrip_objetivo }}</td>
+                                    <td>
+                                    <input type="checkbox" ></td>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </section>
             </div>
-            @if ($mostrarMensaje)
-                <h2 class="Mensaje-de-semana-registrada" style="color: red">Esta semana ya fue registrada</h2>
-            @endif 
-            <div class="description">
-                <h3>Descripción</h3>
-                <textarea placeholder="Escribe descripción"></textarea>
-                <span id="descripcionError" class="error-message"></span>
-            </div>
-        </section>
-        <section class="objectives-section">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Entregables</th>
-                        <th>Criterios de aceptación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($objetivos as $objetivo)
+            <div class="bloque_dos">
+                <table id="tabla-dinamica">
+                    <thead>
                         <tr>
-                            <td>{{ $objetivo->descrip_objetivo }}</td>
-                            <td>
-                                <table class="nested-table">
-                                    @foreach ($criteriosDeAceptacion as $criterio)
-                                        @if ($criterio->descrip_objetivo === $objetivo->descrip_objetivo)
-                                            <tr>
-                                                <td class="checkbox-container">
-                                                    <label>
-                                                        <input type="checkbox" name="criterio_{{ $criterio->id_criterio_aceptacion }}" class="styled-checkbox">
-                                                        <span>{{ $criterio->descripcion_ca }}</span>
-                                                    </label>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </table>
-                            </td>
+                           
+                            <th>Historia de Usuario</th>
+                            <th>Estimación</th>
+                            <th>Observación</th>
+                            <th>Evaluar</th>
+                            <th></th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </section>
-
+                    </thead>
+                    <tbody>
+                        <!-- Las filas se añadirán aquí -->
+                        @foreach ($historiaUsuario as $hu)
+                                <tr>
+                                    <td>{{ $hu->titulo_hu }}</td>
+                                    <td>{{ $hu->estimacion_hu}}</td>
+                                    <td>
+                                    <textarea id="textarea_hu_{{ $hu->id_hu }}" class="stile-text" placeholder="Editar Descripción">{{ $hu->descripcion_eva_hu }}</textarea>
+                                    </td>
+                                    <td>
+                                    <input type="checkbox" class="stile-text">
+                                    </td>
+                                </tr>
+                            @endforeach
+                    </tbody>
+                </table>
+                
+                <button class="addHU" onclick="agregarFila()">Añadir +</button>
+            </div>
+        </section>   
         <div class="submit-section">
             <button class="save">Guardar <i class="bi bi-rocket-takeoff-fill"></i></button>
         </div>
@@ -321,6 +413,136 @@
         const numero =  '{{ $numeroColor }}'; // Reemplazar con valor dinámico
         setProgress(numero);
         highlightFinalWeek();
+
+        function agregarFila() {
+        const tabla = document.getElementById("tabla-dinamica").getElementsByTagName("tbody")[0];
+        const nuevaFila = tabla.insertRow();
+        const rowIndex = tabla.rows.length;
+
+        // Crear y agregar celdas con campos de entrada y divs para mensajes de error
+        nuevaFila.insertCell(0).innerHTML = `<input type="text" id="historia_${rowIndex}" placeholder="Historia de usuario" class="stile-text">
+                                             <div id="error_historia_${rowIndex}" class="error"></div>`;
+        nuevaFila.insertCell(1).innerHTML = `<input type="text" id="estimacion_${rowIndex}" placeholder="Estimación" class="stile-text">
+                                             <div id="error_estimacion_${rowIndex}" class="error"></div>`;
+        nuevaFila.insertCell(2).innerHTML = `<input type="text" id="descripcion_${rowIndex}" placeholder="Observación" class="stile-text">
+                                             <div id="error_descripcion_${rowIndex}" class="error"></div>`;
+        nuevaFila.insertCell(3).innerHTML = '<input type="checkbox" class="stile-text">';
+        
+        nuevaFila.insertCell(4).innerHTML = `<button class="btn-eliminar" onclick="eliminarFila(this)">Eliminar</button>`;
+
+        // Asignar validaciones en tiempo real
+        agregarValidaciones(rowIndex);
+    }
+    function eliminarFila(boton) {
+        // Eliminar la fila correspondiente
+        const fila = boton.parentNode.parentNode;
+        fila.parentNode.removeChild(fila);
+    }
+    function agregarValidaciones(index) {
+        const historiaInput = document.getElementById(`historia_${index}`);
+        const estimacionInput = document.getElementById(`estimacion_${index}`);
+        const descripcionInput = document.getElementById(`descripcion_${index}`);
+
+        // Validar "Historia de Usuario" en tiempo real
+        historiaInput.addEventListener('input', function() {
+            validarHistoriaUsuario(index);
+        });
+
+        // Validar "Estimación" en tiempo real
+        estimacionInput.addEventListener('input', function() {
+            validarEstimacion(index);
+        });
+
+        // Validar "Descripción" en tiempo real
+        descripcionInput.addEventListener('input', function() {
+            validarDescripcion(index);
+        });
+    }
+
+    function validarHistoriaUsuario(index) {
+        const historiaInput = document.getElementById(`historia_${index}`);
+        const errorHistoria = document.getElementById(`error_historia_${index}`);
+
+        if (historiaInput.value.length > 80) {
+            errorHistoria.innerHTML = "La Historia de Usuario no debe superar los 80 caracteres.";
+        } else {
+            errorHistoria.innerHTML = ""; // Limpiar el error si es válido
+        }
+    }
+
+    function validarEstimacion(index) {
+        const estimacionInput = document.getElementById(`estimacion_${index}`);
+        const errorEstimacion = document.getElementById(`error_estimacion_${index}`);
+
+        if (!/^\d+$/.test(estimacionInput.value)) {
+            errorEstimacion.innerHTML = "La Estimación debe ser un valor numérico.";
+        } else {
+            errorEstimacion.innerHTML = ""; // Limpiar el error si es válido
+        }
+    }
+
+    function validarDescripcion(index) {
+        const descripcionInput = document.getElementById(`descripcion_${index}`);
+        const errorDescripcion = document.getElementById(`error_descripcion_${index}`);
+
+        if (descripcionInput.value.length > 500) {
+            errorDescripcion.innerHTML = "La Descripción no debe superar los 500 caracteres.";
+        } else {
+            errorDescripcion.innerHTML = ""; // Limpiar el error si es válido
+        }
+    }
+
+    function validarFormulario() {
+        const filas = document.querySelectorAll("#tabla-dinamica tbody tr");
+        let formularioValido = true;
+
+        filas.forEach((fila, index) => {
+            // Validar cada campo al hacer submit
+            validarHistoriaUsuario(index + 1);
+            validarEstimacion(index + 1);
+            validarDescripcion(index + 1);
+
+            // Verifica si hay errores
+            const errorHistoria = document.getElementById(`error_historia_${index + 1}`).innerHTML;
+            const errorEstimacion = document.getElementById(`error_estimacion_${index + 1}`).innerHTML;
+            const errorDescripcion = document.getElementById(`error_descripcion_${index + 1}`).innerHTML;
+
+            if (errorHistoria || errorEstimacion || errorDescripcion) {
+                formularioValido = false;
+            }
+        });
+
+        if (formularioValido) {
+            alert("Formulario enviado correctamente");
+        } else {
+            alert("Hay errores en el formulario. Por favor, corrígelos.");
+        }
+    }
+    function validarDescripcionControlSemanal() {
+        const descripcion = document.getElementById('descripcion_control_semanal').value;
+        const errorMensaje = document.getElementById('descripcionError');
+        
+        let error = '';
+        
+        // 1. Validar límite de 500 caracteres
+        if (descripcion.length > 500) {
+            error = "La descripción no debe exceder los 500 caracteres.";
+        }
+
+        // 2. Validar que no haya más de 20 caracteres especiales
+        const caracteresEspeciales = descripcion.match(/[^a-zA-Z0-9\s]/g); // Coincide con todos los caracteres no alfanuméricos
+        if (caracteresEspeciales && caracteresEspeciales.length > 20) {
+            error = "La descripción no debe contener más de 20 caracteres especiales.";
+        }
+
+        // 3. Validar que no contenga solo valores numéricos
+        if (/^\d+$/.test(descripcion)) {
+            error = "La descripción no puede ser solo valores numéricos.";
+        }
+
+        // Mostrar el mensaje de error debajo del campo si hay algún error
+        errorMensaje.textContent = error;
+    }
     </script>
 </body>
 </html>
