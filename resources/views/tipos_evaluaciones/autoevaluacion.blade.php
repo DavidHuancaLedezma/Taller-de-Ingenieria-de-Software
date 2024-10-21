@@ -369,7 +369,6 @@
             // Prevenir que el usuario pegue texto en el campo
             event.preventDefault();
         }
-
     </script>
     <script>
         $(document).ready(function(){
@@ -471,8 +470,6 @@
     
             });
         });
-
-
     </script>
 </body>
 </html>
