@@ -38,6 +38,16 @@ Route::get('/estudiante', function () {
 Route::get('/docente', function () {
     return view('/docente/registroDocente');
 });
+
+
+
+Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
+
+Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
+// Ruta para mostrar la evaluación de un estudiante
+Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
+Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
+
 use App\Http\Controllers\GrupoEmpresaController;
 
 Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'showForm']);
