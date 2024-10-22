@@ -319,7 +319,7 @@
                     @endforeach
             
                     @if ($valorCambiado != 1)
-                        <td><button class="btn-calificar" data-id="{{ $item->id_usuario }}">Evaluar</button></td>
+                        <td><button class="btn-calificar" data-id="{{ $item->id_usuario }}" data-nombre="{{ $item->nombre_estudiante }}">Evaluar</button></td>
                         <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; No calificado</td>
                     @endif
                 </tr>
@@ -332,7 +332,7 @@
 
     <div class="ventana-emergente-calificacion">
         <div class="container">
-            <h1>Evaluando a Rodrigo Chocamani Borda</h1>
+            <h1 id="nombre-estudiante-evaluado">Evaluando a <span></span></h1>
 
             <div class="columnas">
                 <h3 class="criterios">Criterios</h3>
@@ -359,7 +359,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).on('click', '.btn-calificar', function() {
- console.log("Botón evaluar presionado"); 
+    console.log("Botón evaluar presionado"); 
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -368,7 +368,16 @@
 
         let idEstudiante = $(this).data('id'); // Captura el id del botón presionado
         console.log(idEstudiante);
+        let nombreEstudiante = $(this).data('nombre');
         $('#id-estudiante-a-evaluar').val(idEstudiante);
+
+        if (typeof idEstudiante === 'undefined' || idEstudiante === '') {
+            console.error('ID del estudiante no válido:', idEstudiante);
+            return; // Detener si el ID es inválido
+        }
+
+        $('#id-estudiante-a-evaluar').val(idEstudiante);
+        $('.ventana-emergente-calificacion h1').text('Evaluando a ' + nombreEstudiante);
 
         $.ajax({
             url: "{{ url('/obtener_criterios_y_parametros') }}",
