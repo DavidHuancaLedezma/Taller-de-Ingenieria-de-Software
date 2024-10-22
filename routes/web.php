@@ -16,6 +16,7 @@ use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\ControllerAutoevaluacion;
 use App\Http\Controllers\ControllerEvaluacionCruzada;
+use App\Http\Controllers\ControllerHome;
 
 
 use App\Http\Controllers\CriterioAceptacionController;
@@ -110,3 +111,7 @@ Route::get('/evaluacion_cruzada/{idGrupoEmpresa}', [ControllerEvaluacionCruzada:
 Route::post('/guardar_nota_autoevaluacion', [ControllerAutoevaluacion::class, 'registroNota']);
 Route::post('/obtener_criterios_y_parametros', [ControllerEvaluacionCruzada::class, 'getCriteriosParametros']);
 Route::post('/guardar_nota_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'guardarNotaGrupoEmpresas']);
+
+
+//HOME 
+Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome']);

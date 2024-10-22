@@ -433,6 +433,7 @@
                         icon: 'success',
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
+                        allowOutsideClick: false,
                     });
 
                     let sumatoriaNota = 0;
