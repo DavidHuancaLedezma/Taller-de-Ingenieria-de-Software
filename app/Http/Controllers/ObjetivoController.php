@@ -57,10 +57,10 @@ class ObjetivoController extends Controller
     if (is_array($request->input('objetivo'))) {
         return redirect()->back()->withErrors(['objetivo' => 'El objetivo no debe ser un array.']);
     }
-    
+
        // Ejecutar la consulta para insertar el objetivo
-       $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, fecha_ini_objetivo, fecha_fin_objetivo) 
-       VALUES (?, ?, ?, ?, ?)", [
+       $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, entregabo_ob, fecha_ini_objetivo, fecha_fin_objetivo) 
+       VALUES (?, ?, ?, false, ?, ?)", [
             //$request->input('id_proyecto_ob'),
             $request->input('objetivo'),
             $request->input('hito'),
