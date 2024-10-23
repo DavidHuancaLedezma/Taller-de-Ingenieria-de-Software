@@ -43,6 +43,9 @@ Route::get('/docente', function () {
 
 Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
 
+Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class.'guardarNotaEstudiantes']);
+
+
 Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
 // Ruta para mostrar la evaluación de un estudiante
 Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');

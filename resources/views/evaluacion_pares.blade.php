@@ -108,7 +108,6 @@
             z-index: 500;
         }
 
-
         .ventana-emergente-calificacion .container {
             /*background-color: white;
             padding: 10px;
