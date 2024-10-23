@@ -46,21 +46,21 @@ class ObjetivoController extends Controller
     // Verificar si ya existe un objetivo con el mismo id_proyecto e id_hito
     $existeObjetivo = DB::table('objetivo')
         ->where('descrip_objetivo', $request->input('objetivo'))
-        ->where('id_proyecto', $request->input('proyecto_id'))
+        //->where('id_proyecto', $request->input('proyecto_id'))
         ->where('id_hito', $request->input('hito'))
         ->exists(); // Verifica si ya existe
 
         // Si ya existe, retornar con un mensaje de error
     if ($existeObjetivo) {
-        return redirect()->back()->with('error', 'Ya existe un objetivo para este hito y proyecto.');
+        return redirect()->back()->with('error', 'Ya existe este entregable para este hito.');
     }
     if (is_array($request->input('objetivo'))) {
-        return redirect()->back()->withErrors(['objetivo' => 'El objetivo no debe ser un array.']);
+        return redirect()->back()->withErrors(['objetivo' => 'El entregable no debe ser un array.']);
     }
-    
+
        // Ejecutar la consulta para insertar el objetivo
-       $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, fecha_ini_objetivo, fecha_fin_objetivo) 
-       VALUES (?, ?, ?, ?, ?)", [
+       $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, entregado_ob, fecha_ini_objetivo, fecha_fin_objetivo) 
+       VALUES (?, ?, ?, false, ?, ?)", [
             //$request->input('id_proyecto_ob'),
             $request->input('objetivo'),
             $request->input('hito'),
