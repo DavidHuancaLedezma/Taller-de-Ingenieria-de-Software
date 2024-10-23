@@ -28,6 +28,19 @@ class ControllerRegistroSemanalGE extends Controller
             $numeroDeHito = self::getNumeroDeHito($idHito);
 
             $mostrarMensaje = self::verificarSemanaCalificadaMensaje($idHito, $enProgreso);
+            // Verificar si es la última semana del hito
+            $semanaActual = self::getSemanaActual($semanas, $idHito);
+            $ultimaSemana = end($semanas); // Obtener la última semana del hito
+            $criteriosDeAceptacion = self::getCriteriosDeAceptacion($idHito);
+            $historiaUsuario = self::getHistoriaUsuario($idHito);
+
+            if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
+                // Redirigir a la vista de evaluación final del hito
+                //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
+                return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
+                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'nombreCorto', 
+                            'criteriosDeAceptacion', 'historiaUsuario','mostrarMensaje'));
+            }
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
         } catch (\Exception $e) {
             return "ERROR 404";
@@ -265,7 +278,7 @@ class ControllerRegistroSemanalGE extends Controller
 
     private static function getObjetivos($idHito)
     {
-        $consulta = DB::select('SELECT descrip_objetivo FROM objetivo WHERE id_hito = ?', array($idHito));
+        $consulta = DB::select('SELECT descrip_objetivo, id_objetivo, entregado_ob FROM objetivo WHERE id_hito = ?', array($idHito));
         return $consulta;
     }
 
@@ -298,5 +311,24 @@ class ControllerRegistroSemanalGE extends Controller
             }
         }
         return $estudianteAsistencias;
+    }
+    private static function getCriteriosDeAceptacion($idHito) {
+        return DB::select("
+            SELECT o.descrip_objetivo, ca.descripcion_ca, ca.id_criterio_aceptacion
+            FROM objetivo o
+            JOIN criterio_aceptacion ca ON o.id_objetivo = ca.id_objetivo
+            WHERE o.id_hito = ?
+        ", [$idHito]);
+    }
+    private static function getHistoriaUsuario($idHito) {
+        return DB::select("
+            select * 
+                from historia_usuario,(
+                    select id_proyecto
+                    from hito
+                    where id_hito = ?
+                )a
+                where historia_usuario.id_proyecto = a.id_proyecto and done = 'False'
+        ", [$idHito]);
     }
 }

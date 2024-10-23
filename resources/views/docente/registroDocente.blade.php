@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Estudiante</title>
-    <!-- Bootstrap CSS -->
+    <title>Registro Docente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        body{
+        body {
             background-color: #D2D6DE;
         }
         .toggle-password {
@@ -42,41 +41,39 @@
         }
         .text-danger {
             font-size: 0.875rem;
-             margin-top: 5px;
+            margin-top: 5px;
             margin-left: 2px;
             margin-bottom: 1px;
-             /* Reservar espacio */
-            /* Asegurar que siempre esté en bloque */
+            min-height: 20px; 
         }
-  
-
     </style>
 </head>
 <body>
 
 <div class="container d-flex justify-content-center mt-5">
     <div class="custom-container">
-        <h4 class="text-center mb-4">Registro Estudiante</h4>
-        <form action="{{ route('registro_estudiante.store') }}"  method="POST">
+        <h4 class="text-center mb-4">Registro Docente</h4>
+        <form action="{{ route('registro_docente.store') }}" method="POST">
             @csrf
             <div class="row">
                 <!-- Columna 1 -->
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="nombre_estudiante" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario" tabindex="1"
-                        value="{{ old('nombre_usuario') }}" required placeholder="Nombre">
+                        <label for="nombre_docente" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre_docente" name="nombre_docente" tabindex="1"
+                        value="{{ old('nombre_docente') }}" required placeholder="Nombre">
                     </div>
-                    @if ($errors->has('nombre_usuario'))
-                                    <div class="text-danger">{{ $errors->first('nombre_usuario') }}</div>
-                            @endif
+                    @if ($errors->has('nombre_docente'))
+                        <div class="text-danger">{{ $errors->first('nombre_docente') }}</div>
+                    @endif
+
                     <div class="mb-3">
-                        <label for="telefono" class="form-label">Teléfono:</label>
-                        <input type="number" class="form-control" id="telefono_usuario" name="telefono_usuario" tabindex="3"
-                        value="{{ old('telefono_usuario') }}" placeholder="Teléfono" required>
-                        @if ($errors->has('telefono_usuario'))
-                                    <div class="text-danger">{{ $errors->first('telefono_usuario') }}</div>
-                                @endif
+                        <label for="telefono_docente" class="form-label">Teléfono:</label>
+                        <input type="number" class="form-control" id="telefono_docente" name="telefono_docente" tabindex="3"
+                        value="{{ old('telefono_docente') }}" placeholder="Teléfono" required>
+                        @if ($errors->has('telefono_docente'))
+                            <div class="text-danger">{{ $errors->first('telefono_docente') }}</div>
+                        @endif
                     </div>
 
                     <div class="mb-3">
@@ -89,31 +86,29 @@
                             </span>
                         </div>
                         @if ($errors->has('contrasena'))
-                                    <div class="text-danger">{{ $errors->first('contrasena') }}</div>
-                            @endif
+                            <div class="text-danger">{{ $errors->first('contrasena') }}</div>
+                        @endif
                     </div>
                 </div>
 
                 <!-- Columna 2 -->
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="apellido_estudiante" class="form-label">Apellidos:</label>
-                        <input type="text" class="form-control" id="apellido_estudiante" name="apellido_estudiante" tabindex="2"
-                        value="{{ old('apellido_estudiante') }}" required placeholder="Apellidos">
+                        <label for="apellido_docente" class="form-label">Apellidos:</label>
+                        <input type="text" class="form-control" id="apellido_docente" name="apellido_docente" tabindex="2"
+                        value="{{ old('apellido_docente') }}" required placeholder="Apellidos">
                     </div>
-                    @if ($errors->has('apellido_estudiante'))
-                                    <div class="text-danger">{{ $errors->first('apellido_estudiante') }}</div>
-                            @endif
+                    @if ($errors->has('apellido_docente'))
+                        <div class="text-danger">{{ $errors->first('apellido_docente') }}</div>
+                    @endif
+
                     <div class="mb-3">
-                        <label for="correo" class="form-label">Correo electronico:</label>
-
-                        <input type="email" class="form-control" id="correo_electronico_user" tabindex="4"
-
-
-                        value="{{ old('correo_electronico_user') }}" name="correo_electronico_user" required placeholder="Correo electronico">
-                        @if ($errors->has('correo_electronico_user'))
-                                    <div class="text-danger">{{ $errors->first('correo_electronico_user') }}</div>
-                                @endif
+                        <label for="correo_docente" class="form-label">Correo electrónico:</label>
+                        <input type="email" class="form-control" id="correo_docente" tabindex="4"
+                        value="{{ old('correo_docente') }}" name="correo_docente" required placeholder="Correo electrónico">
+                        @if ($errors->has('correo_docente'))
+                            <div class="text-danger">{{ $errors->first('correo_docente') }}</div>
+                        @endif
                     </div>
 
                     <div class="mb-3">
@@ -121,14 +116,13 @@
                         <div class="input-group">
                             <input type="password" class="form-control" id="contrasena_confirmation" name="contrasena_confirmation" tabindex="6"
                             value="{{ old('contrasena_confirmation') }}" required placeholder="Confirmar contraseña">
-
                             <span class="input-group-text">
                                 <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmar_contrasena')"></i>
                             </span>
                         </div>
                         @if ($errors->has('contrasena_confirmation'))
-                                    <div class="text-danger">{{ $errors->first('contrasena_confirmation') }}</div>
-                                @endif
+                            <div class="text-danger">{{ $errors->first('contrasena_confirmation') }}</div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -141,6 +135,7 @@
                     He leído y acepto el aviso legal y la política de privacidad. *
                 </label>
             </div>
+
             <div class="form-check mb-4">
                 <input class="form-check-input" value="1" type="checkbox" value="" id="terms_conditions"
                 {{ old('terms_conditions') ? 'checked' : '' }} name="terms_conditions" required>
@@ -157,9 +152,7 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- FontAwesome para el icono del ojo -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <script>
@@ -177,13 +170,12 @@
             icon.classList.add('fa-eye');
         }
     }
-    
-    
 </script>
-@if(session('success2'))
+
+@if(session('success'))
     <script>
         Swal.fire({
-            title: '¡Registro Éxitoso!',
+            title: '¡Registro Exitoso!',
             text: "{{ session('success') }}",
             icon: 'success',
             confirmButtonText: 'Aceptar'
@@ -191,10 +183,7 @@
     </script>
 @endif
 
-
-<script src="grupo_empresa/Re"></script>
-
-<script src="{{ asset('js/RegistroEstudiante.js') }}"></script>
+<script src="{{ asset('js/RegistroDocente.js') }}"></script>
 
 </body>
 </html>

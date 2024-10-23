@@ -26,7 +26,7 @@ class GrupoEmpresaController extends Controller
             'nombre_corto' => 'required|string|max:30|different:nombre_largo|unique:grupo_empresa,nombre_corto',
             'direccion' => 'required|string|max:70',
             'telefono' => 'nullable|digits:8|regex:/[0-9]+$/',
-            'correo' => 'required|string|email|max:70|unique:grupo_empresa,correo_electronico_ge|ends_with:@gmail.com',
+            'correo' => 'required|string|email|max:70|unique:grupo_empresa,correo_electronico_ge',
             'acepto_politica' => 'accepted',
             'acepto_terminos' => 'accepted',
 
