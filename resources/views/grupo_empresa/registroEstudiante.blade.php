@@ -106,7 +106,10 @@
                             @endif
                     <div class="mb-3">
                         <label for="correo" class="form-label">Correo electronico:</label>
+
                         <input type="email" class="form-control" id="correo_electronico_user" tabindex="4"
+
+
                         value="{{ old('correo_electronico_user') }}" name="correo_electronico_user" required placeholder="Correo electronico">
                         @if ($errors->has('correo_electronico_user'))
                                     <div class="text-danger">{{ $errors->first('correo_electronico_user') }}</div>

@@ -38,7 +38,7 @@ class ObjetivoController extends Controller
         'objetivo' => 'required|string|max:255',
         'proyecto_id' => 'required|integer|exists:proyecto,id_proyecto', // Asegúrate de que esto esté presente
         'hito' => 'required|integer|exists:hito,id_hito', 
-        'prioridad' => 'required|in:Alta,Media,Baja',
+        
         'fecha_inicio' => 'required|date',
         'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
     ]);
@@ -59,13 +59,12 @@ class ObjetivoController extends Controller
     }
     
        // Ejecutar la consulta para insertar el objetivo
-       $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, prioridad, fecha_ini_objetivo, fecha_fin_objetivo) 
-       VALUES (?, ?, ?, ?, ?, ?)", [
+       $inserted = DB::insert("INSERT INTO objetivo (descrip_objetivo, id_hito, id_proyecto, fecha_ini_objetivo, fecha_fin_objetivo) 
+       VALUES (?, ?, ?, ?, ?)", [
             //$request->input('id_proyecto_ob'),
             $request->input('objetivo'),
             $request->input('hito'),
             $request->input('proyecto_id'),
-            $request->input('prioridad'),
             $request->input('fecha_inicio'),
             $request->input('fecha_fin'),
         ]);
@@ -74,9 +73,9 @@ class ObjetivoController extends Controller
     // Verificar si la inserción fue exitosa
     if ($inserted) {
         //return redirect()->route('registro_objetivo')->with('success', 'Objetivo registrado correctamente.');
-        return redirect()->back()->with('success', 'Objetivo registrado correctamente');
+        return redirect()->back()->with('success', 'Entregable registrado correctamente');
     } else {
-        return redirect()->back()->with('error', 'Error al registrar el objetivo.');
+        return redirect()->back()->with('error', 'Error al registrar el Entregable.');
     }
 }
 
@@ -90,7 +89,7 @@ class ObjetivoController extends Controller
 
          // Asegurarse de que el objetivo existe
          if (!$objetivo) {
-            return redirect()->back()->withErrors('El objetivo no existe.');
+            return redirect()->back()->withErrors('El Entregable no existe.');
         }
 
         // Implementación de la consulta solicitada con el constructor de consultas de Laravel
@@ -129,7 +128,7 @@ class ObjetivoController extends Controller
         }
 
         // Pasar las actividades, criterios de aceptación y estudiantes a la vista
-        return view('actividad_criterioAceptacion', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
+        return view('actividad', compact('objetivo', 'estudiantes', 'actividades', 'criterios_aceptacion'));
 
         //return view('actividad_criterioAceptacion', compact('objetivo'));
     }

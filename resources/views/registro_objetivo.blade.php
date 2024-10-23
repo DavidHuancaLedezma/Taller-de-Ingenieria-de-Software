@@ -88,10 +88,10 @@
             padding-left: 10px; /* Añade espacio interior para que el texto no quede pegado al borde */
             
         }
-        .select_priori_group{
+        /*.select_priori_group{
             display: flex;
             justify-content: space-between;
-        }
+        }*/
         /* Estilo para los campos de fecha */
         .date-group {
             display: flex;
@@ -100,13 +100,10 @@
     
         }
         select {
-            width: 200px;
+            width: 400px;
             height: 40px;
         }
 
-        .input[type="text"]{
-            height: 70px;
-        }
         input[type="date"] {
             color:rgba(80,80,80);
             width: calc(95% - 8px); /* Ajusta el ancho de los campos de fecha */
@@ -116,16 +113,13 @@
         #fecha-inicio-group {
             margin-left: -50px; /* Ajusta este valor según lo que necesites */
         }
-        /* Estilo para las etiquetas de radio */
-        .radio-group {
-            display: flex;
-            justify-content: space-between;
-            
-        }
        
         .acti_criAcep{
             display: flex;
             gap: 20%;
+        }
+        .texto{
+            height: 60px;
         }
         a{
             color: black;
@@ -140,11 +134,6 @@
         }
         p{
             font-size: 14px;
-        }
-        label {
-            margin-right: 10px;
-            color: black;
-            font-size: 16px; /* Tamaño de fuente más pequeño para las etiquetas de radio */
         }
         input[type="text"]:focus {
             border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
@@ -213,21 +202,15 @@
     <div class="content">
         <div class="container">
             <div class="header">
-                <h1>Registro de Objetivo</h1>
+                <h1>Registro de entregable</h1>
             </div>
           <!-- caja de Exito -->
             @if(session('success'))
                 <script>
                     Swal.fire({
-                        title: '¡Registro exitoso!',
-                        text: 'Ojetivo registrado correctamente',
                         icon: 'success',
-                        confirmButtonText: 'Ir al inicio',
-                        allowOutsideClick: false
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "{{ url('/') }}"; // Cambia la URL según tu necesidad
-                        }
+                        title: 'Buen trabajo',
+                        text: "{{ session('success') }}",
                     });
                 </script>
             @endif
@@ -245,11 +228,6 @@
                 @csrf
                 <input type="hidden" name="proyecto_id" value="{{ $id_proyecto }}">
                 <!-- Campo para el objetivo -->
-                <h5>Objetivo</h5>
-                <input type="text" name="objetivo" placeholder="Escribe tu objetivo" value="{{ old('objetivo') }}" required>
-                <p id="error-objetivo" style="color:red; display:none;">El objetivo debe tener al menos 20 caracteres.</p>
-                <p id="error-caracteres" style="color:red; display:none;">El objetivo no puede exceder 500 caracteres y debe contener como máximo 10 caracteres especiales o números.</p>
-                
                 <div class="select_priori_group">
                     <div>
                     <h5>Seleccione Hito</h5>
@@ -261,24 +239,12 @@
                             @endforeach
                         </select>
                     </div>
-
-                    <!-- Selección de prioridad -->
-                    <div>
-                        <h5>Prioridad</h5>
-                        <div class="radio-group"> 
-                            <label>
-                                <input type="radio" name="prioridad" value="Alta" {{ old('prioridad') == 'Alta' ? 'checked' : '' }}> Alta
-                            </label>
-                            <label>
-                                <input type="radio" name="prioridad" value="Media" {{ old('prioridad') == 'Media' ? 'checked' : '' }}> Media
-                            </label>
-                            <label>
-                                <input type="radio" name="prioridad" value="Baja" {{ old('prioridad') == 'Baja' ? 'checked' : '' }}> Baja
-                            </label>
-                        </div>
-                        <p id="error-prioridad" style="color:red; display:none;">Debes seleccionar una prioridad.</p>
-                    </div>
                 </div>
+                <h5>Entregable</h5>
+                <input type="text" class="texto" name="objetivo" placeholder="Escribe tu entregable" value="{{ old('objetivo') }}" required>
+                <p id="error-objetivo" style="color:red; display:none;">El entregable debe tener al menos 20 caracteres.</p>
+                <p id="error-caracteres" style="color:red; display:none;">El entregable no puede exceder 500 caracteres y debe contener como máximo 10 caracteres especiales o números.</p>
+                
 
                 <!-- Fecha de inicio y fin -->
                 <div class="date-group">
@@ -328,7 +294,7 @@
         const objetivoInput = document.querySelector('input[name="objetivo"]');
         const errorObjetivo = document.getElementById('error-objetivo');
         const errorCaracteres = document.getElementById('error-caracteres');
-        const prioridadRadios = document.querySelectorAll('input[name="prioridad"]');
+        
         const errorPrioridad = document.getElementById('error-prioridad');
 
         let fechaInicioHandler, fechaFinHandler;
@@ -357,27 +323,12 @@
             }
         });
 
-        // Validación de la prioridad
-        prioridadRadios.forEach(function (radio) {
-            radio.addEventListener('click', function () {
-                errorPrioridad.style.display = 'none'; // Ocultar error al seleccionar prioridad
-            });
-        });
+        
 
         // Validar si se selecciona alguna prioridad al enviar el formulario
         document.querySelector('form').addEventListener('submit', function (e) {
-            let prioridadSeleccionada = false;
-            prioridadRadios.forEach(function (radio) {
-                if (radio.checked) {
-                    prioridadSeleccionada = true;
-                }
-            });
-            if (!prioridadSeleccionada) {
-                e.preventDefault(); // Evitar envío si no hay prioridad seleccionada
-                errorPrioridad.style.display = 'block'; // Mostrar error
-            }
+           
 
-            
             // Validación final del campo de objetivo
             const objetivoLength = objetivoInput.value.length;
             const specialCharCount = countSpecialCharsAndNumbers(objetivoInput.value);

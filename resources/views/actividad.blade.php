@@ -201,7 +201,7 @@
 <body>
     <div class="container">
         <div class="header">
-        <h2 class="titulo-objetivo">Objetivo:</h2>
+        <h2 class="titulo-objetivo">Entregable:</h2>
             <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
         </div>
         @if(session('success'))
@@ -250,25 +250,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <br>
            
-            <button type="button" id="add-criteria" class="tab-button">Criterios de Aceptación +</button>
-           
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Descripción de criterio de aceptación</th>
-                    </tr>
-                </thead>
-                <tbody id="activityTable">
-                    @foreach($criterios_aceptacion as $criterio)
-                    <tr>
-                        <td>{{ $criterio->descripcion_ca }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
- 
         </form>
 
     </div>
@@ -316,41 +298,13 @@
         </div>
     </div>
 
-    <!-- Formulario emergente para Criterio de Aceptación -->
-    <div id="popupCriteriaForm" class="popup-form" style="display: none;">
-        <div class="contenedor-mini-formulario">
-            <header class="header-mini-formulario">
-                <h1 class="h1-mini-formulario">Criterio de aceptación</h1>
-            </header>
-            <main class="main-mini-formulario">
-                <form id="criteriaForm" action="{{ route('criterio_aceptacion.store') }}" method="POST">
-                    @csrf <!-- Incluye el token CSRF -->
-                    <input type="hidden" name="objetivo_id" value="{{ $objetivo->id_objetivo }}">
-                    <div class="form-group">
-                        <label for="descripcionCriterio">Descripción</label>
-                        <textarea name="descripcionCriterio" id="descripcionCriterio" cols="45" rows="4" class="form-control" placeholder="Descripción del criterio de aceptación"></textarea>
-                        <span id="descripcionCriterioError" class="error-message"></span>
-                    </div>
-                    <footer class="footer-mini-formulario">
-                        <button type="submit" class="btn btn-info">Añadir <i class="bi bi-rocket-takeoff-fill"></i></button>
-                        <button type="button" class="btn btn-danger" id="cancelCriteria">Cancelar <i class="bi bi-x-circle-fill"></i></button>
-                    </footer>
-                </form>
-            </main>
-        </div>
-    </div>
-
+   
     <script>
     // Obtener elementos del DOM
         const popupActivityForm = document.getElementById('popupActivityForm');
         const addActivityBtn = document.getElementById('add-activity');
         const cancelActivityBtn = document.getElementById('cancelActivity');
         const activityForm = document.getElementById('activityForm');
-
-        const popupCriteriaForm = document.getElementById('popupCriteriaForm');
-        const addCriteriaBtn = document.getElementById('add-criteria');
-        const cancelCriteriaBtn = document.getElementById('cancelCriteria');
-        const criteriaForm = document.getElementById('criteriaForm');
 
         // Mostrar el formulario emergente para Actividad
         addActivityBtn.addEventListener('click', function (e) {
@@ -363,16 +317,6 @@
             popupActivityForm.style.display = 'none'; // Ocultar el formulario
         });
 
-        // Mostrar el formulario emergente para Criterio de Aceptación
-        addCriteriaBtn.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevenir la acción por defecto
-            popupCriteriaForm.style.display = 'flex'; // Mostrar el formulario
-        });
-
-        // Cerrar formulario de Criterio de Aceptación
-        cancelCriteriaBtn.addEventListener('click', function () {
-            popupCriteriaForm.style.display = 'none'; // Ocultar el formulario
-        });
 
           // Función para contar caracteres especiales y números
         function countSpecialCharsAndNumbers(str) {
@@ -391,8 +335,8 @@
             if (descripcion === '') {
                 document.getElementById('descripcionActividadError').textContent = 'La descripción de la actividad es obligatoria.';
                 isValid = false;
-            } else if (descripcion.length < 20) {
-                document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 20 caracteres.';
+            } else if (descripcion.length < 5) {
+                document.getElementById('descripcionActividadError').textContent = 'La descripción debe tener más de 5 caracteres.';
                 isValid = false;
             } else if (descripcion.length > 500) {
                 document.getElementById('descripcionActividadError').textContent = 'La descripción no puede exceder los 500 caracteres.';
@@ -411,7 +355,7 @@
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado es obligatorio.';
                 isValid = false;
             } else if (resultado.length < 5) {
-                document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 20 caracteres.';
+                document.getElementById('resultadoEsperadoError').textContent = 'El resultado debe tener más de 5 caracteres.';
                 isValid = false;
             } else if (resultado.length > 500) {
                 document.getElementById('resultadoEsperadoError').textContent = 'El resultado esperado no puede exceder los 500 caracteres.';
@@ -451,40 +395,6 @@
             document.getElementById('estudianteError').textContent = '';
         });
 
-        // Validar el formulario de Criterio de Aceptación antes de enviar
-        criteriaForm.addEventListener('submit', function (e) {
-            let isValid = true;
-
-            const descripcionCriterio = document.getElementById('descripcionCriterio').value.trim();
-
-            if (descripcionCriterio === '') {
-                document.getElementById('descripcionCriterioError').textContent = 'La descripción del criterio de aceptación es obligatoria.';
-                isValid = false;
-            } else if (descripcionCriterio.length < 20) {
-                document.getElementById('descripcionCriterioError').textContent = 'La descripción debe tener más de 20 caracteres.';
-                isValid = false;
-            } else if (descripcionCriterio.length > 500) {
-                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede exceder los 500 caracteres.';
-                isValid = false;
-            } else if (countSpecialCharsAndNumbers(descripcionCriterio) > 10) {
-                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede contener más de 10 caracteres especiales o números.';
-                isValid = false;
-            } else if (/^[0-9]+$/.test(descripcionCriterio) || /^[^a-zA-Z0-9]+$/.test(descripcionCriterio)) {
-                document.getElementById('descripcionCriterioError').textContent = 'La descripción no puede contener solo números o caracteres especiales.';
-                isValid = false;
-            } else {
-                document.getElementById('descripcionCriterioError').textContent = '';
-            }
-
-            if (!isValid) {
-                e.preventDefault(); // Prevenir el envío del formulario si hay errores
-            }
-        });
-
-        // Eliminar el mensaje de error al hacer clic en el campo
-        document.getElementById('descripcionCriterio').addEventListener('focus', function () {
-            document.getElementById('descripcionCriterioError').textContent = '';
-        });
     </script>
 
  </body>
