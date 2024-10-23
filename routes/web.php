@@ -23,6 +23,8 @@ use App\Http\Controllers\ControllerHomeDocente;
 use App\Http\Controllers\CriterioAceptacionController;
 
 use App\Http\Controllers\HitoController;
+//use App\Http\Controllers\FinalHitoController;
+use App\Http\Controllers\EvaluacionFinHitoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +136,12 @@ Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHit
 
 Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
 
+
+//Ruta para la visualizacion de evaluacion final de hito
+Route::get('/evaluacion_final_hito/{id_hito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+//Route::post('/guardar_evaluacion_hito/{id_hito}', [FinalHitoController::class, 'registrarFinHito'])->name('guardar_evaluacion_hito');
+Route::post('/finHito/store/{id_hito}', [EvaluacionFinHitoController::class, 'store'])->name('finHito.store');
+
 //Tipo de Evaluaciones 
 Route::get('/autoevaluacion/{idEstudiante}', [ControllerAutoevaluacion::class, 'autoevaluacion']);
 Route::get('/evaluacion_cruzada/{idGrupoEmpresa}', [ControllerEvaluacionCruzada::class, 'evaluacionCruzada']);
@@ -149,3 +157,4 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 
 //Home docente
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
+
