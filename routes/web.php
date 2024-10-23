@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
+
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,6 +16,10 @@ use App\Http\Controllers\ControllerSeguimientoSemanal;
 
 use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\ControllerAutoevaluacion;
+use App\Http\Controllers\ControllerEvaluacionCruzada;
+use App\Http\Controllers\ControllerHome;
+use App\Http\Controllers\ControllerHomeDocente;
 use App\Http\Controllers\CriterioAceptacionController;
 
 use App\Http\Controllers\HitoController;
@@ -52,9 +58,20 @@ Route::get('/', function () {
 Route::get('/estudiante', function () {
     return view('/grupo_empresa/registroEstudiante');
 });
-Route::get('/objetivos', function () {
-    return view('/objetivos/visualizarObjetivos');
+
+Route::get('/docente', function () {
+    return view('/docente/registroDocente');
 });
+
+
+
+Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
+
+Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
+// Ruta para mostrar la evaluación de un estudiante
+Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
+Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
+
 
 use App\Http\Controllers\GrupoEmpresaController;
 
@@ -76,6 +93,19 @@ Route::get('/registro-success', function () {
     return view('success2'); // Asegúrate de tener una vista 'success2.blade.php'
 })->name('registro.success');
 
+
+use App\Http\Controllers\RegistroDocenteController;
+
+// Ruta para mostrar el formulario
+Route::get('/registro-docente', [RegistroDocenteController::class, 'create'])->name('registro_docente.create');
+
+// Ruta para procesar el formulario
+Route::post('/registro-docente', [RegistroDocenteController::class, 'store'])->name('registro_docente.store');
+
+// Ruta para la vista de éxito después de registrar un docente
+Route::get('/registro-docente-success', function () {
+    return view('success'); // Vista de éxito para docentes
+})->name('registro_docente.success');
 
 
 // Ruta para la vista de registro de objetivo (usando registro_objetivo.blade.php)
@@ -103,7 +133,25 @@ Route::get('/registro_hitos/{id_proyecto}', [HitoController::class, 'registroHit
 
 Route::post('/hitos/store/{id_proyecto}', [HitoController::class, 'store'])->name('hitos.store');
 
+
 //Ruta para la visualizacion de evaluacion final de hito
 Route::get('/evaluacion_final_hito/{id_hito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
 //Route::post('/guardar_evaluacion_hito/{id_hito}', [FinalHitoController::class, 'registrarFinHito'])->name('guardar_evaluacion_hito');
 Route::post('/finHito/store/{id_hito}', [EvaluacionFinHitoController::class, 'store'])->name('finHito.store');
+
+//Tipo de Evaluaciones 
+Route::get('/autoevaluacion/{idEstudiante}', [ControllerAutoevaluacion::class, 'autoevaluacion']);
+Route::get('/evaluacion_cruzada/{idGrupoEmpresa}', [ControllerEvaluacionCruzada::class, 'evaluacionCruzada']);
+
+//Rutas extras para el funcionamiento de evaluaciones
+Route::post('/guardar_nota_autoevaluacion', [ControllerAutoevaluacion::class, 'registroNota']);
+Route::post('/obtener_criterios_y_parametros', [ControllerEvaluacionCruzada::class, 'getCriteriosParametros']);
+Route::post('/guardar_nota_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'guardarNotaGrupoEmpresas']);
+
+
+//HOME estudiante
+Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome']);
+
+//Home docente
+Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
+
