@@ -39,7 +39,7 @@ class ControllerRegistroSemanalGE extends Controller
                 //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
                 return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
                             'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'nombreCorto', 
-                            'criteriosDeAceptacion', 'historiaUsuario'));
+                            'criteriosDeAceptacion', 'historiaUsuario','mostrarMensaje'));
             }
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
         } catch (\Exception $e) {
