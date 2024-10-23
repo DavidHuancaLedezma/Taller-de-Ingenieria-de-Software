@@ -265,18 +265,6 @@
 
 <script>
 
-    //------------------------------------------------------------------
-    //let descripcion = $('#descripcion').val();
-        
-    // Expresión regular: Verifica que no sea solo números
-   // let soloNumeros = /^[0-9]+$/;
-    //let validacionNumeros ;
-
-    //if (soloNumeros.test(descripcion)) {
-    //    validacionNumeros = false;
-   // }
-    //-------------------------------------------------------------------
-
 
 
 
