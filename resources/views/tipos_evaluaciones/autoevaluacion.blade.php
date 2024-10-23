@@ -434,6 +434,15 @@
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
                         allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Aquí puedes agregar la acción que desees realizar
+                            let idEstudiante = $("#id-estudiante").val();
+                            window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
+
+                            // Recarga la página después de presionar "OK"
+                            
+                        }
                     });
 
                     let sumatoriaNota = 0;

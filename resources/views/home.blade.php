@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sidebar</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
@@ -774,6 +775,7 @@
 </head>
 <body>
     <input id="id-estudiante-home" type="hidden" value="{{$idEstudinte}}">
+    <input id="autoevaluacion-realizada" type="hidden" value="{{$autoevaluacion}}">
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -787,7 +789,7 @@
             </div>
             <button class="boton">
                 <ion-icon name="reload-outline"></ion-icon>
-                <span>Menu principal</span>
+                <span>ESTUDIANTE</span>
             </button>
         </div>
 
@@ -817,9 +819,15 @@
                         <span>Evaluacion cruzada</span>
                     </a>
                 </li>
+                <li>
+                    <a onclick="cargarContenido('registro_grupo_empresa')">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <span>Registro<br>Grupo Empresa</span>
+                    </a>
+                </li>
             </ul>
         </nav>
-
+        
         <div>
             <div class="linea"></div>
 
@@ -861,10 +869,13 @@
                 </div>
             </div>
         </div>
+        
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
+
         console.log(document.getElementById("id-estudiante-home").value);
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
@@ -911,6 +922,7 @@
         });
 
         function cargarContenido(seccion) {
+            let idEstudiante = document.getElementById("id-estudiante-home").value;
             const contenido = document.getElementById('contenido');
             let html = '';
             switch (seccion) {
@@ -926,7 +938,7 @@
                             <h3>REGISTRO DE HITOS</h3>
                             <img src="https://img.freepik.com/vector-premium/progreso-proyecto-flujo-trabajo-trabajo-hombre-completa-tareas-paso-paso_159757-1418.jpg" alt="Autoevaluacion" class="card-image-planificacion">
                             <h3>Registro de hitos</h3>
-                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                            <p class="description">Los hitos son puntos críticos o eventos significativos que marcan el progreso en el proyecto.<p>  
                             <form action="{{ url('/registro_hitos/2')}}" method="GET">
                                 <button id="btn-switch-hitos" type="submit">REGISTRO HITOS(idProyecto)</button>
                             </form>
@@ -941,7 +953,7 @@
                             <h3>REGISTRO DE OBJETIVOS</h3>
                             <img src="https://img.freepik.com/vector-premium/concepto-progresion-proyecto-hacer-cosas-tareas-completadas-o-logros-comerciales_178888-1909.jpg" alt="Autoevaluacion" class="card-image-planificacion">
                             <h3>Registro de hitos</h3>
-                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                            <p class="description">Se formularán objetivos claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
                             <form action="{{ url('/registro_objetivo/2')}}" method="GET">
                                 <button id="btn-switch-objetivos" type="submit">REGISTRO OBJETIVOS(idProyecto)</button>
                             </form>                            
@@ -954,7 +966,7 @@
                             <h3>REGISTRO DE ACTIVIDADES</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
                             <h3>Registro de hitos</h3>
-                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                            <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
                             <form action="{{ url('/actividad_criterioAceptacion/5')}}" method="GET">
                                 <button id="btn-switch-actividades" type="submit">ACTIVIDADES(idObjetivo)</button>
                             </form>                        
@@ -964,20 +976,42 @@
                     `;
                     break;
                 case 'autoevaluacion':
+                    let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
+                    console.log(autoevaluacion);
+                    if(autoevaluacion == 0){
                         html = `
-                <div class="switch_autoevaluacion">
-                    <h2>Evaluaciones</h2>
-                    <div class="evaluation-card">
-                        <div class="card">
-                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                            <h3>Autoevaluacion</h3>
-                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                            <form action="{{ url('/autoevaluacion/7')}}" method="GET">
-                                <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
-                            </form>
-                       </div>
-                    </div>
-                </div> `;
+                            <div class="switch_autoevaluacion">
+                                <h2>Evaluaciones</h2>
+                                <div class="evaluation-card">
+                                    <div class="card">
+                                        <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                        <h3>Autoevaluacion</h3>
+                                        <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                        <form action="{{ url('/autoevaluacion/${idEstudiante}')}}" method="GET">
+                                            <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
+                                        </form>
+                                </div>
+                                </div>
+                            </div> `;
+
+                    }else{
+                            html = `
+                    <div class="switch_autoevaluacion">
+                        <h2>Evaluaciones</h2>
+                        <div class="evaluation-card">
+                            <div class="card">
+                                <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                <h3>Autoevaluacion</h3>
+                                <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                
+                                    <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionYaRegistrada()">AUTOEVALUACIÓN</button>
+                                
+                        </div>
+                        </div>
+                    </div> `;
+
+                    }
+                        
                         break;    
                     break;
                 case 'Evaluacion_pares':
@@ -1014,8 +1048,8 @@
                     </div>
                 </div> `; 
                     break;
-                case 'notificaciones':
-                    html = '<h1>Notificaciones</h1><p>Aquí va el contenido de Notificaciones.</p>';
+                case 'registro_grupo_empresa':
+                    html = '<h1>Registro grupo empresa</h1><p>Aquí va el contenido de registro grupo empresa.</p>';
                     break;
                 default:
                     html = '<h1>Contenido</h1>';
@@ -1028,7 +1062,17 @@
             // Añadir la clase 'activo' al enlace que se acaba de hacer clic
             const enlaceActivo = document.querySelector(`a[onclick="cargarContenido('${seccion}')"]`);
             enlaceActivo.classList.add('activo');
-        }  
+        }
+        function mensajeAutoevaluacionYaRegistrada(){
+            console.log("Ya funciona el mensaje de restriccion");
+            Swal.fire({
+                icon: 'error',
+                title: 'Autoevaluación ya realizada',
+                text: 'Usted ya registro su autoevaluación',
+                allowOutsideClick: false,
+            });
+        }
+        
     </script>
 </body>
 </html>
