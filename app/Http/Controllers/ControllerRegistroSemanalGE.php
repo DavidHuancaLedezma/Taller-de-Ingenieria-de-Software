@@ -38,7 +38,7 @@ class ControllerRegistroSemanalGE extends Controller
                 // Redirigir a la vista de evaluación final del hito
                 //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
                 return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
-                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'mostrarMensaje', 'nombreCorto', 
+                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'nombreCorto', 
                             'criteriosDeAceptacion', 'historiaUsuario'));
             }
             return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
@@ -278,7 +278,7 @@ class ControllerRegistroSemanalGE extends Controller
 
     private static function getObjetivos($idHito)
     {
-        $consulta = DB::select('SELECT descrip_objetivo FROM objetivo WHERE id_hito = ?', array($idHito));
+        $consulta = DB::select('SELECT descrip_objetivo, id_objetivo, entregado_ob FROM objetivo WHERE id_hito = ?', array($idHito));
         return $consulta;
     }
 
