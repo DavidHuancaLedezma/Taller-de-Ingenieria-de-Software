@@ -13,6 +13,6 @@ class InicioController extends Controller
      */
     public function index()
     {
-        return view('Inicio'); // Asegúrate de que este nombre coincida con el archivo 'Inicio.blade.php'
+        return view('Inicio'); // Asegúrate de que este nombrecoincida con el archivo 'Inicio.blade.php'
     }
 }

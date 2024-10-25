@@ -52,7 +52,7 @@ Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [Contro
 
 
 Route::get('/', function () {
-    return view('/grupo_empresa/registroGE');
+    return view('/Inicio');
 });
 
 Route::get('/estudiante', function () {
@@ -158,6 +158,6 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 //Home docente
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
 
-use App\Http\Controllers\InicioController;
+//use App\Http\Controllers\InicioController;
 
-Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
+//Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
