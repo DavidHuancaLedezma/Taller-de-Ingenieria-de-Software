@@ -44,6 +44,7 @@ use App\Http\Controllers\EvaluacionFinHitoController;
 
 //registro del control semanal con asistencias
 Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+Route::post('/obtener_id_hito_grupo_empresa_combo_box', [ControllerRegistroSemanalGE::class, 'getIdHitoComboxSeleccionado']);
 Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
 
 
@@ -154,4 +155,3 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 
 //Home docente
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
-

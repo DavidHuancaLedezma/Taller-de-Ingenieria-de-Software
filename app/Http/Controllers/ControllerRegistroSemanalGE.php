@@ -37,11 +37,25 @@ class ControllerRegistroSemanalGE extends Controller
             if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
                 // Redirigir a la vista de evaluación final del hito
                 //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
-                return view('evaluacion_final_hito', compact('idHito', 'objetivos', 'nombreEstudiante', 'estudianteEnAlerta', 
-                            'semanas', 'enProgreso','semanaActual', 'numeroColor','numeroDeHito', 'nombreCorto', 
-                            'criteriosDeAceptacion', 'historiaUsuario','mostrarMensaje'));
+                return view('evaluacion_final_hito', compact(
+                    'idHito',
+                    'objetivos',
+                    'nombreEstudiante',
+                    'estudianteEnAlerta',
+                    'semanas',
+                    'enProgreso',
+                    'semanaActual',
+                    'numeroColor',
+                    'numeroDeHito',
+                    'nombreCorto',
+                    'criteriosDeAceptacion',
+                    'historiaUsuario',
+                    'mostrarMensaje'
+                ));
             }
-            return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje]);
+
+            $grupoEmpresas = self::getGrupoEmpresas();
+            return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje, 'grupoEmpresas' => $grupoEmpresas]);
         } catch (\Exception $e) {
             return "ERROR 404";
         }
@@ -77,6 +91,46 @@ class ControllerRegistroSemanalGE extends Controller
         return response(json_encode($respuesta), 200)->header('Content-type', 'text/plain');
 
         //self::registrarSeguimientoDB($idHito, $descripcion, $asistencias, $faltas);
+    }
+
+    public function getIdHitoComboxSeleccionado(Request $request)
+    {
+        $idGrupoEmpresa = $request->input("idGrupoEmpresa");
+        date_default_timezone_set('America/La_Paz');
+        $fechaActual = date('Y-m-d');
+
+        $consulta = DB::select("SELECT ge.id_grupo_empresa, ge.nombre_corto, pr.id_proyecto, h.id_hito, h.fecha_inicio_hito, h.fecha_fin_hito
+        FROM grupo_empresa ge, proyecto pr, hito h
+        WHERE ge.id_grupo_empresa = pr.id_grupo_empresa
+        AND pr.id_proyecto = h.id_proyecto
+        AND ge.id_grupo_empresa = ?
+        AND ? >= h.fecha_inicio_hito
+        AND ? <= h.fecha_fin_hito", array($idGrupoEmpresa, $fechaActual, $fechaActual));
+        if (count($consulta) > 0) {
+            $idHito = $consulta[0]->id_hito;
+        } else {
+            //Primera fecha de hito(hito que no inicio)
+            $consulta = DB::select("SELECT pr.id_proyecto, h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, ge.nombre_corto 
+            FROM hito h, grupo_empresa ge, proyecto pr
+            WHERE ge.id_grupo_empresa = pr.id_grupo_empresa
+            AND pr.id_proyecto = h.id_proyecto
+            AND ge.id_grupo_empresa = ?
+            ORDER BY h.id_hito ASC", array($idGrupoEmpresa));
+
+            $primeraFechaInicioGE = $consulta[0]->fecha_inicio_hito;
+            $primeraFechaInicioGE = new DateTime($primeraFechaInicioGE);
+            $fechaActualBolivia = new DateTime($fechaActual);
+            if ($fechaActualBolivia >= $primeraFechaInicioGE) {
+                //ultima fecha de hito(hito que finalizo)
+                $consulta = DB::select("SELECT max(h.id_hito) as id_hito
+                FROM hito h, grupo_empresa ge, proyecto pr
+                WHERE ge.id_grupo_empresa = pr.id_grupo_empresa
+                AND pr.id_proyecto = h.id_proyecto
+                AND ge.id_grupo_empresa = ?", array($idGrupoEmpresa));
+            }
+        }
+        $idHito = $consulta[0]->id_hito;
+        return response(json_encode($idHito), 200)->header('Content-type', 'text/plain');
     }
 
     private static function verificarSemanaCalificadaMensaje($idHito, $verificarSemana)
@@ -240,9 +294,6 @@ class ControllerRegistroSemanalGE extends Controller
         return $semanas;
     }
 
-
-
-
     private static function registrarSeguimientoDB($idHito, $descripcion, $asistencias, $faltas, $fechaInicio, $fechaFin)
     {
         //Colocar fechas reales en control semanal ahora estan con estaticos
@@ -312,7 +363,8 @@ class ControllerRegistroSemanalGE extends Controller
         }
         return $estudianteAsistencias;
     }
-    private static function getCriteriosDeAceptacion($idHito) {
+    private static function getCriteriosDeAceptacion($idHito)
+    {
         return DB::select("
             SELECT o.descrip_objetivo, ca.descripcion_ca, ca.id_criterio_aceptacion
             FROM objetivo o
@@ -320,7 +372,8 @@ class ControllerRegistroSemanalGE extends Controller
             WHERE o.id_hito = ?
         ", [$idHito]);
     }
-    private static function getHistoriaUsuario($idHito) {
+    private static function getHistoriaUsuario($idHito)
+    {
         return DB::select("
             select * 
                 from historia_usuario,(
@@ -330,5 +383,19 @@ class ControllerRegistroSemanalGE extends Controller
                 )a
                 where historia_usuario.id_proyecto = a.id_proyecto and done = 'False'
         ", [$idHito]);
+    }
+
+    private static function getGrupoEmpresas()
+    {
+        $consulta = DB::select("SELECT ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
+        FROM grupo_empresa ge, estudiante_grupoempresa ege, proyecto pr, grupo gr
+        WHERE ge.id_grupo_empresa = ege.id_grupo_empresa
+        AND pr.id_grupo_empresa = ge.id_grupo_empresa
+        AND pr.id_grupo = gr.id_grupo
+        AND gr.nombre_grupo = 'TIS'
+        AND ege.periodo_grupoempresa = '2-2024'
+        GROUP BY ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
+        ORDER BY ge.id_grupo_empresa ASC");
+        return $consulta;
     }
 }
