@@ -967,7 +967,7 @@
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
                             <h3>Registro de hitos</h3>
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('/actividad_criterioAceptacion/5')}}" method="GET">
+                            <form action="{{ url('/actividad/5')}}" method="GET">
                                 <button id="btn-switch-actividades" type="submit">ACTIVIDADES(idObjetivo)</button>
                             </form>                        
                         </div>
