@@ -285,7 +285,7 @@
                 <h3 class="control-hoy" style="color:red">{{$enProgreso[0]}}</h3>
             @endif
             <div class="contenedor-objetivos">
-                <h4>Objetivos:</h4>
+                <h4>Entregables:</h4>
                 @foreach ($objetivos as $objetivo)
                     <p>-{{$objetivo->descrip_objetivo}}</p>
                 @endforeach
