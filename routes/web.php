@@ -50,6 +50,7 @@ Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'regi
 
 //visialización de la planilla de planificación
 Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
+Route::post('/obtener_id_proyecto_de_grupo_empresa', [ControllerVisualizarPlanillaDePlanificacion::class, 'getIdProyectoDeGrupoEmpresa']);
 
 
 Route::get('/', function () {

@@ -635,7 +635,7 @@
                             <img src="https://img.freepik.com/vector-gratis/planificacion-empresarial-calendario_23-2149164011.jpg" alt="Autoevaluacion" class="card-image">
                             <h3>Descripcion</h3>
                             <p class="description">La visualización de la planificación de proyectos permite al docente revisar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
-                            <form action="{{ url('/visualizar_planilla_de_planificacion/2')}}" method="GET">
+                            <form action="{{ url('/visualizar_planilla_de_planificacion/0')}}" method="GET">
                                 <button id="btn-switch-visualizar-planificacion" type="submit">Visualizar planificacion</button>
                             </form>
                        </div>
