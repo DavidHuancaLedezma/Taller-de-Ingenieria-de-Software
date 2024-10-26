@@ -15,4 +15,8 @@ class InicioController extends Controller
     {
         return view('Inicio'); // Asegúrate de que este nombrecoincida con el archivo 'Inicio.blade.php'
     }
+   public function registrarse()
+   {
+    return view('/estudiante.estudiante');
+   }
 }

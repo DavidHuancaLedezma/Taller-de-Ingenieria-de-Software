@@ -158,6 +158,10 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 //Home docente
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
 
-//use App\Http\Controllers\InicioController;
+use App\Http\Controllers\InicioController;
 
 //Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
+//Route ::get('/estudiante/estudiante',[InicioController::class,'registrarse'])->name('estudiante.estudiante');
+Route ::get('/login',[LoginController::class,'iniciarSesion'])->name('login');
+
+
