@@ -15,47 +15,55 @@ class ControllerRegistroSemanalGE extends Controller
     {
         // 6 y 7 test
         try {
-            //Todo funciona unicamente con el id de un hito
-            $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
-            $objetivos = self::getObjetivos($idHito);
-            $nombreEstudiante = self::getEstudiantes($idHito);
-            $estudianteEnAlerta = self::getEstudiantesConFaltas($nombreEstudiante);
-            $semanas = self::getSemanasDivididas($idHito);
 
-            $enProgreso = self::getSemanaActual($semanas, $idHito);
-            $numeroColor = self::numeroColoreado($semanas, $idHito);
-            $nombreCorto = self::getNombreEmpresa($idHito);
-            $numeroDeHito = self::getNumeroDeHito($idHito);
+            if ($parametroHito != 0) {
+                //Ventana que estaba por defecto(Venata con informacion del control semanal)
+                //Todo funciona unicamente con el id de un hito
+                $idHito = $parametroHito; // Reemplazar con hito que nos mandaran
+                $objetivos = self::getObjetivos($idHito);
+                $nombreEstudiante = self::getEstudiantes($idHito);
+                $estudianteEnAlerta = self::getEstudiantesConFaltas($nombreEstudiante);
+                $semanas = self::getSemanasDivididas($idHito);
 
-            $mostrarMensaje = self::verificarSemanaCalificadaMensaje($idHito, $enProgreso);
-            // Verificar si es la última semana del hito
-            $semanaActual = self::getSemanaActual($semanas, $idHito);
-            $ultimaSemana = end($semanas); // Obtener la última semana del hito
-            $criteriosDeAceptacion = self::getCriteriosDeAceptacion($idHito);
-            $historiaUsuario = self::getHistoriaUsuario($idHito);
+                $enProgreso = self::getSemanaActual($semanas, $idHito);
+                $numeroColor = self::numeroColoreado($semanas, $idHito);
+                $nombreCorto = self::getNombreEmpresa($idHito);
+                $numeroDeHito = self::getNumeroDeHito($idHito);
 
-            if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
-                // Redirigir a la vista de evaluación final del hito
-                //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
-                return view('evaluacion_final_hito', compact(
-                    'idHito',
-                    'objetivos',
-                    'nombreEstudiante',
-                    'estudianteEnAlerta',
-                    'semanas',
-                    'enProgreso',
-                    'semanaActual',
-                    'numeroColor',
-                    'numeroDeHito',
-                    'nombreCorto',
-                    'criteriosDeAceptacion',
-                    'historiaUsuario',
-                    'mostrarMensaje'
-                ));
+                $mostrarMensaje = self::verificarSemanaCalificadaMensaje($idHito, $enProgreso);
+                // Verificar si es la última semana del hito
+                $semanaActual = self::getSemanaActual($semanas, $idHito);
+                $ultimaSemana = end($semanas); // Obtener la última semana del hito
+                $criteriosDeAceptacion = self::getCriteriosDeAceptacion($idHito);
+                $historiaUsuario = self::getHistoriaUsuario($idHito);
+
+                if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
+                    // Redirigir a la vista de evaluación final del hito
+                    //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
+                    return view('evaluacion_final_hito', compact(
+                        'idHito',
+                        'objetivos',
+                        'nombreEstudiante',
+                        'estudianteEnAlerta',
+                        'semanas',
+                        'enProgreso',
+                        'semanaActual',
+                        'numeroColor',
+                        'numeroDeHito',
+                        'nombreCorto',
+                        'criteriosDeAceptacion',
+                        'historiaUsuario',
+                        'mostrarMensaje'
+                    ));
+                }
+
+                $grupoEmpresas = self::getGrupoEmpresas();
+                return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje, 'grupoEmpresas' => $grupoEmpresas]);
+            } else {
+                //otra ventana de inicio
+                $grupoEmpresas = self::getGrupoEmpresas();
+                return view("registro_semanal_inicio", ['grupoEmpresas' => $grupoEmpresas]);
             }
-
-            $grupoEmpresas = self::getGrupoEmpresas();
-            return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje, 'grupoEmpresas' => $grupoEmpresas]);
         } catch (\Exception $e) {
             return "ERROR 404";
         }
