@@ -11,7 +11,7 @@ use Exception;
 
 class ControllerRegistroSemanalGE extends Controller
 {
-    public function cargarRegistroSemanal($parametroHito)
+    public function cargarRegistroSemanal($parametroHito, $idDocente)
     {
         // 6 y 7 test
         try {
@@ -57,12 +57,12 @@ class ControllerRegistroSemanalGE extends Controller
                     ));
                 }
 
-                $grupoEmpresas = self::getGrupoEmpresas();
-                return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje, 'grupoEmpresas' => $grupoEmpresas]);
+                $grupoEmpresas = self::getGrupoEmpresas($idDocente);
+                return view('registroSemanalGE', ['idHito' => $idHito, 'objetivos' => $objetivos, 'estudianteEnAlerta' => $estudianteEnAlerta, 'semanas' => $semanas, 'enProgreso' => $enProgreso, 'numeroColor' => $numeroColor, 'nombreCorto' => $nombreCorto, 'numeroDeHito' => $numeroDeHito, 'mostrarMensaje' => $mostrarMensaje, 'grupoEmpresas' => $grupoEmpresas, 'idDocente' => $idDocente]);
             } else {
                 //otra ventana de inicio
-                $grupoEmpresas = self::getGrupoEmpresas();
-                return view("registro_semanal_inicio", ['grupoEmpresas' => $grupoEmpresas]);
+                $grupoEmpresas = self::getGrupoEmpresas($idDocente);
+                return view("registro_semanal_inicio", ['grupoEmpresas' => $grupoEmpresas, 'idDocente' => $idDocente]);
             }
         } catch (\Exception $e) {
             return "ERROR 404";
@@ -393,17 +393,19 @@ class ControllerRegistroSemanalGE extends Controller
         ", [$idHito]);
     }
 
-    private static function getGrupoEmpresas()
+    private static function getGrupoEmpresas($idDocente)
     {
         $consulta = DB::select("SELECT ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
-        FROM grupo_empresa ge, estudiante_grupoempresa ege, proyecto pr, grupo gr
+        FROM grupo_empresa ge, estudiante_grupoempresa ege, proyecto pr, grupo gr, grupo_materia gm, docente doc
         WHERE ge.id_grupo_empresa = ege.id_grupo_empresa
         AND pr.id_grupo_empresa = ge.id_grupo_empresa
         AND pr.id_grupo = gr.id_grupo
-        AND gr.nombre_grupo = 'TIS'
+		AND gr.id_grupo = gm.id_grupo
+		AND gm.id_usuario = doc.id_usuario
+		AND doc.id_usuario = ?
         AND ege.periodo_grupoempresa = '2-2024'
         GROUP BY ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
-        ORDER BY ge.id_grupo_empresa ASC");
+        ORDER BY ge.id_grupo_empresa ASC", array($idDocente));
         return $consulta;
     }
 }

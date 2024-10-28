@@ -132,7 +132,7 @@
     </style>
 </head>
 <body>
-
+    <input id="id-docente" type="hidden" value="{{$idDocente}}">
     <div class="combo_GEs">
         <label for="opciones">Elige una opción:</label>
         <select id="opciones" name="opciones">
@@ -192,7 +192,7 @@
             $('#opciones').on('change', function() {
                 // Obtener el valor de la opción seleccionada
                 let valorSeleccionado = $(this).val();
-    
+                let idDocente = $('#id-docente').val();
                 // Obtener el texto de la opción seleccionada
                 let textoSeleccionado = $("#opciones option:selected").text();
     
@@ -207,7 +207,7 @@
                     }
                     }).done(function(res){
                         let idProyecto = JSON.parse(res);
-                        window.location.href = `{{ url('/visualizar_planilla_de_planificacion/${idProyecto}') }}`;
+                        window.location.href = `{{ url('/visualizar_planilla_de_planificacion/${idProyecto}/${idDocente}') }}`;
                         console.log("id obtenido de ajax Proyecto: " + idProyecto);
                         
                     }).fail(function(jqXHR, textStatus, errorThrown) {

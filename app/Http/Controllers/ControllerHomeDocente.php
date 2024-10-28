@@ -8,6 +8,6 @@ class ControllerHomeDocente extends Controller
 {
     public function openHomeDocente($idDocente)
     {
-        return view("home_docente");
+        return view("home_docente", ['idDocente' => $idDocente]);
     }
 }

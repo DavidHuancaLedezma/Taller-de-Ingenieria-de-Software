@@ -510,6 +510,7 @@
     </style>
 </head>
 <body>
+    <input id="id-docente" type="hidden" value="{{$idDocente}}">
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -622,6 +623,7 @@
         });
 
         function cargarContenido(seccion) {
+            let idDocente = document.getElementById('id-docente').value;
             const contenido = document.getElementById('contenido');
             let html = '';
 
@@ -635,7 +637,7 @@
                             <img src="https://img.freepik.com/vector-gratis/planificacion-empresarial-calendario_23-2149164011.jpg" alt="Autoevaluacion" class="card-image">
                             <h3>Descripcion</h3>
                             <p class="description">La visualización de la planificación de proyectos permite al docente revisar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
-                            <form action="{{ url('/visualizar_planilla_de_planificacion/0')}}" method="GET">
+                            <form action="{{ url('/visualizar_planilla_de_planificacion/0/${idDocente}')}}" method="GET">
                                 <button id="btn-switch-visualizar-planificacion" type="submit">Visualizar planificacion</button>
                             </form>
                        </div>
@@ -652,7 +654,7 @@
                             <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
                             <h3>Descripcion</h3>
                             <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
-                            <form action="{{ url('/cargar_registro_semanal0')}}" method="GET">
+                            <form action="{{ url('/cargar_registro_semanal0_${idDocente}')}}" method="GET">
                                 <button id="btn-switch-control-semanal" type="submit">Control semanal</button>
                             </form>
                        </div>

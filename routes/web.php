@@ -43,13 +43,14 @@ use App\Http\Controllers\EvaluacionFinHitoController;
 
 
 //registro del control semanal con asistencias
-Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+//NOTA IMPORTANTE: la url /cargar_registro_semanal no funciona si se coloca / para los parametros(se tiene que sustituir el / con _ )
+Route::get('/cargar_registro_semanal{parametroHito}_{idDocente}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
 Route::post('/obtener_id_hito_grupo_empresa_combo_box', [ControllerRegistroSemanalGE::class, 'getIdHitoComboxSeleccionado']);
 Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
 
 
 //visialización de la planilla de planificación
-Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
+Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}/{idDocente}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
 Route::post('/obtener_id_proyecto_de_grupo_empresa', [ControllerVisualizarPlanillaDePlanificacion::class, 'getIdProyectoDeGrupoEmpresa']);
 
 

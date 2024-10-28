@@ -776,6 +776,7 @@
 <body>
     <input id="id-estudiante-home" type="hidden" value="{{$idEstudinte}}">
     <input id="autoevaluacion-realizada" type="hidden" value="{{$autoevaluacion}}">
+    <input id="id-grupo-empresa-del-estudiante" type="hidden" value="{{$idGrupoEmpresa}}">
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -876,7 +877,7 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
 
-        console.log(document.getElementById("id-estudiante-home").value);
+        
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
         const spans = document.querySelectorAll("span");
@@ -923,6 +924,8 @@
 
         function cargarContenido(seccion) {
             let idEstudiante = document.getElementById("id-estudiante-home").value;
+            let idGrupoEmpresa = document.getElementById("id-grupo-empresa-del-estudiante").value;
+            
             const contenido = document.getElementById('contenido');
             let html = '';
             switch (seccion) {
@@ -1041,7 +1044,7 @@
                             <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
                             <h3>Evaluación Cruzada</h3>
                             <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                            <form action="{{ url('/evaluacion_cruzada/1')}}" method="GET">
+                            <form action="{{ url('/evaluacion_cruzada/${idGrupoEmpresa}')}}" method="GET">
                                 <button id="btn-evaluacion-cruzada" type="submit">EVALUACIÓN CRUZADA</button>
                             </form>
                        </div>

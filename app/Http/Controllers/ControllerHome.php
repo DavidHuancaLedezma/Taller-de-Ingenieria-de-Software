@@ -10,7 +10,8 @@ class ControllerHome extends Controller
     public function openHome($idEstudiante)
     {
         $autoevaluacion = self::autoevaluacionRealizada($idEstudiante);
-        return view("home", ['idEstudinte' => $idEstudiante, 'autoevaluacion' => $autoevaluacion]);
+        $idGrupoEmpresa = self::getIdGrupoEmpresaDelEstudiante($idEstudiante);
+        return view("home", ['idEstudinte' => $idEstudiante, 'autoevaluacion' => $autoevaluacion, 'idGrupoEmpresa' => $idGrupoEmpresa]);
     }
 
     private static function autoevaluacionRealizada($idEstudiante)
@@ -25,5 +26,15 @@ class ControllerHome extends Controller
             $evaluado = 1;
         }
         return $evaluado;
+    }
+
+    private static function getIdGrupoEmpresaDelEstudiante($idEstudiante)
+    {
+
+        $consulta = DB::select("SELECT ge.id_grupo_empresa, ge.nombre_corto 
+        FROM estudiante_grupoempresa ege, grupo_empresa ge
+        WHERE ege.id_grupo_empresa = ge.id_grupo_empresa
+        AND ege.id_usuario = ?", array($idEstudiante));
+        return $consulta[0]->id_grupo_empresa;
     }
 }

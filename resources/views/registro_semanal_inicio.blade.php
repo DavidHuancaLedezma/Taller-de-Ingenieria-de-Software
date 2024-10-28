@@ -104,6 +104,7 @@
     </style>
 </head>
 <body>
+    <input id="id-docente" type="hidden" value="{{$idDocente}}">
 
     <div class="combo_GEs">
         <label for="opciones">Elige una opción:</label>
@@ -139,7 +140,7 @@
             $('#opciones').on('change', function() {
                 // Obtener el valor de la opción seleccionada
                 let valorSeleccionado = $(this).val();
-    
+                let idDocente = $('#id-docente').val();
                 // Obtener el texto de la opción seleccionada
                 let textoSeleccionado = $("#opciones option:selected").text();
     
@@ -154,7 +155,7 @@
                     }
                     }).done(function(res){
                         let id_hito = JSON.parse(res);
-                        window.location.href = `{{ url('/cargar_registro_semanal${id_hito}') }}`;
+                        window.location.href = `{{ url('/cargar_registro_semanal${id_hito}_${idDocente}') }}`;
                         console.log("id obtenido de ajax GE: " + id_hito);
                         
                     }).fail(function(jqXHR, textStatus, errorThrown) {

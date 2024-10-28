@@ -20,7 +20,6 @@ class ControllerEvaluacionCruzada extends Controller
         }
 
         $grupoEmpresasCalificadas = self::getGrupoEmpresasCalificadas($idGrupoEmpresa);
-
         return view("tipos_evaluaciones/evaluacion_cruzada", ['grupoEmpresas' => $grupoEmpresas, "idEvaluador" => $idEvaluador, "grupoEmpresasCalificadas" => $grupoEmpresasCalificadas]);
     }
 
