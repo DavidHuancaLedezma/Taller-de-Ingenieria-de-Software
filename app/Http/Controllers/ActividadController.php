@@ -62,6 +62,8 @@ class ActividadController extends Controller
         ]);
         if ($inserted) {
             return redirect()->back()->with('success', 'Actividad añadida correctamente.');
+           //return redirect()->route('registro_actividad_criterioAcep', ['id_objetivo' => $request->input('objetivo_id')])
+           // ->with('success', 'Actividad añadida correctamente.');
         } else {
             return redirect()->back()->with('error', 'Actividad no añadida correctamente.');
         }

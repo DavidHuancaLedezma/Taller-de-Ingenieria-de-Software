@@ -249,7 +249,7 @@
                 </div>
                 <h5>Entregable</h5>
                 <input type="text" class="texto" name="objetivo" placeholder="Escribe tu entregable" value="{{ old('objetivo') }}" required>
-                <p id="error-objetivo" style="color:red; display:none;">El entregable debe tener al menos 10 caracteres.</p>
+                <p id="error-objetivo" style="color:red; display:none;">El entregable debe tener al menos 5 caracteres.</p>
                 <p id="error-caracteres" style="color:red; display:none;">El entregable no puede exceder 500 caracteres y debe contener como máximo 10 caracteres especiales o números.</p>
                 
 
@@ -319,7 +319,7 @@
             const objetivoLength = this.value.length;
             const specialCharCount = countSpecialCharsAndNumbers(this.value);
 
-            if (objetivoLength < 10) {
+            if (objetivoLength < 5) {
                 errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
             } else {
                 errorObjetivo.style.display = 'none'; // Ocultar error si cumple la longitud
@@ -342,9 +342,9 @@
             const objetivoLength = objetivoInput.value.length;
             const specialCharCount = countSpecialCharsAndNumbers(objetivoInput.value);
 
-            if (objetivoLength < 10 || objetivoLength > 500 || specialCharCount > 10) {
+            if (objetivoLength < 5 || objetivoLength > 500 || specialCharCount > 10) {
                 e.preventDefault(); // Evitar envío si no cumple las validaciones
-                if (objetivoLength < 10) {
+                if (objetivoLength < 5) {
                     errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
                 }
                 if (objetivoLength > 500 || specialCharCount > 10) {

@@ -25,6 +25,7 @@ use App\Http\Controllers\CriterioAceptacionController;
 use App\Http\Controllers\HitoController;
 //use App\Http\Controllers\FinalHitoController;
 use App\Http\Controllers\EvaluacionFinHitoController;
+use App\Http\Controllers\PlanillaPlanificacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -155,3 +156,11 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 //Home docente
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
 
+Route::view('/planilla-planificacion', 'planilla_planificacion.h_planilla_planificacion');
+Route::view('/actividad', 'planilla_planificacion.actividad_select');
+
+Route::get('/planilla_planificacion_actividad/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_actividad']);
+Route::get('/get-entregables', [PlanillaPlanificacionController::class, 'getEntregablesPorHito'])->name('get.entregables');
+Route::get('/entregable-data/{id_objetivo}', [PlanillaPlanificacionController::class, 'getEntregableData'])->name('get.entregableData');
+
+Route::get('/actividades/{id_objetivo}', [PlanillaPlanificacionController::class, 'getActividadesPorEntregable'])->name('get.actividades');
