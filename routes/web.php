@@ -163,5 +163,6 @@ use App\Http\Controllers\InicioController;
 //Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
 //Route ::get('/estudiante/estudiante',[InicioController::class,'registrarse'])->name('estudiante.estudiante');
 Route ::get('/login',[LoginController::class,'iniciarSesion'])->name('login');
+Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
 
 

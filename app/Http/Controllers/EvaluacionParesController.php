@@ -8,25 +8,47 @@ use Illuminate\Support\Facades\DB;
 
 class EvaluacionParesController extends Controller
 {
-    public function evaluacionPares($idGrupoEmpresa)
+    public function evaluacionPares($idEstudiante)
     {
-        // Obtenemos los estudiantes del grupo empresa
-        $estudiantes = self::getEstudiantes($idGrupoEmpresa);
-       /* try {
-            $idEvaluador = self::getDatosEvaluador($idGrupoEmpresa);
-            $idEvaluador = $idEvaluador[0]->id_usuario;
-        } catch (Exception) {
-            $idEvaluador = NULL;
-        }
-       */
-        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa);
-        
-        return view("evaluacion_pares", [
-            'estudiantes' => $estudiantes,
-            "estudiantesCalificados" => $estudiantesCalificados
-        ]);
+        // Obtenemos los estudiantes del grupo empresa al que pertenece el estudiante
+    $estudiantes = self::getEstudiantes($idEstudiante);
+    
+    // También podemos obtener estudiantes calificados utilizando el mismo grupo
+    $idGrupoEmpresa = self::getGrupoEmpresaByEstudiante($idEstudiante);
+    $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa);
+    
+    return view("evaluacion_pares", [
+        'estudiantes' => $estudiantes,
+        "estudiantesCalificados" => $estudiantesCalificados]);
+
+    }
+    private static function getEstudiantes($idEstudiante)
+{
+    // Obtener el id_grupo_empresa del estudiante proporcionado
+    $idGrupoEmpresa = self::getGrupoEmpresaByEstudiante($idEstudiante);
+    
+    if (!$idGrupoEmpresa) {
+        return []; // Retornar un arreglo vacío si no se encuentra el grupo
     }
 
+    // Devuelve los estudiantes del grupo empresa correspondiente
+    $estudiantes = DB::select("SELECT e.id_usuario, concat(e.nombre_estudiante, ' ', e.apellido_estudiante) as nombre_estudiante 
+        FROM estudiante e
+        JOIN estudiante_grupoempresa ege ON e.id_usuario = ege.id_usuario
+        WHERE ege.id_grupo_empresa = ?", array($idGrupoEmpresa));
+
+    return $estudiantes;
+}
+
+private static function getGrupoEmpresaByEstudiante($idEstudiante)
+{
+    // Obtener el id_grupo_empresa para el estudiante proporcionado
+    $resultado = DB::select("SELECT ege.id_grupo_empresa 
+                              FROM estudiante_grupoempresa ege 
+                              WHERE ege.id_usuario = ?", array($idEstudiante));
+
+    return $resultado ? $resultado[0]->id_grupo_empresa : null; // Retorna el grupo o null si no se encuentra
+}
       public function guardarNotaEstudiantes(Request $request)
     {
         $nota = $request->input('nota');
@@ -62,7 +84,7 @@ class EvaluacionParesController extends Controller
         return response(json_encode($consulta), 200)->header('Content-type', 'text/plain');
     }
 
-    private static function getEstudiantes($idGrupoEmpresa)
+    private static function getEstudiantes2($idGrupoEmpresa)
     {
         // Devuelve los estudiantes de una grupo empresa específica
         $estudiantes = DB::select("SELECT e.id_usuario, concat(e.nombre_estudiante, ' ', e.apellido_estudiante) as nombre_estudiante 
