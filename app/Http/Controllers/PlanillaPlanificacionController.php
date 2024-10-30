@@ -111,5 +111,27 @@ class PlanillaPlanificacionController extends Controller
         return response()->json(['actividades' => $actividades, 'estudiantes' => $estudiantes]);
     }
 
+    // ------------ Criterio de Aceptacion-------------------------
+    public function create_criterio_aceptacion($id_proyecto)
+    {
+        $proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+        if (!$proyecto) {
+            return redirect()->back()->withErrors('El proyecto no existe.');
+        }
+        $hitos = DB::select("
+            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+            FROM hito h
+            WHERE h.id_proyecto = ?", [$id_proyecto]);
+        
+        $entregables = DB::select(
+            " 
+            select id_hito, id_objetivo, descrip_objetivo
+            from objetivo
+            where id_proyecto =?", [$id_proyecto]);
+
+              
+        return view('planilla_planificacion.criterioAceptacion_select', compact('hitos','entregables'));
+
+    }
 
 }

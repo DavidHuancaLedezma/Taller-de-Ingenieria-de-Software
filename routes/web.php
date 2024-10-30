@@ -157,10 +157,12 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
 
 Route::view('/planilla-planificacion', 'planilla_planificacion.h_planilla_planificacion');
-Route::view('/actividad', 'planilla_planificacion.actividad_select');
+Route::view('/criterioAceptacion', 'planilla_planificacion.criterioAceptacion_select');
 
 Route::get('/planilla_planificacion_actividad/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_actividad']);
 Route::get('/get-entregables', [PlanillaPlanificacionController::class, 'getEntregablesPorHito'])->name('get.entregables');
 Route::get('/entregable-data/{id_objetivo}', [PlanillaPlanificacionController::class, 'getEntregableData'])->name('get.entregableData');
 
 Route::get('/actividades/{id_objetivo}', [PlanillaPlanificacionController::class, 'getActividadesPorEntregable'])->name('get.actividades');
+
+Route::get('/planilla_planificacion_criterio_aceptacion/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_criterio_aceptacion']);

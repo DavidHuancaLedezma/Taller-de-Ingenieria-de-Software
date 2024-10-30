@@ -375,8 +375,8 @@
                     alert('Por favor, selecciona un hito primero.');
                 }
         });
-        });
-
+        //});
+    
          // Mostrar el formulario emergente para Actividad
          $(document).on('click', '#add-activity', function() {
                 $('#popupActivityForm').css('display', 'flex'); // Mostrar el formulario
@@ -387,7 +387,7 @@
                 $('#popupActivityForm').hide(); // Ocultar el formulario
             });
 
-                    // Función de validación en tiempo real
+                  // Función de validación en tiempo real
             function validateField(field, minLength, maxLength, errorField, emptyMessage, lengthMessage) {
                 const value = field.val().trim();
                 
@@ -405,7 +405,7 @@
                     return true;
                 }
             }
-
+        
 
 
             // Validación y envío del formulario de actividad
@@ -521,7 +521,8 @@
                 $('#estudianteError').text('');
             }
         });
+    });
         
     </script>
-</body>
+ </body>
 </html>
