@@ -159,6 +159,7 @@ return [
             'different' => 'El nombre corto no puede ser igual al nombre largo.',
         ],
         'telefono' => [
+            'unique' => 'El telefono ya esta en uso',
             'digits' => 'El teléfono debe tener  8 dígitos.'
         ],
         'correo' => [

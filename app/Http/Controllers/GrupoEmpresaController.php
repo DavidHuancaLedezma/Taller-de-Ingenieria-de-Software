@@ -25,16 +25,16 @@ class GrupoEmpresaController extends Controller
             'nombre_largo' => 'required|string|max:60|unique:grupo_empresa,nombre_largo',
             'nombre_corto' => 'required|string|max:30|unique:grupo_empresa,nombre_corto',
             'direccion' => 'required|string|max:70',
-            'telefono' => 'nullable|digits:8|regex:/[0-9]+$/',
+            'telefono' => 'nullable|digits:8|unique:grupo_empresa,telefono_ge|regex:/[0-9]+$/',
             'correo' => 'required|string|email|max:70|unique:grupo_empresa,correo_electronico_ge',
             'acepto_politica' => 'accepted',
             'acepto_terminos' => 'accepted',
 
         ]);
-        if (strlen($validated['nombre_largo']) <= strlen($validated['nombre_corto'])) {
+       /* if (strlen($validated['nombre_largo']) <= strlen($validated['nombre_corto'])) {
             return back()->withErrors(['nombre_largo' => 'El nombre largo debe tener más caracteres que el nombre corto.'])
                          ->withInput();
-        }
+        }*/
         $codigoAcceso = Str::random(8);
         
         // Guardar la nueva grupo empresa
