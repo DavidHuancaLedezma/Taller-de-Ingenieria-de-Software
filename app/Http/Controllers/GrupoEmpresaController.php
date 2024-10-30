@@ -23,7 +23,7 @@ class GrupoEmpresaController extends Controller
         // Validar los datos del formulario
         $validated = $request->validate([
             'nombre_largo' => 'required|string|max:60|unique:grupo_empresa,nombre_largo',
-            'nombre_corto' => 'required|string|max:30|different:nombre_largo|unique:grupo_empresa,nombre_corto',
+            'nombre_corto' => 'required|string|max:30|unique:grupo_empresa,nombre_corto',
             'direccion' => 'required|string|max:70',
             'telefono' => 'nullable|digits:8|regex:/[0-9]+$/',
             'correo' => 'required|string|email|max:70|unique:grupo_empresa,correo_electronico_ge',
