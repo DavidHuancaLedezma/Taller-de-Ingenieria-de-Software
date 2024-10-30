@@ -17,9 +17,12 @@ class EvaluacionParesController extends Controller
     $idGrupoEmpresa = self::getGrupoEmpresaByEstudiante($idEstudiante);
     $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa);
     
+    
     return view("evaluacion_pares", [
         'estudiantes' => $estudiantes,
-        "estudiantesCalificados" => $estudiantesCalificados]);
+        "estudiantesCalificados" => $estudiantesCalificados,
+        'idEvaluador' => $idEstudiante
+    ]);
 
     }
     private static function getEstudiantes($idEstudiante)
@@ -49,15 +52,25 @@ private static function getGrupoEmpresaByEstudiante($idEstudiante)
 
     return $resultado ? $resultado[0]->id_grupo_empresa : null; // Retorna el grupo o null si no se encuentra
 }
-      public function guardarNotaEstudiantes(Request $request)
-    {
+public function guardarNotaEstudiantes(Request $request)
+{
+    try {
         $nota = $request->input('nota');
         $idEvaluacion = $request->input('idEvaluacion');
         $idEstudianteEvaluado = $request->input('idEstudianteEvaluado');
-        $idEstudiante = $request->input('idEstudiante');
+        $idEstudiante = $request->input('idEstudiante'); // Evaluador
 
-        DB::insert("INSERT INTO respuesta (id_evaluacion, id_estudiante, otro_id_estudiante, puntaje) VALUES (?,?,?,?)", array($idEvaluacion, $idEstudiante, $idEstudianteEvaluado, $nota));
+        // Guardar la nota en la base de datos
+        DB::insert("INSERT INTO respuesta (id_evaluacion, id_estudiante, otro_id_estudiante, puntaje) VALUES (?,?,?,?)", 
+                   [$idEvaluacion, $idEstudiante, $idEstudianteEvaluado, $nota]);
+
+        // Retorna una respuesta de éxito
+        return response()->json(['success' => true, 'message' => 'Calificación guardada exitosamente.']);
+    } catch (Exception $e) {
+        // En caso de error, retorna una respuesta de error
+        return response()->json(['success' => false, 'message' => 'Error al guardar la calificación.'], 500);
     }
+}
 
     public function getCriteriosParametros(Request $request)
     {
