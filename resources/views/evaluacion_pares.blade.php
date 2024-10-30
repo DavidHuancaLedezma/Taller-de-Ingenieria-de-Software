@@ -308,15 +308,16 @@
                 $valorCambiado = 0;  // Inicializas la variable fuera del bucle 
             @endphp 
 
-            @foreach ($estudidanteCalificados ?? [] as $eCalificados) 
-                @if ($eCalificados->otro_id_estudiante == $item->id_usuario) 
-                    <td><button class="null" data-id="{{ $item->id_usuario }}" disabled>Evaluar</button></td> 
-                    <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; {{ $eCalificados->puntaje }}/100 </td> 
-                    @php 
-                        $valorCambiado = 1;  // Cambias el valor indicando que ya fue calificado 
-                    @endphp 
-                @endif 
-            @endforeach 
+            @foreach ($estudiantesCalificados ?? [] as $eCalificados)
+                                @if ($eCalificados->otro_id_estudiante == $item->id_usuario)
+                                    <td><button class="null" data-id="{{ $item->id_usuario }}"
+                                            disabled>Evaluar</button></td>
+                                    <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; {{ $eCalificados->puntaje }}/100 </td>
+                                    @php
+                                        $valorCambiado = 1; // Cambias el valor indicando que ya fue calificado
+                                    @endphp
+                                @endif
+                            @endforeach
 
             @if ($valorCambiado != 1) 
                 <td><button class="btn-calificar" data-id="{{ $item->id_usuario }}" data-nombre="{{ $item->nombre_estudiante }}">Evaluar</button></td> 
