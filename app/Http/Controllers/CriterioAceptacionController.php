@@ -59,7 +59,7 @@ class CriterioAceptacionController extends Controller
         // Si ya existe, retornar con un mensaje de error
         if ($existeCriterio) {
             //return redirect()->back()->with('error', 'El criterio de aceptación ya existe para este objetivo.');
-            return response()->json(['error' => 'El criterio de aceptación ya existe para este objetivo.'], 400);
+            return response()->json(['error' => 'El criterio de aceptación ya existe para este entregable.'], 400);
         }
         $cumplido_ca = FALSE;
         // Ejecutar la consulta para insertar el criterio de aceptación

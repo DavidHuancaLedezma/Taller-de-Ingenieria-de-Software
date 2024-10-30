@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         * {
             box-sizing: border-box;
@@ -314,8 +317,7 @@
                                     $('#entregable').append('<option value="' + entregable.id_objetivo + '">' + entregable.descrip_objetivo + '</option>');
                                 });
                             } else {
-                                alert('No hay entregables disponibles para el hito seleccionado.');
-                            }
+                                Swal.fire('Sin entregables', 'No hay entregables disponibles para el hito seleccionado.', 'warning');                            }
                         }
                     });
                 }
@@ -329,7 +331,7 @@
                     success: function(response) {
                         $('#objetivo_id').val(entregableId);
                         if (response.error) {
-                            alert(response.error);
+                            Swal.fire('Error', response.error, 'error');
                         } else {
                             // Renderizar título y actividades en container_two
                             $('.container_two').html(`
@@ -365,14 +367,15 @@
                         }
                     },
                     error: function() {
-                        alert('Error al obtener los datos del entregable.');
+                        Swal.fire('Error', 'Error al obtener los datos del entregable.', 'error');
                     }
                 });
             } else {
                 $('.container_two').empty();
             }
             if (!$('#hitos').val()) {
-                    alert('Por favor, selecciona un hito primero.');
+                    Swal.fire('Error', 'Por favor, selecciona un hito primero.', 'error');
+                    
                 }
         });
         //});
@@ -445,7 +448,15 @@
                         type: $(this).attr('method'),
                         data: $(this).serialize(), // Serializar el formulario
                         success: function(response) {
-                            alert('Actividad añadida exitosamente.');
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: response.success,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            }
                             $('#popupActivityForm').hide(); // Ocultar el formulario
                             $('#activityForm')[0].reset(); // Limpiar el formulario
                             //$('.container_two').empty(); // Limpiar las actividades (opcional, o puedes volver a cargar)
@@ -491,10 +502,17 @@
 
                         },
                         error: function(xhr) {
-                            alert('Error al agregar la actividad: ' + xhr.responseText);
-                        }
+                        $('#popupActivityForm').hide();
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: xhr.responseJSON.error
+                        });
+                    }
                     });
                 }
+            
             });
 
               // Validación en tiempo real al escribir en los campos
