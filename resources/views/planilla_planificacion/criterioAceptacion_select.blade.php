@@ -379,17 +379,17 @@
 
             // Validación y envío del formulario de actividad
             $('#criteriaForm').on('submit', function(e) {
-    e.preventDefault(); // Prevenir el envío por defecto
-    let isValid = true;
+            e.preventDefault(); // Prevenir el envío por defecto
+            let isValid = true;
 
-    const descripcionValid = validateField(
-        $('#descripcionCriterio'), 5, 500,
-        $('#descripcionCriterioError'),
-        'La descripción es obligatoria.',
-        'La descripción debe tener entre 5 y 500 caracteres.'
-    );
+            const descripcionValid = validateField(
+                $('#descripcionCriterio'), 5, 500,
+                $('#descripcionCriterioError'),
+                'La descripción es obligatoria.',
+                'La descripción debe tener entre 5 y 500 caracteres.'
+            );
 
-    isValid = descripcionValid;
+            isValid = descripcionValid;
 
     if (isValid) {
         $.ajax({
@@ -467,7 +467,13 @@
         });
     }
 });
-
+        $('#descripcionCriterio').on('keyup', function() {
+            validateField(
+                $(this), 5, 500, $('#descripcionCriterioError'),
+                'La descripción es obligatoria.',
+                'La descripción debe tener entre 5 y 500 caracteres.'
+            );
+        });
 
         $('#descripcionCriterio').on('focus', function () {
                 $('#descripcionCriterioError').text('');
