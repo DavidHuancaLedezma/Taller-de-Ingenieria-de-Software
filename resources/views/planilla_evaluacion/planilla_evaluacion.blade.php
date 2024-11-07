@@ -177,13 +177,22 @@
             padding: 20px;
             border-radius: 8px;
             width: 250px;
-            text-align: center;
+            text-align: left;
         }
 
-        .modal-content h3 {
+        /*.modal-content h3 {
             margin-bottom: 15px;
             font-size: 18px;
             color: #000;
+        }*/
+        .header_2 {
+            background-color: #3a8dbc;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px 8px 0 0;
         }
 
         .modal-content input[type="checkbox"] {
@@ -357,8 +366,12 @@
                     <div>
                         <div class="form-group">
                             <label>Seleccione tipo de evaluación</label>
-                            <select>
-                                <option value="">Tipo de evaluación</option>
+
+                            <select name="tipo_evaluacion" id="tipo_evaluacion" required>
+                                <option value="">-- Selecciona tipo de evaluación --</option>
+                                @foreach($tipos_evaluacion as $tipo_evaluacion)
+                                    <option value="{{ $tipo_evaluacion->id_tipo_evaluacion }}">{{$tipo_evaluacion->tipo_evaluacion }}</option>
+                                @endforeach
                             </select>
                         </div>
                         
@@ -414,17 +427,26 @@
         </div>
     </div>
 
-     <!-- Modal Asignar Grupo Empresa -->
-     <div id="assignModal" class="modal">
+    <!-- Modal Asignar Grupo Empresa -->
+    <div id="assignModal" class="modal">
         <div class="modal-content">
+            <div class="header_2">
             <h3>Asigna a:</h3>
-            <input type="checkbox" id="allGroups"> Todas las grupo empresa<br>
-            <input type="checkbox" id="eliteSoft"> EliteSoft<br>
-            <input type="checkbox" id="techSoft"> TechSoft<br>
-            <input type="checkbox" id="appDev"> AppDev<br>
+            </div>
+            <!-- Checkbox para seleccionar todas las grupo empresa -->
+            <input type="checkbox" id="allGroups" onclick="toggleAllCheckboxes(this)"> Todas las grupo empresa<br>
+
+            <!-- Generar checkboxes dinámicamente para cada grupo empresa -->
+            @foreach($grupoEmpresas as $grupoEmpresa)
+                <input type="checkbox" class="group-checkbox" name="grupoEmpresas[]" 
+                    value="{{ $grupoEmpresa->id_grupo_empresa }}">
+                {{ $grupoEmpresa->nombre_corto }}<br>
+            @endforeach
+
             <button class="close-btn" onclick="closeAssignModal()">Listo</button>
         </div>
     </div>
+
 
     <!-- Modal de Criterios y Parámetros -->
     <div id="criteriaModal" class="criteria-modal">
@@ -565,6 +587,14 @@
             const row = button.parentNode.parentNode;
             row.remove();
         }
+        
+        function toggleAllCheckboxes(source) {
+            const checkboxes = document.querySelectorAll('.group-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+
     </script>
 </body>
 </html>

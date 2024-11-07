@@ -26,6 +26,7 @@ use App\Http\Controllers\HitoController;
 //use App\Http\Controllers\FinalHitoController;
 use App\Http\Controllers\EvaluacionFinHitoController;
 use App\Http\Controllers\PlanillaPlanificacionController;
+use App\Http\Controllers\PlanillaEvaluacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -166,3 +167,5 @@ Route::get('/entregable-data/{id_objetivo}', [PlanillaPlanificacionController::c
 Route::get('/actividades/{id_objetivo}', [PlanillaPlanificacionController::class, 'getActividadesPorEntregable'])->name('get.actividades');
 
 Route::get('/planilla_planificacion_criterio_aceptacion/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_criterio_aceptacion']);
+
+Route::get('/planilla_evaluacion/{id_docente}', [PlanillaEvaluacionController::class, 'create']);
