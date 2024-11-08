@@ -176,12 +176,24 @@
 
     <div class="login-container">
         <h2>Inicio de Sesion</h2>
-        <form method="POST">
-            <input type="email" name="email" placeholder="Correo electronico" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <button type="submit">Iniciar Sesion</button>
+        <form action="{{ route('login') }}" method="POST">
+            @csrf
+            
+            <input type="email" name="email" required placeholder="Correo electronico">
+            @error('email')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
+            
+            
+            <input type="password" name="password" required placeholder="Contraseña">
+            @error('password')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
+            
+            <button type="submit">Ingresar</button>
         </form>
     </div>
+
 
     <footer>
         <p>&copy; 2024 - Todos los derechos reservados | <a href="#">Política de Privacidad</a></p>
