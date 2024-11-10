@@ -13,7 +13,16 @@ class PlanillaEvaluacionController extends Controller
             "select * from tipo_evaluacion"
         );
         $grupoEmpresas = self::getGrupoEmpresas($idDocente);
-        return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion','grupoEmpresas'));
+        $criterios_evaluacion= DB:: select(
+            "select * from criterio_evaluacion"
+        );
+        $parametros=DB:: select(
+            "select * from parametro_evaluacion"
+        );
+        $escalas=DB:: select(
+            "select * from escala_medicion"
+        );
+        return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion','grupoEmpresas','criterios_evaluacion', 'parametros', 'escalas'));
     }
 
     private static function getGrupoEmpresas($idDocente)

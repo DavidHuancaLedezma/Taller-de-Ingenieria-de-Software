@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Planilla de Evaluación</title>
-    <style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <style>
         * {
             margin: 0;
             padding: 0;
@@ -112,6 +116,10 @@
         #fecha-inicio-group {
             margin-left: -50px; /* Ajusta este valor según lo que necesites */
         }
+        select:focus{
+            border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
+            outline: none;
+        }
         input[type="date"]:focus{
             border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
             outline: none; 
@@ -146,7 +154,7 @@
         }
 
         .create-btn {
-            width: 100%;
+            width: 20%;
             background-color: #3a8dbc;
             color: white;
             padding: 10px;
@@ -155,6 +163,8 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
+            display: block;
+            margin: 0 auto;
         }
         /* Modal Styles */
         .modal {
@@ -238,6 +248,7 @@
             }
         }
         /* Estilos específicos para el modal de criterios */
+
         .criteria-modal {
             display: none;
             position: fixed;
@@ -255,7 +266,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            width: 400px;
+            /*width: 400px;*/
+            width: 600px;
+            max-width: 90%;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
@@ -272,18 +285,34 @@
             border-radius: 8px 8px 0 0;
         }
 
-        .criteria-group {
+       /* .criteria-group {
             margin-bottom: 20px;
-        }
+        }*/
 
-        .criteria-item {
+        /*.criteria-item {
             display: flex;
             align-items: center;
             margin: 10px 0;
             padding: 8px;
             cursor: pointer;
-        }
+        }*/
+        .criteria-group, .criteria-group_2 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Crear exactamente 6 columnas */
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
+    .criteria-item {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+    }
+    
         .criteria-item:hover {
             background-color: #f5f5f5;
         }
@@ -293,17 +322,7 @@
             align-items: center;
             gap: 10px;
         }
-
-        .radio-container input[type="radio"] {
-            margin: 0;
-        }
-
-        .info-icon {
-            color: #3a8dbc;
-            margin-left: auto;
-            cursor: help;
-        }
-
+       
         .divider {
             height: 1px;
             background-color: #ddd;
@@ -317,9 +336,13 @@
             border-radius: 4px;
             margin-top: 10px;
         }
+        .score-input:focus{
+            border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
+            outline: none;
+        }
 
         .add-btn {
-            width: 100%;
+            width: 20%;
             background-color: #3a8dbc;
             color: white;
             padding: 10px;
@@ -351,8 +374,68 @@
             border-radius: 4px;
             cursor: pointer;
         }
+        @media (max-width: 768px) {
+            .criteria-group, .criteria-group_2 {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Crear exactamente 6 columnas */
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+        }
 
-    </style>
+    .info-icon {
+        margin-left: 8px;
+        color: #007bff;
+        cursor: pointer;
+        position: relative;
+    }
+
+    /* Contenedor del tooltip */
+    .tooltip-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Tooltip personalizado */
+    .custom-tooltip {
+        visibility: hidden;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 8px;
+        border-radius: 5px;
+        position: absolute;
+        bottom: 125%; /* Ajusta según el tamaño deseado */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px; /* Ajusta el ancho de la cajita */
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.875em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Triángulo del tooltip */
+    .custom-tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+    }
+
+    /* Mostrar el tooltip al pasar el mouse sobre el icono */
+    .tooltip-container:hover .custom-tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+    
 </head>
 <body>
     <div class="container">
@@ -402,8 +485,13 @@
                     </div>
                     <div>
                         <h5>Fecha Fin</h5>
-                        <input type="date" name="fecha_fin" value="{{ old('fecha_fin') }}" required>
+                        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ old('fecha_fin') }}" required>
                     </div>
+                </div>
+                <button type="button" class="add-evaluation-btn" onclick="showCriteriaModal()">Añadir evaluación +</button>
+               
+                <div id="error-message" style="display: none; color: red;">
+                    No puedes agregar más criterios de evaluación, el puntaje máximo de 100 ha sido alcanzado.
                 </div>
                 <table class="evaluation-table">
                     <thead>
@@ -421,7 +509,6 @@
                     </tbody>
                 </table>
 
-                <button type="button" class="add-evaluation-btn" onclick="showCriteriaModal()">Añadir evaluación +</button>
                 <button type="submit" class="create-btn">Crear</button>
             </form>
         </div>
@@ -451,71 +538,53 @@
     <!-- Modal de Criterios y Parámetros -->
     <div id="criteriaModal" class="criteria-modal">
         <div class="criteria-modal-content">
+            <div class="criteria-section">
             <div class="criteria-header">
                 Criterio de evaluación
             </div>
-            <div class="criteria-section">
-                <div class="criteria-group">
+            <div class="criteria-group">
+                @foreach($criterios_evaluacion as $criterio)
                     <div class="radio-container criteria-item">
-                        <input type="radio" name="criteria" id="puntualidad" value="puntualidad">
-                        <label for="puntualidad">Puntualidad</label>
-                        <span class="info-icon">?</span>
+                        <input type="radio" name="criteria" id="criteria_{{ $criterio->id_criterio_evaluacion }}" value="{{ $criterio->evaluacion }}">
+                        <label for="criteria_{{ $criterio->id_criterio_evaluacion }}">{{ $criterio->evaluacion }}</label>
+                        <!-- Icono de interrogación con tooltip -->
+                        <div class="tooltip-container">
+                            <i class="bi bi-question-circle-fill info-icon"></i>
+                            <span class="custom-tooltip">{{ $criterio->descripcion_evaluacion }}</span>
+                        </div>
                     </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="criteria" id="comunicacion" value="comunicacion">
-                        <label for="comunicacion">Comunicación</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="criteria" id="colaboracion" value="colaboracion">
-                        <label for="colaboracion">Colaboración</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="criteria" id="trabajo" value="trabajo">
-                        <label for="trabajo">Trabajo Colaborativo</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                </div>
-
+                @endforeach
+            </div>
                 <div class="divider"></div>
 
                 <div class="criteria-header">
                     Parámetro de evaluación
                 </div>
-                <div class="criteria-group">
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="parameter" id="likert" value="likert">
-                        <label for="likert">Likert</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="parameter" id="binaria" value="binaria">
-                        <label for="binaria">Elección binaria</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="parameter" id="categoria" value="categoria">
-                        <label for="categoria">Categoría</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="parameter" id="frecuencia" value="frecuencia">
-                        <label for="frecuencia">Escala de frecuencia</label>
-                        <span class="info-icon">?</span>
-                    </div>
-                    <div class="radio-container criteria-item">
-                        <input type="radio" name="parameter" id="deslizante" value="deslizante">
-                        <label for="deslizante">Escala deslizante</label>
-                        <span class="info-icon">?</span>
-                    </div>
+                <div class="criteria-group_2">
+                    @foreach($parametros as $parametro)
+                        <div class="radio-container criteria-item">
+                         <input type="radio" name="parameter" id="parameter_{{ $parametro->id_parametro }}" value="{{ $parametro->nombre_parametro }}">
+                            <label for="parameter_{{ $parametro->id_parametro }}">{{ $parametro->nombre_parametro }}</label>
+                            
+                            <!-- Icono de interrogación con tooltip personalizado para parámetros -->
+                            <div class="tooltip-container">
+                                <i class="bi bi-question-circle-fill info-icon"></i>
+                                <span class="custom-tooltip">
+                                    @foreach($escalas as $escala)
+                                        @if($escala->id_parametro == $parametro->id_parametro)
+                                            <p>{{ $escala->escala_cualitativa ?? 'N/A' }} ----> {{ $escala->escala_cuantitativa ?? 'N/A' }}</p>
+                                        @endif
+                                    @endforeach
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-
                 <div class="divider"></div>
 
                 <div>
                     <label>Puntaje de evaluación</label>
-                    <input type="number" class="score-input" placeholder="Ingrese el puntaje">
+                    <input type="number" class="score-input" placeholder="Ingrese el puntaje" min="0" max="100" oninput="this.value = Math.min(Math.max(this.value, 0), 100)">
                 </div>
 
                 <button class="add-btn">Añadir</button>
@@ -524,11 +593,13 @@
     </div>
 
     <script>
+        let totalScore = 0; // Puntaje total acumulado
+        const maxScore = 100; // Puntaje máximo permitido
         // Funcionalidad para el modal de criterios
         const criteriaModal = document.getElementById('criteriaModal');
         const addEvaluationBtn = document.querySelector('.add-evaluation-btn');
         const addBtn = document.querySelector('.add-btn');
-
+        const errorMessage = document.getElementById('error-message'); // Elemento para mensaje de error
         // Abrir modal de criterios
         addEvaluationBtn.addEventListener('click', () => {
             criteriaModal.style.display = 'block';
@@ -545,23 +616,66 @@
         addBtn.addEventListener('click', () => {
             const selectedCriteria = document.querySelector('input[name="criteria"]:checked');
             const selectedParameter = document.querySelector('input[name="parameter"]:checked');
-            const score = document.querySelector('.score-input').value;
+            //const score = document.querySelector('.score-input').value;
+            const scoreInput = document.querySelector('.score-input');
+            const score = parseInt(scoreInput.value); // Convertir puntaje a número
 
             if (selectedCriteria && selectedParameter && score) {
+                  // Verificar que el puntaje no exceda el máximo permitido
+                if (totalScore + score > maxScore) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Puntaje Excedido',
+                        text: `El puntaje excede el máximo permitido (${maxScore}), puntaje actual: ${totalScore} .`,
+                    });
+                    return; // Detiene la ejecución
+                }
+                const evaluationText = selectedCriteria.value; // Valor del criterio de evaluación
+                const parameterText = selectedParameter.value; // Valor del parámetro de evaluación
+
+                // Obtener los criterios existentes en la tabla
+                const existingCriteria = Array.from(document.querySelectorAll('.evaluation-table tbody tr td:first-child'))
+                    .map(cell => cell.textContent.trim());
+
+                // Verificar si el criterio ya está en la tabla
+                if (existingCriteria.includes(evaluationText)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Criterio Duplicado',
+                        text: 'Este criterio de evaluación ya se ha agregado.',
+                    });
+                    return; // Detiene la ejecución para evitar la duplicación
+                }
+
+
+                // Agregar una nueva fila a la tabla con los valores seleccionados
                 const table = document.querySelector('.evaluation-table tbody');
                 const newRow = table.insertRow();
                 newRow.innerHTML = `
-                    <td>${selectedCriteria.parentElement.textContent.trim()}</td>
-                    <td>${selectedParameter.parentElement.textContent.trim()}</td>
+                    <td>${evaluationText}</td>
+                    <td>${parameterText}</td>
                     <td>${score}</td>
-                    <td><button type="button" class="delete-btn" onclick="deleteRow(this)">Eliminar</button></td>
+                                    <td><button type="button" class="delete-btn" onclick="deleteRow(this, ${score})">Eliminar</button></td>
                 `;
-                criteriaModal.style.display = 'none';
 
+                // Actualizar el puntaje total
+                totalScore += score;
+
+                // Ocultar botón de añadir evaluación si el puntaje es igual o mayor a 100
+                if (totalScore >= maxScore) {
+                    addEvaluationBtn.style.display = 'none';
+                    errorMessage.style.display = 'block'; // Mostrar mensaje de error
+                } else {
+                    errorMessage.style.display = 'none'; // Ocultar mensaje de error si el puntaje es válido
+                }
+                 
+                criteriaModal.style.display = 'none';
+                
                 // Limpiar selecciones
                 selectedCriteria.checked = false;
                 selectedParameter.checked = false;
-                document.querySelector('.score-input').value = '';
+                //document.querySelector('.score-input').value = '';
+                scoreInput.value = '';
             }
         });
     </script>
@@ -583,18 +697,91 @@
         function closeCriteriaModal() {
             document.getElementById("criteriaModal").style.display = "none";
         }
-        function deleteRow(button) {
+     
+        /*function deleteRow(button) {
             const row = button.parentNode.parentNode;
             row.remove();
+        }*/
+        // Eliminar fila y actualizar puntaje
+        function deleteRow(button, score) {
+            const row = button.parentNode.parentNode;
+            row.remove();
+            totalScore -= score; // Restar el puntaje eliminado
+
+            // Reactivar botón de añadir evaluación si el puntaje es menor a 100
+            if (totalScore < maxScore) {
+                addEvaluationBtn.style.display = 'block';
+                errorMessage.style.display = 'none'; // Ocultar mensaje de error
+            }
         }
-        
+
+
+
         function toggleAllCheckboxes(source) {
             const checkboxes = document.querySelectorAll('.group-checkbox');
             checkboxes.forEach(checkbox => {
                 checkbox.checked = source.checked;
             });
         }
-
     </script>
+        <script>
+        // Obtener la fecha de hoy en formato YYYY-MM-DD
+        const today = new Date().toISOString().split("T")[0];
+
+      // Obtener los elementos de fecha inicio y fecha fin
+        const fechaInicioInput = document.getElementById("fecha_inicio");
+        const fechaFinInput = document.getElementById("fecha_fin");
+
+        // Establecer el mínimo de la fecha de inicio y fecha fin en la fecha actual
+        fechaInicioInput.setAttribute("min", today);
+        fechaFinInput.setAttribute("min", today);
+
+        fechaInicioInput.addEventListener("change", validarFechas);
+        fechaFinInput.addEventListener("change", validarFechas);
+        // Añadir eventos change para validar cada vez que cambie una fecha
+        function validarFechas() {
+            const fechaInicio = fechaInicioInput.value;
+            const fechaFin = fechaFinInput.value;
+
+            // Validar si la fecha de inicio es anterior a hoy
+            if (fechaInicio && fechaInicio < today) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fecha de inicio inválida',
+                    text: 'La fecha de inicio no puede ser anterior a la fecha actual.',
+                });
+                fechaInicioInput.value = ""; // Limpia el campo de fecha inicio
+                return;
+            }
+
+            // Actualizar la fecha mínima de fecha fin basada en fecha inicio
+            if (fechaInicio) {
+                fechaFinInput.setAttribute("min", fechaInicio);
+            } else {
+                // Restablecer el mínimo de fecha fin a la fecha de hoy si no hay fecha de inicio
+                fechaFinInput.setAttribute("min", today);
+            }
+
+            // Validar si la fecha de fin es menor que la fecha de inicio
+            if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fechas inválidas',
+                    text: 'La fecha de fin no puede ser anterior a la fecha de inicio.',
+                });
+                fechaFinInput.value = ""; // Limpia el campo de fecha fin
+            }
+        }
+        </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+
+
 </body>
 </html>
