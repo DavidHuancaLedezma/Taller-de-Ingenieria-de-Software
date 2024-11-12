@@ -72,7 +72,7 @@ Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class,'
 
 
 Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
-// Ruta para mostrar la evaluación de un estudiante 
+// Ruta para mostrar la evaluación de un estudiante
 Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
 Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
 
@@ -84,7 +84,13 @@ Route::get('/registro-grupo-empresa', [GrupoEmpresaController::class, 'create'])
 Route::post('/registro-grupo-empresa/store', [GrupoEmpresaController::class, 'store'])->name('grupo_empresa.store');
 Route::get('/registro-grupo-empresa/success', [GrupoEmpresaController::class, 'success'])->name('grupo_empresa.success');
 
+use App\Http\Controllers\RegistroEstudianteController;
+// Ruta para mostrar el formulario de registro
+Route::get('/registro-estudiante', [RegistroEstudianteController::class, 'create'])->name('registro_estudiante.form');
 
+// Ruta para manejar el envío del formulario de registro
+Route::post('/registro-estudiante', [RegistroEstudianteController::class, 'store'])->name('registro_estudiante.store');
+Route::get('/registro-estudiante', [RegistroEstudianteController::class, 'create'])->name('registro_estudiante.create');
 
 // Ruta para redirigir en caso de éxito (puedes cambiar el nombre a success2 si lo prefieres)
 Route::get('/registro-success', function () {
@@ -157,21 +163,7 @@ use App\Http\Controllers\InicioController;
 
 //Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
 //Route ::get('/estudiante/estudiante',[InicioController::class,'registrarse'])->name('estudiante.estudiante');
-Route ::get('/login',[LoginController::class,'VeriniciarSesion'])->name('login');
+Route ::get('/login',[LoginController::class,'iniciarSesion'])->name('login');
 Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
 
-//Login
-use App\Http\Controllers\RegistroEstudianteController;
-// Ruta para mostrar el formulario de registro
-Route::get('/registro-estudiante', [RegistroEstudianteController::class, 'create'])->name('registro_estudiante.form');
 
-// Ruta para manejar el envío del formulario de registro
-Route::post('/registro-estudiante', [RegistroEstudianteController::class, 'store'])->name('registro_estudiante.store');
-Route::get('/registro-estudiante', [RegistroEstudianteController::class, 'create'])->name('registro_estudiante.create');//ver registroEst
-//
-Route::post('/login', [LoginController::class, 'iniciarSesion']); //ver  login
-Route::post('/logout', [LoginController::class, 'cerrarSesion'])->name('logout'); // Cierra la sesión
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard'); // Protege la ruta del dashboard con middleware de autenticación
