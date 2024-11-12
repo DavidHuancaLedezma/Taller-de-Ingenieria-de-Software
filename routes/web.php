@@ -169,3 +169,4 @@ Route::get('/actividades/{id_objetivo}', [PlanillaPlanificacionController::class
 Route::get('/planilla_planificacion_criterio_aceptacion/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_criterio_aceptacion']);
 
 Route::get('/planilla_evaluacion/{id_docente}', [PlanillaEvaluacionController::class, 'create']);
+Route::post('/planilla_evaluacion/store', [PlanillaEvaluacionController::class, 'store'])->name('planilla_evaluacion.store');

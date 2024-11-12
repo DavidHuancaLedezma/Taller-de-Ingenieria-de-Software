@@ -443,7 +443,28 @@
             <h1>Planilla de evaluación</h1>
         </div>
         <div class="form-container">
-            <form>
+        @if(session('success'))
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Buen trabajo',
+                        text: "{{ session('success') }}",
+                    });
+                </script>
+            @endif
+            @if(session('error'))
+                <script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "{{ session('error') }}",
+                        });
+                </script>
+            @endif
+           
+            <form action="{{ route('planilla_evaluacion.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="docente_id" value="{{ $idDocente }}">
                 <div class="grid-container">
                     <!-- Left Column -->
                     <div>
@@ -475,6 +496,25 @@
                             </button>
                         </div>
                        
+                    </div>
+                        <!-- Modal Asignar Grupo Empresa -->
+                    <div id="assignModal" class="modal">
+                        <div class="modal-content">
+                            <div class="header_2">
+                            <h3>Asigna a:</h3>
+                            </div>
+                            <!-- Checkbox para seleccionar todas las grupo empresa -->
+                            <input type="checkbox" id="allGroups" onclick="toggleAllCheckboxes(this)"> Todas las grupo empresa<br>
+
+                            <!-- Generar checkboxes dinámicamente para cada grupo empresa -->
+                            @foreach($grupoEmpresas as $grupoEmpresa)
+                                <input type="checkbox" class="group-checkbox" name="grupoEmpresas[]" 
+                                    value="{{ $grupoEmpresa->id_grupo_empresa }}">
+                                {{ $grupoEmpresa->nombre_corto }}<br>
+                            @endforeach
+
+                            <button class="close-btn" onclick="closeAssignModal()">Listo</button>
+                        </div>
                     </div>
                 </div>
                 <!-- Fecha de inicio y fin -->
@@ -514,25 +554,7 @@
         </div>
     </div>
 
-    <!-- Modal Asignar Grupo Empresa -->
-    <div id="assignModal" class="modal">
-        <div class="modal-content">
-            <div class="header_2">
-            <h3>Asigna a:</h3>
-            </div>
-            <!-- Checkbox para seleccionar todas las grupo empresa -->
-            <input type="checkbox" id="allGroups" onclick="toggleAllCheckboxes(this)"> Todas las grupo empresa<br>
 
-            <!-- Generar checkboxes dinámicamente para cada grupo empresa -->
-            @foreach($grupoEmpresas as $grupoEmpresa)
-                <input type="checkbox" class="group-checkbox" name="grupoEmpresas[]" 
-                    value="{{ $grupoEmpresa->id_grupo_empresa }}">
-                {{ $grupoEmpresa->nombre_corto }}<br>
-            @endforeach
-
-            <button class="close-btn" onclick="closeAssignModal()">Listo</button>
-        </div>
-    </div>
 
 
     <!-- Modal de Criterios y Parámetros -->
@@ -584,7 +606,7 @@
 
                 <div>
                     <label>Puntaje de evaluación</label>
-                    <input type="number" class="score-input" placeholder="Ingrese el puntaje" min="0" max="100" oninput="this.value = Math.min(Math.max(this.value, 0), 100)">
+                    <input type="number" name="score" class="score-input" placeholder="Ingrese el puntaje" min="0" max="100" oninput="this.value = Math.min(Math.max(this.value, 0), 100)">
                 </div>
 
                 <button class="add-btn">Añadir</button>
@@ -611,7 +633,6 @@
                 criteriaModal.style.display = 'none';
             }
         });
-
         // Añadir evaluación
         addBtn.addEventListener('click', () => {
             const selectedCriteria = document.querySelector('input[name="criteria"]:checked');
@@ -632,6 +653,9 @@
                 }
                 const evaluationText = selectedCriteria.value; // Valor del criterio de evaluación
                 const parameterText = selectedParameter.value; // Valor del parámetro de evaluación
+                const idCriterio = selectedCriteria.id.split('_')[1]; // Extraer el ID de criterio
+                const idParametro = selectedParameter.id.split('_')[1]; // Extraer el ID de parámetro
+
 
                 // Obtener los criterios existentes en la tabla
                 const existingCriteria = Array.from(document.querySelectorAll('.evaluation-table tbody tr td:first-child'))
@@ -651,11 +675,18 @@
                 // Agregar una nueva fila a la tabla con los valores seleccionados
                 const table = document.querySelector('.evaluation-table tbody');
                 const newRow = table.insertRow();
+                const rowIndex = table.rows.length; 
                 newRow.innerHTML = `
-                    <td>${evaluationText}</td>
-                    <td>${parameterText}</td>
-                    <td>${score}</td>
-                                    <td><button type="button" class="delete-btn" onclick="deleteRow(this, ${score})">Eliminar</button></td>
+                    <td>${evaluationText}
+                    <input type="hidden" name="evaluaciones[${rowIndex}][id_criterio]" value="${idCriterio}">
+                    </td>
+                    <td>${parameterText}
+                    <input type="hidden" name="evaluaciones[${rowIndex}][id_parametro]" value="${idParametro}">
+                    </td>
+                    <td>${score}
+                    <input type="hidden" name="evaluaciones[${rowIndex}][score]" value="${score}">
+                    </td>
+                    <td><button type="button" class="delete-btn" onclick="deleteRow(this, ${score})">Eliminar</button></td>
                 `;
 
                 // Actualizar el puntaje total
@@ -713,7 +744,8 @@
                 addEvaluationBtn.style.display = 'block';
                 errorMessage.style.display = 'none'; // Ocultar mensaje de error
             }
-        }
+
+         }
 
 
 
