@@ -32,7 +32,13 @@ class CriterioAceptacionController extends Controller
 
       
         // Pasar las actividades, criterios de aceptación y estudiantes a la vista
-        return view('criterioAceptacion', compact('objetivo','criterios_aceptacion'));
+        //return view('criterioAceptacion', compact('objetivo','criterios_aceptacion'));
+        return response()->json([
+            'objetivo' => $objetivo,
+            'criterios_aceptacion' => $criterios_aceptacion,
+           
+        ]);
+
 
     }
 
@@ -52,7 +58,8 @@ class CriterioAceptacionController extends Controller
 
         // Si ya existe, retornar con un mensaje de error
         if ($existeCriterio) {
-            return redirect()->back()->with('error', 'El criterio de aceptación ya existe para este objetivo.');
+            //return redirect()->back()->with('error', 'El criterio de aceptación ya existe para este objetivo.');
+            return response()->json(['error' => 'El criterio de aceptación ya existe para este entregable.'], 400);
         }
         $cumplido_ca = FALSE;
         // Ejecutar la consulta para insertar el criterio de aceptación
@@ -65,9 +72,11 @@ class CriterioAceptacionController extends Controller
 
         // Verificar si la inserción fue exitosa
         if ($inserted) {
-            return redirect()->back()->with('success', 'Criterio de aceptación añadido correctamente.');
+            //return redirect()->back()->with('success', 'Criterio de aceptación añadido correctamente.');
+            return response()->json(['success' => 'Criterio de aceptación añadido correctamente.']);
         } else {
-            return redirect()->back()->with('error', 'Error al añadir el criterio de aceptación.');
+            //return redirect()->back()->with('error', 'Error al añadir el criterio de aceptación.');
+            return response()->json(['error' => 'Error al añadir el criterio de aceptación.'], 500);
         }
     
     }

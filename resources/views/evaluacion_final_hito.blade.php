@@ -410,10 +410,14 @@
             <!-- Campos ocultos para enviar las fechas de inicio y fin -->
             <input type="hidden" name="fechaInicio" value="{{ $enProgreso[0] ?? '' }}">
             <input type="hidden" name="fechaFin" value="{{ $enProgreso[1] ?? '' }}">
+            @if ($mostrarMensaje)
+                <h2 class="Mensaje-de-semana-registrada" style="color: red">La evaluación final de hito ya fue registrada</h2>
+            @else
+                <div class="submit-section">
+                    <button type="submit" class="save">Guardar <i class="bi bi-rocket-takeoff-fill"></i></button>
+                </div>
+            @endif
 
-            <div class="submit-section">
-                <button type="submit" class="save">Guardar <i class="bi bi-rocket-takeoff-fill"></i></button>
-            </div>
         </form>
 
     </div>

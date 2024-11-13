@@ -40,14 +40,17 @@ class ActividadController extends Controller
             ->exists();
         // Si ya existe, retornar con un mensaje de error
         if ($existeActividad) {
-            return redirect()->back()->with('error', 'La actividad con este resultado ya existe para este objetivo.');
+            //return redirect()->back()->with('error', 'La actividad con este resultado ya existe para este objetivo.');
+            return response()->json(['error' => 'La actividad con este resultado ya existe para este entregable.'], 500);
         }
         // Si ya existe una descripción con un resultado diferente, retornar con un mensaje de error
         if ($existeDescripcionConDiferenteResultado) {
-            return redirect()->back()->with('error', 'Ya existe una actividad con esta descripción para este objetivo.');
+            //return redirect()->back()->with('error', 'Ya existe una actividad con esta descripción para este objetivo.');
+            return response()->json(['error' => 'Ya existe una actividad con esta descripción para este entregable.'], 500);
         }
         if ($existeResultadoConDiferenteDescripcion) {
-            return redirect()->back()->with('error', 'El resultado esperado ya está asociado a otra actividad para este objetivo.');
+            //return redirect()->back()->with('error', 'El resultado esperado ya está asociado a otra actividad para este objetivo.');
+            return response()->json(['error' => 'El resultado esperado ya está asociado a otra actividad para este entregable.'], 500);
         }
 
         $realizado_ac = FALSE;
@@ -61,9 +64,12 @@ class ActividadController extends Controller
             $request->input('objetivo_id'),    // ID del objetivo
         ]);
         if ($inserted) {
-            return redirect()->back()->with('success', 'Actividad añadida correctamente.');
+            //return redirect()->back()->with('success', 'Actividad añadida correctamente.');
+            return response()->json(['success' => 'Actividad añadida correctamente.']);
+
         } else {
-            return redirect()->back()->with('error', 'Actividad no añadida correctamente.');
+            //return redirect()->back()->with('error', 'Actividad no añadida correctamente.');
+            return response()->json(['error' => 'Error al añadir la actividad.'], 500);
         }
         
     }
