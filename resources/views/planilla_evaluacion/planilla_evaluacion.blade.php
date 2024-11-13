@@ -471,7 +471,7 @@
                         <div class="form-group">
                             <label>Seleccione tipo de evaluación</label>
 
-                            <select name="tipo_evaluacion" id="tipo_evaluacion" required>
+                            <select name="tipo_evaluacion" id="tipo_evaluacion" required onchange="loadEmpresasPorEvaluacion()">
                                 <option value="">-- Selecciona tipo de evaluación --</option>
                                 @foreach($tipos_evaluacion as $tipo_evaluacion)
                                     <option value="{{ $tipo_evaluacion->id_tipo_evaluacion }}">{{$tipo_evaluacion->tipo_evaluacion }}</option>
@@ -503,20 +503,16 @@
                             <div class="header_2">
                             <h3>Asigna a:</h3>
                             </div>
-                            <!-- Checkbox para seleccionar todas las grupo empresa -->
-                            <input type="checkbox" id="allGroups" onclick="toggleAllCheckboxes(this)"> Todas las grupo empresa<br>
+                            <div id="warningMessage" style="color: red; display: block;">Por favor, seleccione un tipo de evaluación.</div>
+                            <div id="vacioMessage" style="color: red; display: none;">No hay grupo empresas para asignar.</div>
 
                             <!-- Generar checkboxes dinámicamente para cada grupo empresa -->
-                            @foreach($grupoEmpresas as $grupoEmpresa)
-                                <input type="checkbox" class="group-checkbox" name="grupoEmpresas[]" 
-                                    value="{{ $grupoEmpresa->id_grupo_empresa }}">
-                                {{ $grupoEmpresa->nombre_corto }}<br>
-                            @endforeach
-
+                            <div id="checkboxContainer"></div>
                             <button class="close-btn" onclick="closeAssignModal()">Listo</button>
                         </div>
                     </div>
                 </div>
+                   
                 <!-- Fecha de inicio y fin -->
                 <div class="date-group">
                     <div id="fecha-inicio-group">
@@ -813,6 +809,41 @@
             });
         });
     </script>
+    <script>
+    function loadEmpresasPorEvaluacion() {
+        const tipoEvaluacionId = document.getElementById('tipo_evaluacion').value;
+        const id_docente = document.querySelector('input[name="docente_id"]').value; // Obtener el ID del docente desde el input hidden
+
+        if (tipoEvaluacionId) {
+            warningMessage.style.display = 'none';
+            fetch(`/get-empresas-por-evaluacion/${tipoEvaluacionId}/${id_docente}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.empresas && data.empresas.length > 0) {
+                        // Si hay empresas, mostrar los checkboxes
+                        let modalContent = '<input type="checkbox" id="allGroups" onclick="toggleAllCheckboxes(this)"> Todas las grupo empresa<br>';
+
+                        data.empresas.forEach(empresa => {
+                            modalContent += `
+                                <input type="checkbox" class="group-checkbox" name="grupoEmpresas[]" value="${empresa.id_grupo_empresa}">
+                                ${empresa.nombre_corto}<br>
+                            `;
+                        });
+                        vacioMessage.style.display = 'none';
+                        checkboxContainer.innerHTML = modalContent; // Agregar los checkboxes al contenedor
+                        allGroupsCheckbox.style.display = 'inline'; // Mostrar checkbox "Todas las grupo empresa"
+                    } else {
+                        // Si no hay empresas, mostrar el mensaje
+                        vacioMessage.style.display = 'block'; // Mostrar el mensaje de "Grupo empresas para asignar"
+                        checkboxContainer.innerHTML = ''; // Limpiar cualquier checkbox previo
+                        allGroupsCheckbox.style.display = 'none'; // Ocultar el checkbox "Todas las grupo empresa"
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+    
+</script>
 
 
 </body>

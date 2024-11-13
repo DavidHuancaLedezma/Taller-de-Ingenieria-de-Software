@@ -170,3 +170,5 @@ Route::get('/planilla_planificacion_criterio_aceptacion/{id_proyecto}', [Planill
 
 Route::get('/planilla_evaluacion/{id_docente}', [PlanillaEvaluacionController::class, 'create']);
 Route::post('/planilla_evaluacion/store', [PlanillaEvaluacionController::class, 'store'])->name('planilla_evaluacion.store');
+
+Route::get('/get-empresas-por-evaluacion/{id_tipo_evaluacion}/{id_docente}', [PlanillaEvaluacionController::class, 'getEmpresasPorEvaluacion']);

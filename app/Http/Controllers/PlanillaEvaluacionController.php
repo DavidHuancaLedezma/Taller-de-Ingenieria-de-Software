@@ -14,7 +14,7 @@ class PlanillaEvaluacionController extends Controller
         $tipos_evaluacion = DB:: select(
             "select * from tipo_evaluacion"
         );
-        $grupoEmpresas = self::getGrupoEmpresas($idDocente);
+        
         $criterios_evaluacion= DB:: select(
             "select * from criterio_evaluacion"
         );
@@ -24,29 +24,40 @@ class PlanillaEvaluacionController extends Controller
         $escalas=DB:: select(
             "select * from escala_medicion"
         );
-        return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion','grupoEmpresas','criterios_evaluacion', 'parametros', 'escalas', 'idDocente'));
+        return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion','criterios_evaluacion', 'parametros', 'escalas', 'idDocente'));
     }
 
-    private static function getGrupoEmpresas($idDocente)
+    public function getEmpresasPorEvaluacion($id_tipo_evaluacion, $id_docente)
     {
-        $consulta = DB::select("SELECT ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
-        FROM grupo_empresa ge, estudiante_grupoempresa ege, proyecto pr, grupo gr, grupo_materia gm, docente doc
-        WHERE ge.id_grupo_empresa = ege.id_grupo_empresa
-        AND pr.id_grupo_empresa = ge.id_grupo_empresa
-        AND pr.id_grupo = gr.id_grupo
-		AND gr.id_grupo = gm.id_grupo
-		AND gm.id_usuario = doc.id_usuario
-		AND doc.id_usuario = ?
-        AND ege.periodo_grupoempresa = '2-2024'
-        GROUP BY ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
-        ORDER BY ge.id_grupo_empresa ASC", array($idDocente));
-        return $consulta;
+        $grupoEmpresas = DB::select("SELECT ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
+            FROM grupo_empresa ge
+            JOIN estudiante_grupoempresa ege ON ge.id_grupo_empresa = ege.id_grupo_empresa
+            JOIN proyecto pr ON pr.id_grupo_empresa = ge.id_grupo_empresa
+            JOIN grupo gr ON pr.id_grupo = gr.id_grupo
+            JOIN grupo_materia gm ON gr.id_grupo = gm.id_grupo
+            JOIN docente doc ON gm.id_usuario = doc.id_usuario
+            WHERE doc.id_usuario = ?
+            AND ege.periodo_grupoempresa = '2-2024'
+            AND NOT EXISTS (
+                    SELECT 1
+                    FROM evaluacion eva
+                    WHERE eva.id_proyecto = pr.id_proyecto
+                    AND eva.id_tipo_evaluacion = ?
+            )
+            GROUP BY ge.nombre_corto, ge.id_grupo_empresa, ege.periodo_grupoempresa
+            ORDER BY ge.id_grupo_empresa ASC
+        ", [$id_docente, $id_tipo_evaluacion]);
+
+        return response()->json(['empresas' =>$grupoEmpresas]);
     }
+
+
    
     public function store(Request $request)
     {
         // Confirmación de datos de entrada en el log
-        Log::info("Datos recibidos en store:", $request->all());
+        //Log::info("Datos recibidos en store:", $request->all());
+        //dd($request->all());
         
 
         $request->validate([
