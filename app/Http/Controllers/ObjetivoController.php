@@ -132,5 +132,4 @@ class ObjetivoController extends Controller
 
         //return view('actividad_criterioAceptacion', compact('objetivo'));
     }
-
 }
