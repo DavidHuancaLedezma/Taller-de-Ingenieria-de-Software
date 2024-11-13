@@ -650,7 +650,7 @@
                     <div class="evaluation-card">
                         <div class="card">
                             <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
-                            <h3>Autoevaluacion</h3>
+                            <h3>Descripcion</h3>
                             <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
                             <form action="{{ url('/cargar_registro_semanal20')}}" method="GET">
                                 <button id="btn-switch-control-semanal" type="submit">Control semanal</button>

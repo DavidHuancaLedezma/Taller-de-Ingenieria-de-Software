@@ -4,8 +4,10 @@ namespace App\Models;
 
 //use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
     protected $table = 'usuario'; // Nombre de la tabla
     protected $primaryKey = 'id_usuario'; // Clave primaria
@@ -27,4 +29,8 @@ class Usuario extends Model
     {
         return $this->hasOne(Docente::class, 'id_usuario', 'id_usuario');
     }
+    public function getAuthPassword()
+{
+    return $this->contrasena; // Cambia "clave" por el nombre real del campo de contraseña
+}
 }
