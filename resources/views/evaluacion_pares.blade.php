@@ -109,11 +109,6 @@
         }
 
         .ventana-emergente-calificacion .container {
-            /*background-color: white;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 750px;*/
             position: fixed;
             top: 50%;
             left: 50%;
@@ -296,7 +291,7 @@
                         Acción
                     </th>
                     <th>
-                        Calificacion
+                        Calificación
                     </th>
                 </tr>
             </thead>
@@ -347,6 +342,7 @@
                 <thead>
                 </thead>
                 <tbody id="contenido-tabla">
+
                 </tbody>
             </table>
             <footer class="footer-autoevaluacion">
@@ -626,7 +622,26 @@
             errorMessage.style.display = 'none';
         });
     </script>
+    <script>
+        $(document).on('click', '.info-button', function(event) {
+            event.stopPropagation(); // Evitar que el clic fuera del botón cierre el mensaje
+            const infoMessage = $(this).next('.info-message'); // Selecciona el div de mensaje siguiente al botón
+            if (infoMessage.css('display') === 'block') {
+                infoMessage.css('display', 'none');
+            } else {
+                $('.info-message').css('display', 'none'); // Cierra cualquier otro mensaje abierto
+                infoMessage.css('display', 'block');
+            }
+        });
 
+        $(document).on('click', function() {
+            $('.info-message').css('display', 'none'); // Ocultar todos los mensajes al hacer clic fuera
+        });
+
+        $(document).on('click', '.info-message', function(event) {
+            event.stopPropagation(); // Prevenir que el mensaje se cierre si se hace clic en él
+        });
+    </script>
 </body>
 
 </html>
