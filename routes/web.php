@@ -55,7 +55,7 @@ Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [Contro
 
 Route::get('/', function () {
     return view('/Inicio');
-});
+})->name('inicio');
 
 Route::get('/estudiante', function () {
     return view('/grupo_empresa/registroEstudiante');
@@ -155,11 +155,13 @@ Route::post('/obtener_criterios_y_parametros', [ControllerEvaluacionCruzada::cla
 Route::post('/guardar_nota_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'guardarNotaGrupoEmpresas']);
 
 
-//HOME estudiante
-Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome']);
+// HOME estudiante
+Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'])
+    ->name('estudiante_home');
 
-//Home docente
-Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
+// HOME docente
+Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente'])
+    ->name('docente_home');
 
 
 Route::view('/planilla-planificacion', 'planilla_planificacion.h_planilla_planificacion');
@@ -180,9 +182,9 @@ Route::get('/get-empresas-por-evaluacion/{id_tipo_evaluacion}/{id_docente}', [Pl
 
 use App\Http\Controllers\InicioController;
 
-//Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
-//Route ::get('/estudiante/estudiante',[InicioController::class,'registrarse'])->name('estudiante.estudiante');
-Route ::get('/login',[LoginController::class,'iniciarSesion'])->name('login');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
 
 

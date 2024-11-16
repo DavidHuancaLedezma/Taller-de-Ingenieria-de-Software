@@ -171,7 +171,8 @@
         <div class="navbar-brand">GESTIÓN DE PROYECTOS</div>
         <div>
             <a class="nav-link btn-login nav-item" href="{{route('login')}}">Iniciar Sesión</a>
-            <a class="nav-link btn-register nav-item" href="{{route('registro_estudiante.create')}}">Registrarse</a>
+            <a class="nav-link btn-register nav-item" href="{{route('registro_estudiante.create')}}">Registrar Estudiante</a>
+            <a class="nav-link btn-register nav-item" href="{{route('registro_docente.create')}}">Registrar Docente</a>
         </div>
     </nav>
 
