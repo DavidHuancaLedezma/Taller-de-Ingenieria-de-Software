@@ -25,6 +25,8 @@ use App\Http\Controllers\CriterioAceptacionController;
 use App\Http\Controllers\HitoController;
 //use App\Http\Controllers\FinalHitoController;
 use App\Http\Controllers\EvaluacionFinHitoController;
+use App\Http\Controllers\PlanillaPlanificacionController;
+use App\Http\Controllers\PlanillaEvaluacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +57,7 @@ Route::post('/obtener_id_proyecto_de_grupo_empresa', [ControllerVisualizarPlanil
 
 
 Route::get('/', function () {
-    return view('/grupo_empresa/registroGE');
+    return view('/Inicio');
 });
 
 Route::get('/estudiante', function () {
@@ -69,6 +71,10 @@ Route::get('/docente', function () {
 
 
 Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
+
+Route::post('/guardar_nota_evaluacion_pares', [EvaluacionParesController::class, 'guardarNotaEstudiantes']);
+
+
 
 Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
 // Ruta para mostrar la evaluación de un estudiante
@@ -157,3 +163,27 @@ Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'
 
 //Home docente
 Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
+
+
+Route::view('/planilla-planificacion', 'planilla_planificacion.h_planilla_planificacion');
+Route::view('/criterioAceptacion', 'planilla_planificacion.criterioAceptacion_select');
+
+Route::get('/planilla_planificacion_actividad/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_actividad']);
+Route::get('/get-entregables', [PlanillaPlanificacionController::class, 'getEntregablesPorHito'])->name('get.entregables');
+Route::get('/entregable-data/{id_objetivo}', [PlanillaPlanificacionController::class, 'getEntregableData'])->name('get.entregableData');
+
+Route::get('/actividades/{id_objetivo}', [PlanillaPlanificacionController::class, 'getActividadesPorEntregable'])->name('get.actividades');
+
+Route::get('/planilla_planificacion_criterio_aceptacion/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_criterio_aceptacion']);
+
+Route::get('/planilla_evaluacion/{id_docente}', [PlanillaEvaluacionController::class, 'create']);
+Route::post('/planilla_evaluacion/store', [PlanillaEvaluacionController::class, 'store'])->name('planilla_evaluacion.store');
+
+Route::get('/get-empresas-por-evaluacion/{id_tipo_evaluacion}/{id_docente}', [PlanillaEvaluacionController::class, 'getEmpresasPorEvaluacion']);
+
+use App\Http\Controllers\InicioController;
+
+//Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
+//Route ::get('/estudiante/estudiante',[InicioController::class,'registrarse'])->name('estudiante.estudiante');
+Route::get('/login', [LoginController::class, 'iniciarSesion'])->name('login');
+Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);

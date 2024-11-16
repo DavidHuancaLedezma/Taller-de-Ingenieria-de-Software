@@ -21,7 +21,7 @@
         }
 
         .container {
-            width: 80%;
+            width: 70%;
             margin: 50px auto;
             background-color: white;
             padding: 20px;
@@ -199,60 +199,62 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-        <h2 class="titulo-objetivo">Entregable:</h2>
-            <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
-        </div>
-        @if(session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: "{{ session('success') }}",
-            });
-        </script>
-        @endif
-        @if(session('error'))
-        <script>
-            Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "{{ session('error') }}",
-            });
-        </script>
-        @endif
-        <div class="tabs">
-            <button id="add-activity" class="tab-button">Actividades +</button>
-           
-        </div>
-        <form action="process.php" method="post">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Descripción de actividad</th>
-                        <th>Resultado esperado</th>
-                        <th>Responsable</th>
-                    </tr>
-                </thead>
-                <tbody id="activityTable">
-                    @foreach($actividades as $actividad)
-                    <tr>
-                        <td>{{$actividad-> descripcion_actividad}}</td>
-                        <td>{{$actividad-> resultado}}</td>
-                        <td>
-                            @php
-                                $estudiante = $estudiantes->firstWhere('id_usuario', $actividad->id_usuario);
-                            @endphp
-                                {{ $estudiante ? $estudiante->nombre_estudiante : 'No asignado' }}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-           
-        </form>
+    <div class="Container_two">
+        <div class="container">
+            <div class="header">
+            <h2 class="titulo-objetivo">Entregable:</h2>
+                <h1>{{ $objetivo->descrip_objetivo ?? 'Descripción no disponible' }}</h1>
+            </div>
+            @if(session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: "{{ session('success') }}",
+                });
+            </script>
+            @endif
+            @if(session('error'))
+            <script>
+                Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "{{ session('error') }}",
+                });
+            </script>
+            @endif
+            <div class="tabs">
+                <button id="add-activity" class="tab-button">Actividades +</button>
+            
+            </div>
+            <form action="process.php" method="post">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Descripción de actividad</th>
+                            <th>Resultado esperado</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTable">
+                        @foreach($actividades as $actividad)
+                        <tr>
+                            <td>{{$actividad-> descripcion_actividad}}</td>
+                            <td>{{$actividad-> resultado}}</td>
+                            <td>
+                                @php
+                                    $estudiante = $estudiantes->firstWhere('id_usuario', $actividad->id_usuario);
+                                @endphp
+                                    {{ $estudiante ? $estudiante->nombre_estudiante : 'No asignado' }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            
+            </form>
 
+        </div>
     </div>
 
     <!-- Formulario emergente para Actividad -->

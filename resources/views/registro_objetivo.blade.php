@@ -194,7 +194,10 @@
             margin-top: s5px;
             display: block;
         }
-
+        .overplay{
+            color: #4682b4;
+           
+        }
     </style>
 </head>
 <body>
@@ -238,11 +241,15 @@
 
                             @endforeach
                         </select>
-                    </div>
+                    <!-- Aqui qe se refleje las fechas inicio y fin de hito seleccionado -->
+                    <div id="fechas-hito">
+                        <p><strong class="overplay"><i class="bi bi-calendar-check-fill"> </i>Fecha de Inicio del Hito:</strong> <span  id="fecha-inicio-hito">No seleccionada</span></p>
+                        <p><strong class="overplay"><i class="bi bi-calendar-check-fill"> </i>Fecha de Fin del Hito:</strong> <span  id="fecha-fin-hito">No seleccionada</span></p>
+                    </div>                    </div>
                 </div>
                 <h5>Entregable</h5>
                 <input type="text" class="texto" name="objetivo" placeholder="Escribe tu entregable" value="{{ old('objetivo') }}" required>
-                <p id="error-objetivo" style="color:red; display:none;">El entregable debe tener al menos 10 caracteres.</p>
+                <p id="error-objetivo" style="color:red; display:none;">El entregable debe tener al menos 5 caracteres.</p>
                 <p id="error-caracteres" style="color:red; display:none;">El entregable no puede exceder 500 caracteres y debe contener como máximo 10 caracteres especiales o números.</p>
                 
 
@@ -289,6 +296,8 @@
         const hitos = @json($hitos); // Obtener los hitos en formato JSON desde Blade
 
         const hitoSelect = document.getElementById('hitos');
+        const fechaInicioDisplay = document.getElementById('fecha-inicio-hito'); // Elemento para la fecha de inicio
+        const fechaFinDisplay = document.getElementById('fecha-fin-hito');
         const fechaInicioInput = document.querySelector('input[name="fecha_inicio"]');
         const fechaFinInput = document.querySelector('input[name="fecha_fin"]');
         const objetivoInput = document.querySelector('input[name="objetivo"]');
@@ -310,7 +319,7 @@
             const objetivoLength = this.value.length;
             const specialCharCount = countSpecialCharsAndNumbers(this.value);
 
-            if (objetivoLength < 10) {
+            if (objetivoLength < 5) {
                 errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
             } else {
                 errorObjetivo.style.display = 'none'; // Ocultar error si cumple la longitud
@@ -333,9 +342,9 @@
             const objetivoLength = objetivoInput.value.length;
             const specialCharCount = countSpecialCharsAndNumbers(objetivoInput.value);
 
-            if (objetivoLength < 20 || objetivoLength > 500 || specialCharCount > 10) {
+            if (objetivoLength < 5 || objetivoLength > 500 || specialCharCount > 10) {
                 e.preventDefault(); // Evitar envío si no cumple las validaciones
-                if (objetivoLength < 20) {
+                if (objetivoLength < 5) {
                     errorObjetivo.style.display = 'block'; // Mostrar error si el objetivo es muy corto
                 }
                 if (objetivoLength > 500 || specialCharCount > 10) {
@@ -353,6 +362,7 @@
                 fechaFinInput.removeEventListener('change', fechaFinHandler);
             }
         }
+        
 
         hitoSelect.addEventListener('change', function () {
             const hitoSeleccionado = hitos.find(hito => hito.id_hito == this.value);
@@ -364,7 +374,20 @@
                 // Convertir las fechas del hito a formato Date
                 const hitoFechaInicio = new Date(hitoSeleccionado.fecha_inicio_hito);
                 const hitoFechaFin = new Date(hitoSeleccionado.fecha_fin_hito);
-
+                // Mostrar las fechas en el formato dd/mm/yyyy
+            fechaInicioDisplay.textContent = hitoFechaInicio.toLocaleDateString('es-BO', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            fechaFinDisplay.textContent = hitoFechaFin.toLocaleDateString('es-BO', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+                   // Opcionalmente puedes ajustar los valores de los inputs de fecha también
+                fechaInicioInput.value = hitoSeleccionado.fecha_inicio_hito;
+                fechaFinInput.value = hitoSeleccionado.fecha_fin_hito;
                 // Validar la fecha de inicio del objetivo
                 fechaInicioHandler = function () {
                     const fechaInicio = new Date(this.value);
@@ -405,6 +428,14 @@
                     }
                 };
                 fechaFinInput.addEventListener('change', fechaFinHandler);
+            }else {
+                // Si no hay hito seleccionado, mostrar "No seleccionada"
+                fechaInicioDisplay.textContent = "No seleccionada";
+                fechaFinDisplay.textContent = "No seleccionada";
+
+                // Limpiar los inputs de fecha
+                fechaInicioInput.value = '';
+                fechaFinInput.value = '';
             }
         });
     });

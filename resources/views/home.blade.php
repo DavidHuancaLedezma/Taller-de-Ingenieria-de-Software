@@ -940,7 +940,7 @@
                         <div class="card">
                             <h3>REGISTRO DE HITOS</h3>
                             <img src="https://img.freepik.com/vector-premium/progreso-proyecto-flujo-trabajo-trabajo-hombre-completa-tareas-paso-paso_159757-1418.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de hitos</h3>
+                            <h3>Descripcion</h3>
                             <p class="description">Los hitos son puntos críticos o eventos significativos que marcan el progreso en el proyecto.<p>  
                             <form action="{{ url('/registro_hitos/2')}}" method="GET">
                                 <button id="btn-switch-hitos" type="submit">REGISTRO HITOS(idProyecto)</button>
@@ -953,12 +953,14 @@
                     
                     <div class="evaluation-card">
                         <div class="card">
-                            <h3>REGISTRO DE OBJETIVOS</h3>
+                            <h3>REGISTRO DE ENTREGABLES</h3>
                             <img src="https://img.freepik.com/vector-premium/concepto-progresion-proyecto-hacer-cosas-tareas-completadas-o-logros-comerciales_178888-1909.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de hitos</h3>
+
+                            <h3>Registro de entregables</h3>
+
                             <p class="description">Se formularán objetivos claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
                             <form action="{{ url('/registro_objetivo/2')}}" method="GET">
-                                <button id="btn-switch-objetivos" type="submit">REGISTRO OBJETIVOS(idProyecto)</button>
+                                <button id="btn-switch-objetivos" type="submit">REGISTRO ENTREGABLES(idProyecto)</button>
                             </form>                            
                         </div>
                     </div>
@@ -968,14 +970,30 @@
                         <div class="card">
                             <h3>REGISTRO DE ACTIVIDADES</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de hitos</h3>
+
+                            <h3>Registro de Actividades</h3>
+
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('/actividad_criterioAceptacion/5')}}" method="GET">
+                            <form action="{{ url('planilla_planificacion_actividad/4')}}" method="GET">
                                 <button id="btn-switch-actividades" type="submit">ACTIVIDADES(idObjetivo)</button>
                             </form>                        
                         </div>
                     </div>
                 </div> 
+                <div class="switch_actividades">
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <h3>REGISTRO DE CRITERIOS DE ACEPTACION</h3>
+                            <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
+                            <h3>Registro de Criterios de aceptación</h3>
+                            <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
+                            <form action="{{ url('planilla_planificacion_criterio_aceptacion/4')}}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">CRITERIO ACEPTACIÓN(idObjetivo)</button>
+                            </form>                        
+                        </div>
+                    </div>
+                </div> 
+                
                     `;
                     break;
                 case 'autoevaluacion':
@@ -988,7 +1006,7 @@
                                 <div class="evaluation-card">
                                     <div class="card">
                                         <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                        <h3>Autoevaluacion</h3>
+                                        <h3>Descripcion autoevaluacion</h3>
                                         <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
                                         <form action="{{ url('/autoevaluacion/${idEstudiante}')}}" method="GET">
                                             <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
@@ -1004,7 +1022,7 @@
                         <div class="evaluation-card">
                             <div class="card">
                                 <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                <h3>Autoevaluacion</h3>
+                                <h3>Descripcion autoevaluacion</h3>
                                 <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
                                 
                                     <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionYaRegistrada()">AUTOEVALUACIÓN</button>
@@ -1024,7 +1042,7 @@
                     <div class="evaluation-card">
                         <div class="card">
                             <img src="https://evalart.com/wp-content/uploads/2023/01/nggallery_import/evaluacion-de-desempeno-constante-para-los-empleados_imgdest.webp" alt="Evaluación Pares" class="card-image">
-                            <h3>Evaluación Pares</h3>
+                            <h3>Descripcion evaluación pares</h3>
                             <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
                             <form action="" method="GET">
                                 <button id="btn-evaluacion-pares" type="submit">EVALUACIÓN PARES</button>
@@ -1042,7 +1060,7 @@
                     <div class="evaluation-card">
                         <div class="card">
                             <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
-                            <h3>Evaluación Cruzada</h3>
+                            <h3>Descripcion evaluación cruzada</h3>
                             <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
                             <form action="{{ url('/evaluacion_cruzada/${idGrupoEmpresa}')}}" method="GET">
                                 <button id="btn-evaluacion-cruzada" type="submit">EVALUACIÓN CRUZADA</button>
