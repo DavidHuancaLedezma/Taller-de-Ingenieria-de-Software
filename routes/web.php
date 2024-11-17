@@ -72,11 +72,8 @@ Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::
 Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class,'guardarNotaEstudiantes']);
 
 
-
-Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
 // Ruta para mostrar la evaluación de un estudiante
 Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
-Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
 
 
 use App\Http\Controllers\GrupoEmpresaController;
@@ -180,7 +177,6 @@ Route::post('/planilla_evaluacion/store', [PlanillaEvaluacionController::class, 
 
 Route::get('/get-empresas-por-evaluacion/{id_tipo_evaluacion}/{id_docente}', [PlanillaEvaluacionController::class, 'getEmpresasPorEvaluacion']);
 
-use App\Http\Controllers\InicioController;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
