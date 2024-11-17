@@ -154,7 +154,7 @@ Route::get('/evaluacion_cruzada/{idGrupoEmpresa}/{idEstudiante}', [ControllerEva
 
 //Rutas extras para el funcionamiento de evaluaciones
 Route::post('/guardar_nota_autoevaluacion', [ControllerAutoevaluacion::class, 'registroNota']);
-Route::post('/obtener_criterios_y_parametros', [ControllerEvaluacionCruzada::class, 'getCriteriosParametros']);
+Route::post('/obtener_criterios_y_parametros_dj', [ControllerEvaluacionCruzada::class, 'getCriteriosParametros']);
 Route::post('/guardar_nota_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'guardarNotaGrupoEmpresas']);
 Route::post('/fechas_validas_de_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'rangoFechasEvaluacionCruzada']);
 

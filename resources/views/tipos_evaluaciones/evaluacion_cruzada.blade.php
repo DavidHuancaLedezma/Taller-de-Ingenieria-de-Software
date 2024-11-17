@@ -374,7 +374,7 @@
             $("#id-grupo-empresa-a-evaluar").val(id_grupo_empresa);
 
             $.ajax({
-                url: '{{ url('/obtener_criterios_y_parametros') }}', //nueva url para la comunicación con AJAX
+                url: '{{ url('/obtener_criterios_y_parametros_dj') }}', //nueva url para la comunicación con AJAX
                 method: 'POST',
                 data: {
                     idGrupoEmpresa: id_grupo_empresa 
