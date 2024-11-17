@@ -16,11 +16,21 @@ class ControllerVisualizarPlanillaDePlanificacion extends Controller
                 $idProyecto = $idPlanillaProyecto;
 
                 $planilla = self::getDetalleDePlanilla($idProyecto);
-                $objetivos = self::getObjetivos($planilla);
-                $planillaCompleta = self::getPlanillaCompleta($planilla, $objetivos);
-                $nombreCorto = self::getNombreCortoGE($idProyecto);
-                $grupoEmpresas = self::getGrupoEmpresas($idDocente);
-                return view('visualizarPlanillaDePlanificacion', ['planillaCompleta' => $planillaCompleta, 'nombreCorto' => $nombreCorto, 'grupoEmpresas' => $grupoEmpresas, 'idDocente' => $idDocente]);
+
+
+                $porcentaje = self::getPorcentajePlanilla($planilla);
+
+                if ($porcentaje == 100) {
+                    $objetivos = self::getObjetivos($planilla);
+                    $planillaCompleta = self::getPlanillaCompleta($planilla, $objetivos);
+                    $nombreCorto = self::getNombreCortoGE($idProyecto);
+                    $grupoEmpresas = self::getGrupoEmpresas($idDocente);
+                    return view('visualizarPlanillaDePlanificacion', ['planillaCompleta' => $planillaCompleta, 'nombreCorto' => $nombreCorto, 'grupoEmpresas' => $grupoEmpresas, 'idDocente' => $idDocente]);
+                } else {
+                    $grupoEmpresas = self::getGrupoEmpresas($idDocente);
+                    $nombreCorto = self::getNombreCortoGE($idProyecto);
+                    return view('visualizarPlanillaDePlanificacionIncompleta', ['grupoEmpresas' => $grupoEmpresas, 'idDocente' => $idDocente, 'nombreCorto' => $nombreCorto]);
+                }
             } else {
                 //otra ventana de inicio
                 $grupoEmpresas = self::getGrupoEmpresas($idDocente);
@@ -40,6 +50,15 @@ class ControllerVisualizarPlanillaDePlanificacion extends Controller
         AND ge.id_grupo_empresa = ?", array($idGrupoEmpresa));
 
         return response(json_encode($consulta[0]->id_proyecto), 200)->header('Content-type', 'text/plain');
+    }
+
+    private static function getPorcentajePlanilla($planilla)
+    {
+        $porcentaje = 0;
+        foreach ($planilla as $item) {
+            $porcentaje = $porcentaje + $item->porcentaje_cobro;
+        }
+        return $porcentaje;
     }
 
     private static function getNombreCortoGE($idProyecto)

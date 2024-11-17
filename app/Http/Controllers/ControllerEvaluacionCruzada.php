@@ -5,22 +5,23 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 class ControllerEvaluacionCruzada extends Controller
 {
-    public function evaluacionCruzada($idGrupoEmpresa)
+    public function evaluacionCruzada($idGrupoEmpresa, $idEstudiante)
     {
         //por parametro se pasa el id de la grupo empresa
         $grupoEmpresas = self::getGrupoEmpresas($idGrupoEmpresa);
         try {
             $idEvaluador = self::getDatosEvaluador($idGrupoEmpresa);
             $idEvaluador = $idEvaluador[0]->id_usuario;
-        } catch (Exception) {
+        } catch (Exception $e) {
             $idEvaluador = NULL;
         }
 
         $grupoEmpresasCalificadas = self::getGrupoEmpresasCalificadas($idGrupoEmpresa);
-        return view("tipos_evaluaciones/evaluacion_cruzada", ['grupoEmpresas' => $grupoEmpresas, "idEvaluador" => $idEvaluador, "grupoEmpresasCalificadas" => $grupoEmpresasCalificadas]);
+        return view("tipos_evaluaciones/evaluacion_cruzada", ['grupoEmpresas' => $grupoEmpresas, "idEvaluador" => $idEvaluador, "grupoEmpresasCalificadas" => $grupoEmpresasCalificadas, "idEstudiante" => $idEstudiante]);
     }
 
     public function guardarNotaGrupoEmpresas(Request $request)
@@ -39,7 +40,7 @@ class ControllerEvaluacionCruzada extends Controller
     public function getCriteriosParametros(Request $request)
     {
         $idGrupoEmpresa = $request->input("idGrupoEmpresa");
-        $consulta = DB::select("SELECT ge.nombre_corto, ce.id_criterio_evaluacion, ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, pe.escala_variable, ge.id_grupo_empresa, e.id_evaluacion 
+        $consulta = DB::select("SELECT ge.nombre_corto, ce.id_criterio_evaluacion, ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, ge.id_grupo_empresa, e.id_evaluacion, pe.id_parametro, cpe.puntaje_evaluacion
         FROM grupo_empresa ge, proyecto pr, evaluacion e, tipo_evaluacion te, 
         criterio_parametro_evaluacion cpe, parametro_evaluacion pe, criterio_evaluacion ce,
         estudiante_grupoempresa ege
@@ -54,10 +55,41 @@ class ControllerEvaluacionCruzada extends Controller
         AND te.id_tipo_evaluacion = 3
         AND e.id_docente = 61
         AND ege.periodo_grupoempresa = '2-2024'
-        GROUP BY ge.nombre_corto, ce.id_criterio_evaluacion, ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, pe.escala_variable, ge.id_grupo_empresa, e.id_evaluacion
+        GROUP BY ge.nombre_corto, ce.id_criterio_evaluacion, ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, ge.id_grupo_empresa, e.id_evaluacion, pe.id_parametro, cpe.puntaje_evaluacion
         ORDER BY ce.id_criterio_evaluacion", array($idGrupoEmpresa));
 
-        return response(json_encode($consulta), 200)->header('Content-type', 'text/plain');
+        $escalaMedicionConParametros = self::getEscalaMedicionConParametros($consulta);
+
+        return response(json_encode($escalaMedicionConParametros), 200)->header('Content-type', 'text/plain');
+    }
+
+
+    private static function getEscalaMedicionConParametros($parametrosDeEvaluacion)
+    {
+
+        $res = [];
+        foreach ($parametrosDeEvaluacion as $item) {
+            if ($item->nombre_parametro != "Numeral entero") {
+                $idParametro = $item->id_parametro;
+                $escalaMedicion = DB::select("SELECT escala_cualitativa, escala_cuantitativa 
+                FROM escala_medicion
+                WHERE id_parametro = ?", array($idParametro));
+
+                $descripcionPuntaje = "";
+
+                foreach ($escalaMedicion as $puntajes) {
+                    $descripcionPuntaje = $descripcionPuntaje . $puntajes->escala_cualitativa . "=" . $puntajes->escala_cuantitativa . ", ";
+                }
+                $descripcionPuntaje = substr($descripcionPuntaje, 0, -2);
+                $descripcionPuntaje = "Valores de los parametros de evaluación: " . $descripcionPuntaje;
+
+                $res[] = array($item, $escalaMedicion, $descripcionPuntaje);
+            } else {
+                $res[] = array($item, NULL, "Valores de los parametros de evaluación: El rango admite valores del 0 al 100"); //El Numeral entero no tiene escalaMedicion en DB
+            }
+        }
+
+        return $res;
     }
 
     private static function getGrupoEmpresas($idGrupoEmpresa)
@@ -110,5 +142,37 @@ class ControllerEvaluacionCruzada extends Controller
                                                                                                                                                 WHERE id_grupo_empresa = ?))) as tabla_notas
                                                                                                                                                 WHERE tabla_empresa.id_usuario = tabla_notas.otro_id_estudiante", array($idGrupoEmpresa, $idGrupoEmpresa));
         return $consulta;
+    }
+
+
+    public function rangoFechasEvaluacionCruzada(Request $request)
+    {
+
+        $idEvaluacion = $request->input("idEvaluacion");
+
+        // Obtener la fecha actual
+        date_default_timezone_set('America/La_Paz');
+        $fechaActual = date('Y-m-d');
+
+        $fechaActual = new DateTime($fechaActual);
+
+        $antesDeFecha = 0;
+        $despuesDeFecha = 0;
+
+        $consulta = DB::select("SELECT fecha_evaluacion_ini, fecha_evaluacion_fin FROM evaluacion
+        WHERE id_evaluacion = ?", array($idEvaluacion));
+
+        $fechaIniEvaluacion = new DateTime($consulta[0]->fecha_evaluacion_ini);
+        $fechaFinEvaluacion = new DateTime($consulta[0]->fecha_evaluacion_fin);
+
+        if ($fechaActual < $fechaIniEvaluacion) {
+            $antesDeFecha = 1;
+        }
+        if ($fechaActual > $fechaFinEvaluacion) {
+            $despuesDeFecha = 1;
+        }
+
+        $respuesta = array(array($antesDeFecha, $fechaActual->format('Y-m-d'), $fechaIniEvaluacion->format('Y-m-d')), array($despuesDeFecha, $fechaActual->format('Y-m-d'), $fechaFinEvaluacion->format('Y-m-d')));
+        return response(json_encode($respuesta), 200)->header('Content-type', 'text/plain');
     }
 }

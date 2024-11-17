@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Autoevaluación Escala Likert</title>
@@ -132,7 +133,7 @@
             top: 35px; /* Debajo del botón */
             left: 0px;
             max-width: 200px; /* Ancho aceptable */
-            min-width: 150px;
+            min-width: 300px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             z-index: 10;
             word-wrap: break-word;
@@ -152,11 +153,26 @@
             margin-left: 40px;
             margin-right: 150px;
         }
+        .back_button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px; /* Fijar el botón al lado izquierdo */
+            top: 20px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
     </style>
 </head>
 <body>
     <input id="id-proyecto" type="hidden" value="{{$idProyecto}}">
     <input id="id-estudiante" type="hidden" value="{{$idEstudiante}}">
+
+    <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+
+
     <div class="container">
         <h1>Autoevaluación</h1>
 
@@ -169,126 +185,64 @@
                 
             </thead>
             <tbody>
+                @php
+                    $valorCambiado = 1;  // Inicializas la variable fuera del bucle
+                @endphp
                 @foreach ($parametrosDeEvaluacion as $item)
-                    @if ($item->nombre_parametro == "Escala Likert")
+
+                    @if ($item[0]->nombre_parametro != "Numeral entero")
                         <tr>
                             <td>
-                                {{$item->evaluacion}}
+                                {{$item[0]->evaluacion}}
                             </td>
                             <td>
                                 <button class="info-button">?</button>
                                 <div class="info-message">
-                                    {{$item->descripcion_evaluacion}}
+                                    {{$item[0]->descripcion_evaluacion}}
+                                    @php
+                                        $puntaje = $item[0]->puntaje_evaluacion;
+                                    @endphp
                                 </div>
                             </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="muy-mal">Deficiente</label>
-                                    <input type="radio" name="question1" value="10">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="mal">Malo</label>
-                                    <input type="radio" name="question1" value="30">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="regular">Regular</label>
-                                    <input type="radio" name="question1" value="50">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="bien">Bueno</label>
-                                    <input type="radio" name="question1" value="75">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="muy-bien">Excelente</label>
-                                    <input type="radio" name="question1" value="100">
-                                </div>
-                            </td>
-                        </tr>
-                    @endif
-                    
-                    @if ($item->nombre_parametro == "Elección binaria")
-                        <tr>
-                            <td>{{$item->evaluacion}}</td>
-                            <td>
-                                <button class="info-button">?</button>
-                                <div class="info-message">
-                                    {{$item->descripcion_evaluacion}}
-                                </div>
-
-                            </td>
-
-                            <td>
-                                <div class="radio-group">
-                                    <label for="falso">Falso</label>
-                                    <input type="radio" name="question2" value="15">
-                                </div>
+                            @foreach ($item[1] as $escalaMedicion)
                                 <td>
                                     <div class="radio-group">
-                                        <label for="verdadero">Verdadero</label>
-                                        <input type="radio" name="question2" value="100">
+                                        <label>{{$escalaMedicion->escala_cualitativa}}
+                                            @php
+                                                $puntaje_u = $puntaje * ($escalaMedicion->escala_cuantitativa/100) ;
+                                            @endphp   
+                                        </label>
+                                        <input type="radio" name="question{{$valorCambiado}}" value="{{$puntaje_u}}"  onchange="mostrarValor(this.value)">
                                     </div>
-                                </td>
-                            </td>
+                                </td>  
+                            @endforeach
+                            @php
+                                $valorCambiado = $valorCambiado + 1;
+                            @endphp
                         </tr>
-                    @endif
-                    
-                    @if ($item->nombre_parametro == "Numeral entero")
+                        
+                    @else
                         <tr>
-                            <td>{{$item->evaluacion}}</td>
+                            <td>{{$item[0]->evaluacion}}</td>
                             <td>
                                 <button class="info-button">?</button>
                                 <div class="info-message">
-                                    {{$item->descripcion_evaluacion}}
+                                    {{$item[0]->descripcion_evaluacion}}
                                 </div>
                             </td>
                             <td>
                                 <div class="radio-group">
-                                    <label for="verdadero">Rango [0 - 100]</label>
-                                    <input class="rango-numeros" type="text" id="numero" value="0" oninput="validarEntrada(event)" onpaste="prevenirPegar(event)" maxlength="3" />
+                                    @php
+                                        $puntaje = $item[0]->puntaje_evaluacion;
+                                        $digitos = strlen((string) $puntaje);
+                                    @endphp
+                                    <label >Rango [0 - {{$puntaje}}]</label>
+                                    <input class="rango-numeros" type="text" id="numero" value="0" oninput="validarEntrada(event, {{$puntaje}})" onpaste="prevenirPegar(event)" maxlength="{{$digitos}}" />
                                 </div>
                             </td>
                         </tr>
+                        
                     @endif
-
-                    @if ($item->nombre_parametro == "Categoria")
-                        <tr>
-                            <td>{{$item->evaluacion}}</td>
-                            <td>
-                                <button class="info-button">?</button>
-                                <div class="info-message">
-                                    {{$item->descripcion_evaluacion}}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="baja">Baja</label>
-                                    <input type="radio" name="question3" value="10">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="media">Media</label>
-                                    <input type="radio" name="question3" value="50">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="radio-group">
-                                    <label for="alta">Alta</label>
-                                    <input type="radio" name="question3" value="100">
-                                </div>
-                            </td>
-
-                        </tr>
-                    @endif    
-                    
                 @endforeach
             </tbody>
         </table>
@@ -298,6 +252,11 @@
             <button id="calificarBtn" class="btn-calificar">Calificar</button>
         </footer>
     </div>
+    <script>
+function mostrarValor(valor) {
+    console.log("Valor seleccionado:", valor);
+}
+</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Obtener todos los botones de información y todos los mensajes de información
@@ -344,7 +303,7 @@
     </script>
 
     <script>
-        function validarEntrada(event) {
+        function validarEntrada(event, maximo) {
             const input = event.target;
             let valor = input.value;
 
@@ -356,9 +315,9 @@
                 valor = "0";
             }
 
-            // Limita el valor a 100
-            if (parseInt(valor) > 100) {
-                valor = valor.slice(0, -1);
+            // Limita el valor que esta en el criterio
+            if (parseInt(valor) > maximo) {
+                valor = maximo.toString();
             }
 
             // Actualiza el valor del input
@@ -441,7 +400,6 @@
                             window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
 
                             // Recarga la página después de presionar "OK"
-                            
                         }
                     });
 
@@ -450,7 +408,7 @@
                         sumatoriaNota = sumatoriaNota + notas[i];
                     }
 
-                    sumatoriaNota = sumatoriaNota / notas.length;
+                    sumatoriaNota = sumatoriaNota;
                     sumatoriaNota = Math.round(sumatoriaNota);
                     console.log(sumatoriaNota);
 
@@ -460,7 +418,6 @@
 
 
 
-                    
                     $.ajax({
                     url: '{{ url('/guardar_nota_autoevaluacion') }}', //nueva url para la comunicación con AJAX
                     method: 'POST',
@@ -474,10 +431,14 @@
                         console.error('Error en la solicitud:', textStatus, errorThrown);
                         console.error('Detalles del error:', jqXHR.responseText);
                     });
-                    
-                    
                 }
-    
+            });
+
+            $("#boton-home").on("click", function () {
+                //Regresa al home del estudiante
+                let idEstudiante = $('#id-estudiante').val();
+                
+                window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
             });
         });
     </script>

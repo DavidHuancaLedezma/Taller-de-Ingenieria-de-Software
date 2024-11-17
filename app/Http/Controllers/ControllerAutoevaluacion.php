@@ -27,14 +27,45 @@ class ControllerAutoevaluacion extends Controller
     private static function getParametrosDeEvaluacion($idProyecto)
     {
         $tipoEvaluacion = 1; // AUTOEVALUACIÓN
-        $parametrosDeEvaluacion = DB::select("SELECT ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, pe.escala_variable  
+        $parametrosDeEvaluacion = DB::select("SELECT ce.evaluacion, ce.descripcion_evaluacion, pe.nombre_parametro, pe.id_parametro, cpe.puntaje_evaluacion
         FROM evaluacion e, criterio_parametro_evaluacion cpe, parametro_evaluacion pe, criterio_evaluacion ce
         WHERE e.id_evaluacion = cpe.id_evaluacion
         AND ce.id_criterio_evaluacion = cpe.id_criterio_evaluacion
         AND pe.id_parametro = cpe.id_parametro
         AND e.id_tipo_evaluacion = ?
         AND e.id_proyecto = ?", array($tipoEvaluacion, $idProyecto));
-        return $parametrosDeEvaluacion;
+
+        $parametrosYescalaMedicion = self::getParametrosYescalaMedicion($parametrosDeEvaluacion);
+
+
+        return $parametrosYescalaMedicion;
+    }
+
+    private static function getParametrosYescalaMedicion($parametrosDeEvaluacion)
+    {
+        $res = [];
+        foreach ($parametrosDeEvaluacion as $item) {
+
+            if ($item->nombre_parametro != "Numeral entero") {
+                $idParametro = $item->id_parametro;
+                $escalaMedicion = DB::select("SELECT escala_cualitativa, escala_cuantitativa 
+                FROM escala_medicion
+                WHERE id_parametro = ?", array($idParametro));
+
+                $descripcionPuntaje = "";
+
+                foreach ($escalaMedicion as $puntajes) {
+                    $descripcionPuntaje = $descripcionPuntaje . $puntajes->escala_cualitativa . "=" . $puntajes->escala_cuantitativa . ", ";
+                }
+                $descripcionPuntaje = substr($descripcionPuntaje, 0, -2);
+                $descripcionPuntaje = "Valores de los parametros de evaluación: " . $descripcionPuntaje;
+
+                $res[] = array($item, $escalaMedicion, $descripcionPuntaje);
+            } else {
+                $res[] = array($item, NULL, "Valores de los parametros de evaluación: El rango admite valores del 0 al 100"); //El Numeral entero no tiene escalaMedicion en DB
+            }
+        }
+        return $res;
     }
 
     private static function getIdProyecto($idEstudiante)

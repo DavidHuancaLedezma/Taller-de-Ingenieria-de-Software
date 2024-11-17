@@ -778,6 +778,8 @@
     <input id="autoevaluacion-realizada" type="hidden" value="{{$autoevaluacion}}">
     <input id="id-grupo-empresa-del-estudiante" type="hidden" value="{{$idGrupoEmpresa}}">
     <input id="parametros-de-autoevaluacion" type="hidden" value="{{$conParametros}}">
+    <input id="fechas-autoevaluacion" type="hidden" value="{{ json_encode($fechasDeAutoevaluacion) }}">
+    
 
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
@@ -877,8 +879,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script>
 
+    <script>
         
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
@@ -983,25 +985,69 @@
                 case 'autoevaluacion':
                     let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
                     let autoevaluacionConParametros = document.getElementById("parametros-de-autoevaluacion").value;
+                    let fechas_autoevaluacion = document.getElementById('fechas-autoevaluacion').value;
+                    fechas_autoevaluacion = JSON.parse(fechas_autoevaluacion);
+                    console.log(fechas_autoevaluacion);
+                    
+                    let valor = "hola";
                     console.log(autoevaluacionConParametros);
                     console.log("-----------------------------");
                     console.log(autoevaluacion);
                     if(autoevaluacion == 0){
                         if(autoevaluacionConParametros === "si"){
-                            html = `
-                            <div class="switch_autoevaluacion">
-                                <h2>Evaluaciones</h2>
-                                <div class="evaluation-card">
-                                    <div class="card">
-                                        <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                        <h3>Autoevaluacion</h3>
-                                        <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                                        <form action="{{ url('/autoevaluacion/${idEstudiante}')}}" method="GET">
-                                            <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
-                                        </form>
-                                </div>
-                                </div>
-                            </div> `;
+
+                            if(fechas_autoevaluacion[0][0] === 1){
+                                //fecha antes sin comenzar(No inicio la autoevalución)
+                                html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            
+                                                <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionSinComenzar('${fechas_autoevaluacion[0][1]}','${fechas_autoevaluacion[0][2]}')">AUTOEVALUACIÓN</button>
+                                            
+                                    </div>
+                                    </div>
+                                </div> `;
+
+                            }else if(fechas_autoevaluacion[1][0] === 1){
+                                //fecha despues (ya termino la autoevaluación)
+                                html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            
+                                                <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionTerminada('${fechas_autoevaluacion[1][1]}','${fechas_autoevaluacion[1][2]}')">AUTOEVALUACIÓN</button>
+                                            
+                                    </div>
+                                    </div>
+                                </div> `;
+                            }else{
+                                //Ingreso normal a la autoevaluación
+                                html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            <form action="{{ url('/autoevaluacion/${idEstudiante}')}}" method="GET">
+                                                <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
+                                            </form>
+                                    </div>
+                                    </div>
+                                </div> `;
+                            }
+
+                            
 
                         }else{
                             html = `
@@ -1110,7 +1156,31 @@
                 allowOutsideClick: false,
             });
         }
+
+        function mensajeAutoevaluacionSinComenzar(fechaActual, fechaComienzo){
+            console.log("AQUI -----------------------");
+            console.log(fechaActual);
+            console.log(fechaComienzo);
+            console.log("fIN AQUI-----------------------");
+            Swal.fire({
+                icon: 'error',
+                title: 'Autoevaluación sin comenzar',
+                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' + fechaComienzo,
+                allowOutsideClick: false,
+            });
+        }
         
+
+        function mensajeAutoevaluacionTerminada(fechaActual, fechaFin){
+            console.log(fechaActual);
+            console.log(fechaFin);
+            Swal.fire({
+                icon: 'error',
+                title: 'Fecha de autoevaluación finalizada',
+                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
+                allowOutsideClick: false,
+            });
+        }
     </script>
 </body>
 </html>

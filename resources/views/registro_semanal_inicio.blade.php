@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <style>
@@ -11,16 +12,22 @@
         *{
             margin: 0px;
             padding: 0px;
-
         }
         body{
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            margin: 0;
+        }
+        .Contenedor_body{
             height: 100vh;
-            background-color: #D2D6DE;
+            background-color: white;
             display: flex;
             flex-direction: column ;
             justify-content: center ; 
             align-items: center;
-            gap: 5px ; 
+            gap: 20px ; 
             padding: 12px ; 
         }
 
@@ -28,7 +35,6 @@
             background-color: rgb(255, 255, 255);
             padding: 10px ;
             max-width: 600px ; 
-            
         }
         header{
             background-color: #367FA9 ;
@@ -101,11 +107,25 @@
             background-color: #222D32;
             color: white;
         } 
+
+        .back-button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px; /* Fijar el botón al lado izquierdo */
+            top: 20px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
+
     </style>
 </head>
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
-
+    <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+ <div class="Contenedor_body">
     <div class="combo_GEs">
         <label for="opciones">Elige una opción:</label>
         <select id="opciones" name="opciones">
@@ -125,7 +145,7 @@
             <img src="https://img.freepik.com/vector-gratis/concepto-gestion-tiempo-dibujado-mano-plana_23-2148820992.jpg" alt="imagen de control">
         </main>
     </div>
-
+</div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -167,8 +187,14 @@
                     console.log("Texto seleccionado: " + textoSeleccionado);
                 }
             });
-            
-        });
+
+            $("#boton-home").on("click", function () {
+                //Regresa al home del docente
+                let idDocente = $('#id-docente').val();
+                
+                window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
+            });
+    });
     </script>
 </body>
 </html>

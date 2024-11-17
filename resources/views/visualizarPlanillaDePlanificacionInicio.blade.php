@@ -4,22 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <style>
         *{
             margin: 0px;
             padding: 0px;
-
         }
         body{
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            margin: 0;
+        }
+        .Contenedor_body{
             height: 100vh;
             background-color: #D2D6DE;
             display: flex;
             flex-direction: column ;
             justify-content: center ; 
             align-items: center;
-            gap: 5px ; 
+            gap: 20px ; 
             padding: 12px ; 
         }
 
@@ -100,28 +107,42 @@
             background-color: #222D32;
             color: white;
         } 
+        .back-button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px; /* Fijar el botón al lado izquierdo */
+            top: 20px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
     </style>
 </head>
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
-    <div class="combo_GEs">
-        <label for="opciones">Elige una opción:</label>
-        <select id="opciones" name="opciones">
-            <option value="">Seleccionar</option>
-        @foreach ($grupoEmpresas as $empresa)
-            <option value="{{$empresa->id_grupo_empresa}}">{{$empresa->nombre_corto}}</option>
-        @endforeach
-        </select>
-    </div>
-    <div class="container_inicial">
-        <header>
-            <h3>PLANILLA DE PLANIFICACION<br>
-            DE GRUPO EMPRESAS</h3>
-        </header>
-        <main>
-            <img src="https://img.freepik.com/vector-gratis/concepto-estrategia-empresarial-diseno-plano-dibujado-mano_52683-78093.jpg" alt="imagen de planificacion">
-        </main>
-    </div>
+    <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    <div class="Contenedor_body">
+        <div class="combo_GEs">
+            <label for="opciones">Elige una opción:</label>
+            <select id="opciones" name="opciones">
+                <option value="">Seleccionar</option>
+            @foreach ($grupoEmpresas as $empresa)
+                <option value="{{$empresa->id_grupo_empresa}}">{{$empresa->nombre_corto}}</option>
+            @endforeach
+            </select>
+        </div>
+        <div class="container_inicial">
+            <header>
+                <h3>PLANILLA DE PLANIFICACION<br>
+                DE GRUPO EMPRESAS</h3>
+            </header>
+            <main>
+                <img src="https://img.freepik.com/vector-gratis/concepto-estrategia-empresarial-diseno-plano-dibujado-mano_52683-78093.jpg" alt="imagen de planificacion">
+            </main>
+        </div>
+    </div>    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Configurar el token CSRF para todas las solicitudes AJAX
@@ -162,7 +183,12 @@
                     console.log("Texto seleccionado: " + textoSeleccionado);
                 }
             });
-            
+
+            $("#boton-home").on("click", function () {
+                //Regresa al home del docente
+                let idDocente = $('#id-docente').val();
+                window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
+            });
         });
     </script>
 </body>

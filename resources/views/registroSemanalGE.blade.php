@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Document</title>
     <style>
@@ -12,6 +13,8 @@
             padding : 0px ; 
             box-sizing : border-box ; /*+*/
         }
+
+
         body{
             margin: 0;
             height: 100vh;
@@ -247,6 +250,17 @@
             background-color: #222D32;
             color: white;
         } 
+        .back-button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px; /* Fijar el botón al lado izquierdo */
+            top: 20px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
     </style>
 </head>
 <body>
@@ -255,77 +269,79 @@
     <input id="id-semana-registro" type="hidden" value="{{ json_encode($enProgreso) }}">
     <input id="ocultar-componente-semana" type="hidden" value="{{$mostrarMensaje}}">
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
-    
-    <div class="combo_GEs">
-        <label for="opciones">Elige una opción:</label>
-        <select id="opciones" name="opciones">
-            <option value="">Seleccionar</option>
-        @foreach ($grupoEmpresas as $empresa)
-            <option value="{{$empresa->id_grupo_empresa}}">{{$empresa->nombre_corto}}</option>
-        @endforeach
-        </select>
-    </div>
-    <div class="margen">
-        <header class="registro-semanal-GE">
-            <h1>Registro Semanal {{$nombreCorto}}</h1>
-            <h2 class="nroHito">Hito {{$numeroDeHito}}</h2>
-        </header>
-        <main>
-            <p class="progreso">Progreso de las semanas del hito</p>
-            <div class="progress-container">
-                @foreach ($semanas as $item)
-                    <div class="step">
-                        <p>{{$item['inicio']}}</p>
-                        <p>{{$item['fin']}}</p>
-                    </div>
-                @endforeach
-            </div>
-            @if (count($enProgreso) == 2)
-                <h3 class="control-hoy">Semana: {{$enProgreso[0]}} al {{$enProgreso[1]}}</h3>
-            @else
-                <h3 class="control-hoy" style="color:red">{{$enProgreso[0]}}</h3>
-            @endif
-            <div class="contenedor-objetivos">
-                <h4>Entregables:</h4>
-                @foreach ($objetivos as $objetivo)
-                    <p>-{{$objetivo->descrip_objetivo}}</p>
-                @endforeach
-            </div>
-            <div class="contenedor-asistencia">
-                <div class="contenedor-asistencia-check">
-                    <h3>Asistencia</h3>
-                    <table class="control-de-asistencia">
-                        <tbody>
-                            @foreach ($estudianteEnAlerta as $estudiante)
-                                <tr> 
-                                    @if ($estudiante[1] >= 3)
-                                        <td style="color:red">{{$estudiante[0]}}</td>
-                                    @else
-                                        <td>{{$estudiante[0]}}</td>
-                                    @endif
-                                    <td><input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" checked></td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @if ($mostrarMensaje)
-                    <h2 class="Mensaje-de-semana-registrada" style="color: red">Esta semana ya fue registrada</h2>
-                @endif 
-                <div class="contenedor-descripcion">
-                    <h3 id="tituloDescripcion">Descripción</h3>
-                    <textarea name="descripcion" id="descripcion" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
-                    <span id="descripcionError" class="error-message"></span>
-                </div>
-            </div>
-        </main>
-        <footer class="margen-footer">
-            <button id="boton-guardar-seguimiento-semanal">Guardar
-                <span class="overlay"></span>
-            </button>
-        </footer>
 
-    </div>
+    <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    
+        <div class="combo_GEs">
+            <label for="opciones">Elige una opción:</label>
+            <select id="opciones" name="opciones">
+                <option value="">Seleccionar</option>
+            @foreach ($grupoEmpresas as $empresa)
+                <option value="{{$empresa->id_grupo_empresa}}">{{$empresa->nombre_corto}}</option>
+            @endforeach
+            </select>
+        </div>
+        <div class="margen">
+            <header class="registro-semanal-GE">
+                <h1>Registro Semanal {{$nombreCorto}}</h1>
+                <h2 class="nroHito">Hito {{$numeroDeHito}}</h2>
+            </header>
+            <main>
+                <p class="progreso">Progreso de las semanas del hito</p>
+                <div class="progress-container">
+                    @foreach ($semanas as $item)
+                        <div class="step">
+                            <p>{{$item['inicio']}}</p>
+                            <p>{{$item['fin']}}</p>
+                        </div>
+                    @endforeach
+                </div>
+                @if (count($enProgreso) == 2)
+                    <h3 class="control-hoy">Semana: {{$enProgreso[0]}} al {{$enProgreso[1]}}</h3>
+                @else
+                    <h3 class="control-hoy" style="color:red">{{$enProgreso[0]}}</h3>
+                @endif
+                <div class="contenedor-objetivos">
+                    <h4>Entregables del hito:</h4>
+                    @foreach ($objetivos as $objetivo)
+                        <p>-{{$objetivo->descrip_objetivo}}</p>
+                    @endforeach
+                </div>
+                <div class="contenedor-asistencia">
+                    <div class="contenedor-asistencia-check">
+                        <h3>Asistencia</h3>
+                        <table class="control-de-asistencia">
+                            <tbody>
+                                @foreach ($estudianteEnAlerta as $estudiante)
+                                    <tr> 
+                                        @if ($estudiante[1] >= 3)
+                                            <td style="color:red">{{$estudiante[0]}}</td>
+                                        @else
+                                            <td>{{$estudiante[0]}}</td>
+                                        @endif
+                                        <td><input name="asistencia[]" value="{{$estudiante[2]}}" type="checkbox" class="asistencia" checked></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    @if ($mostrarMensaje)
+                        <h2 class="Mensaje-de-semana-registrada" style="color: red">Esta semana ya fue registrada</h2>
+                    @endif 
+                    <div class="contenedor-descripcion">
+                        <h3 id="tituloDescripcion">Descripción</h3>
+                        <textarea name="descripcion" id="descripcion" cols="51" rows="5" class="texto-area" placeholder="Descripción"></textarea>
+                        <span id="descripcionError" class="error-message"></span>
+                    </div>
+                </div>
+            </main>
+            <footer class="margen-footer">
+                <button id="boton-guardar-seguimiento-semanal">Guardar
+                    <span class="overlay"></span>
+                </button>
+            </footer>
+        </div>
+      
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -585,6 +601,13 @@
                 console.log("Texto seleccionado: " + textoSeleccionado);
             }
         });
+
+        $("#boton-home").on("click", function () {
+                //Regresa al home del docente
+                let idDocente = $('#id-docente').val();
+                
+                window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
+            });
         
     });
 

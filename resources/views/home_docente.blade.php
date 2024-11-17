@@ -507,6 +507,69 @@
         .switch_control_semanal #btn-switch-control-semanal:hover {
             background-color: #789bc0;
         }
+
+        
+        .switch_planilla_evaluacion {
+            max-width: 650px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .switch_planilla_evaluacion h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .switch_planilla_evaluacion .evaluation-card {
+            display: flex;
+            justify-content: center;
+        }
+
+        .switch_planilla_evaluacion .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .switch_planilla_evaluacion .card-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .switch_planilla_evaluacion h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .switch_planilla_evaluacion .description {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .switch_planilla_evaluacion .evaluation-form {
+            margin-top: 10px;
+        }
+
+        .switch_planilla_evaluacion #btn-switch-planilla-evaluacion{
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .switch_planilla_evaluacion #btn-switch-planilla-evaluacion:hover {
+            background-color: #789bc0;
+        }
     </style>
 </head>
 <body>
@@ -540,6 +603,12 @@
                     <a onclick="cargarContenido('control_semanal')">
                         <ion-icon name="person-outline"></ion-icon>
                         <span>Control semanal</span>
+                    </a>
+                </li>
+                <li>
+                    <a onclick="cargarContenido('planilla_evaluacion')">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <span>Planilla evaluacion</span>
                     </a>
                 </li>
             </ul>
@@ -661,8 +730,21 @@
                     </div>
                 </div> `;
                     break;
-                case 'evaluaciones':
-                    html = '<div class="container_home"><h2>Evaluaciones</h2><div class="evaluation-card"><div class="card"><h3>Autoevaluación</h3><p class="description">Evaluación que permite a los equipos de trabajo y a sus integrantes realizar una retroalimentación sobre su trabajo.</p></div><div class="card"><h3>Evaluación Cruzada</h3><p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.</p></div><div class="card"><h3>Evaluación en Pares</h3><p class="description">Permite a los integrantes de un equipo evaluar el desempeño de sus compañeros de equipo.</p></div></div></div>';
+                case 'planilla_evaluacion':
+                    html = `                
+                <div class="switch_planilla_evaluacion">
+                    <h2>Crear planilla de evaluacion</h2>
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <img src="https://www.bizneo.com/blog/wp-content/uploads/2020/05/formato-de-evaluacion-del-desempen%CC%83o-810x455.webp" alt="planilla de evaluacion" class="card-image">
+                            <h3>Descripcion</h3>
+                            <p class="description">Planilla de evaluación para registrar y calificar desempeño en diversas áreas y competencias.<p>  
+                            <form action="{{ url('/planilla_evaluacion/${idDocente}')}}" method="GET">
+                                <button id="btn-switch-planilla-evaluacion" type="submit">Crear planilla</button>
+                            </form>
+                       </div>
+                    </div>
+                </div> `;
                     break;
                 case 'notificaciones':
                     html = '<h1>Notificaciones</h1><p>Aquí va el contenido de Notificaciones.</p>';
