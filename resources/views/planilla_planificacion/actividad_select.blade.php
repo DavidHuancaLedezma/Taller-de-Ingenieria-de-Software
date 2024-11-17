@@ -19,6 +19,16 @@
             font-family: Arial, sans-serif;
             background-color: #e0e0e0;
         }
+        header{
+            background-color: #4682b4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        
+        }
 
         .container {
             width: 90%;
@@ -231,6 +241,13 @@
     </style>
 </head>
 <body>
+    <header>
+    <nav class="navegacion">
+            <a>Home</a>
+            <a>Planificación</a>
+            
+        </nav>
+    </header>
     <div class="container">
         <div class="container_uno">
             <div class="header">

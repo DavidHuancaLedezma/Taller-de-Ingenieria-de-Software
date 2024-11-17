@@ -14,10 +14,18 @@ class PlanillaPlanificacionController extends Controller
         if (!$proyecto) {
             return redirect()->back()->withErrors('El proyecto no existe.');
         }
+        // Obtener la fecha actual
+        $fecha_actual = now(); // Obtiene la fecha y hora actua
+        // Obtener los hitos asociados al proyecto
         $hitos = DB::select("
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
-            WHERE h.id_proyecto = ?", [$id_proyecto]);
+            WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+        /*
+        $hitos = DB::select("
+            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+            FROM hito h
+            WHERE h.id_proyecto = ?", [$id_proyecto]);*/
         
         $entregables = DB::select(
             " 
@@ -118,10 +126,18 @@ class PlanillaPlanificacionController extends Controller
         if (!$proyecto) {
             return redirect()->back()->withErrors('El proyecto no existe.');
         }
+        // Obtener la fecha actual
+        $fecha_actual = now(); // Obtiene la fecha y hora actua
+        // Obtener los hitos asociados al proyecto
         $hitos = DB::select("
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
-            WHERE h.id_proyecto = ?", [$id_proyecto]);
+            WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+        /*
+        $hitos = DB::select("
+            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+            FROM hito h
+            WHERE h.id_proyecto = ?", [$id_proyecto]);*/
         
         $entregables = DB::select(
             " 
