@@ -296,34 +296,47 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($estudiantes ?? [] as $item)
-                    @if ($item->id_usuario != $idEvaluador)
-                        <tr>
-                            <td>{{ $item->nombre_estudiante }}</td>
+            @foreach ($estudiantes ?? [] as $item)
+    @if ($item->id_usuario != $idEvaluador)
+        <tr>
+            <td>{{ $item->nombre_estudiante }}</td>
 
-                            @php
-                                $valorCambiado = 0; // Inicializas la variable fuera del bucle
-                            @endphp
+            @php
+                $valorCambiado = 0; // Inicializas la variable fuera del bucle
+            @endphp
 
-                            @foreach ($estudiantesCalificados ?? [] as $eCalificados)
-                                @if ($eCalificados->otro_id_estudiante == $item->id_usuario)
-                                    <td><button class="null" data-id="{{ $item->id_usuario }}"
-                                            disabled>Evaluar</button></td>
-                                    <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; {{ $eCalificados->puntaje }}/100 </td>
-                                    @php
-                                        $valorCambiado = 1; // Cambias el valor indicando que ya fue calificado
-                                    @endphp
-                                @endif
-                            @endforeach
+            @foreach ($estudiantesCalificados ?? [] as $eCalificados)
+                @if ($eCalificados->otro_id_estudiante == $item->id_usuario)
+                    <td>
+                        <button class="null" data-id="{{ $item->id_usuario }}" disabled>
+                            Evaluar
+                        </button>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; {{ $eCalificados->puntaje }}/100 
+                    </td>
+                    @php
+                        $valorCambiado = 1; // Indica que ya fue calificado
+                    @endphp
+                @endif
+            @endforeach
 
-                            @if ($valorCambiado != 1)
-                                <td><button class="btn-calificar" data-id="{{ $item->id_usuario }}"
-                                        data-nombre="{{ $item->nombre_estudiante }}">Evaluar</button></td>
-                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; No calificado</td>
-                            @endif
-                        </tr>
-                    @endif
-                @endforeach
+            @if ($valorCambiado != 1)
+                <td>
+                    <button class="btn-calificar" 
+                            data-id="{{ $item->id_usuario }}" 
+                            data-nombre="{{ $item->nombre_estudiante }}">
+                        Evaluar
+                    </button>
+                </td>
+                <td>
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; No calificado
+                </td>
+            @endif
+        </tr>
+    @endif
+@endforeach
+
 
             </tbody>
         </table>
@@ -561,7 +574,7 @@
                 }
             });
 
-            // Validar radio buttons
+            // Validar radio buttons 
             const grupos = new Set();
             document.querySelectorAll('input[type="radio"]').forEach((input) => {
                 grupos.add(input.name);

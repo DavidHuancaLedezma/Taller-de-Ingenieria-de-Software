@@ -15,7 +15,7 @@ class EvaluacionParesController extends Controller
 
         // También podemos obtener estudiantes calificados utilizando el mismo grupo
         $idGrupoEmpresa = self::getGrupoEmpresaByEstudiante($idEstudiante);
-        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa);
+        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa,$idEstudiante);
 
 
         return view("evaluacion_pares", [
@@ -134,18 +134,28 @@ ORDER BY ce.id_criterio_evaluacion
         return $estudiantes;
     }
 
-    private static function getEstudiantesCalificados($idGrupoEmpresa)
+    private static function getEstudiantesCalificados($idGrupoEmpresa, $idEvaluador)
     {
-        $consulta = DB::select("SELECT re.puntaje, e.id_usuario as id_estudiante, re.otro_id_estudiante 
-    FROM respuesta re
-    JOIN evaluacion ev ON re.id_evaluacion = ev.id_evaluacion
-    JOIN estudiante e ON re.otro_id_estudiante = e.id_usuario
-    WHERE ev.id_tipo_evaluacion = 2
-    AND re.id_estudiante IN (SELECT id_usuario 
-                         FROM estudiante 
-                         WHERE id_usuario IN (SELECT id_usuario 
-                                              FROM estudiante_grupoempresa 
-                                              WHERE id_grupo_empresa = ?))", array($idGrupoEmpresa));
+        $consulta = DB::select("
+            SELECT re.puntaje, 
+                   e.id_usuario as id_estudiante, 
+                   re.otro_id_estudiante, 
+                   re.id_estudiante as id_evaluador
+            FROM respuesta re
+            JOIN evaluacion ev ON re.id_evaluacion = ev.id_evaluacion
+            JOIN estudiante e ON re.otro_id_estudiante = e.id_usuario
+            WHERE ev.id_tipo_evaluacion = 2
+              AND re.id_estudiante = ? -- Filtra por el evaluador actual
+              AND re.id_estudiante IN (
+                  SELECT id_usuario 
+                  FROM estudiante 
+                  WHERE id_usuario IN (
+                      SELECT id_usuario 
+                      FROM estudiante_grupoempresa 
+                      WHERE id_grupo_empresa = ?
+                  )
+              )
+        ", [$idEvaluador, $idGrupoEmpresa]); // Pasar el ID del evaluador actual y el grupo empresa
         return $consulta;
     }
 }
