@@ -166,7 +166,7 @@ class PlanillaPlanificacionController extends Controller
             where id_proyecto =?", [$id_proyecto]);
 
               
-        return view('planilla_planificacion.criterioAceptacion_select', compact('hitos','entregables'));
+        return view('planilla_planificacion.criterioAceptacion_select', compact('hitos','entregables', 'id_estudiante'));
 
     }
 
