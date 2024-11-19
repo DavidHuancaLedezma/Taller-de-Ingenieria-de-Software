@@ -1,81 +1,58 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Planilla de Planificación</title>
+    <title>Document</title>
     <style>
 
-        * {
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        body{
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f4;
-            padding: 20px;
-            display: flex ;
-            flex-direction: column ; 
-            justify-content : center ; 
-            align-items: center ;
+        .Contenedor_body{
+            height: 100vh;
+            background-color: white;
+            display: flex;
+            flex-direction: column ;
+            justify-content: center ; 
+            align-items: center;
             gap: 20px ; 
+            padding: 12px ; 
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .container_inicial{
+            background-color: rgb(255, 255, 255);
+            padding: 10px ;
+            max-width: 600px ; 
         }
-
-        h2 {
-            width : 100% ; 
-            min-height:60px ;
+        header{
             background-color: #367FA9 ;
             display: flex ; 
-            justify-content : center ; 
+            justify-content: center ; 
             align-items: center ; 
-            color : white ; 
+            padding: 10px ; 
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background-color: #cce5e5;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
+        h3{
+            color: white;
             text-align: center;
         }
 
-        th {
-            background-color: #ddd;
+        img{
+            width: 100%;
+            max-height: 500px ;
         }
-
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        td {
-            font-size: 14px;
-        }
-        td p {
-            text-align: left ; 
-            margin-left: 10px;
-        }
-
-        /*Estilos del combobox*/ 
         .combo_GEs {
             width: 500px;
             background-color: #fff;
@@ -130,7 +107,8 @@
             background-color: #222D32;
             color: white;
         } 
-        .back_button {
+
+        .back-button {
             border-radius: 25px;
             border: none;
             position: absolute;
@@ -141,13 +119,13 @@
             color: white ; 
             background-color: #367FA9    
         }
+
     </style>
 </head>
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
-
-    <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
-
+    <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+ <div class="Contenedor_body">
     <div class="combo_GEs">
         <label for="opciones">Elige una opción:</label>
         <select id="opciones" name="opciones">
@@ -157,45 +135,19 @@
         @endforeach
         </select>
     </div>
-    <div class="container">
-        <h2 class="titulo-planilla-planificacion" >Planilla de planificación {{$nombreCorto}}</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>HITO</th>
-                    <th>FECHA INICIO</th>
-                    <th>FECHA FIN</th>
-                    <th>% COBRO</th>
-                    <th>ENTREGABLES</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach ($planillaCompleta as $filas)
-                    <tr>
-                        <td>{{$filas[0]->numero_hito}}</td>
-                        <td>{{$filas[0]->fecha_inicio_hito}}</td>
-                        <td>{{$filas[0]->fecha_fin_hito}}</td>
-                        <td>{{$filas[0]->porcentaje_cobro}}%</td>
-                        <td>
-                            @if (count($filas[1]) > 0)
-                                @foreach ($filas[1] as $item)
-                                    <p>- {{$item->descrip_objetivo}}</p>
-                                @endforeach
-                            @else
-                                <p>- Ninguno</p>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-                <!-- Puedes añadir más filas aquí -->
-            </tbody>
-        </table>    
+    
+    <div class="container_inicial">
+        <header>
+            <h3>REGISTRO CONTROL SEMANAL<br>
+            DE GRUPO EMPRESAS</h3>
+        </header>
+        <main>
+            <img src="https://img.freepik.com/vector-gratis/concepto-gestion-tiempo-dibujado-mano-plana_23-2148820992.jpg" alt="imagen de control">
+        </main>
     </div>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Configurar el token CSRF para todas las solicitudes AJAX
         $.ajaxSetup({
@@ -204,6 +156,7 @@
                     }
             });
         $(document).ready(function(){
+            
             $('#opciones').on('change', function() {
                 // Obtener el valor de la opción seleccionada
                 let valorSeleccionado = $(this).val();
@@ -215,20 +168,19 @@
                 if(textoSeleccionado !== "Seleccionar"){
     
                     $.ajax({
-                    url: '{{ url('/obtener_id_proyecto_de_grupo_empresa') }}',
+                    url: '{{ url('/obtener_id_hito_grupo_empresa_combo_box') }}',
                     method: 'POST',
                     data: {
                         idGrupoEmpresa: valorSeleccionado
                     }
                     }).done(function(res){
-                        let idProyecto = JSON.parse(res);
-                        window.location.href = `{{ url('/visualizar_planilla_de_planificacion/${idProyecto}/${idDocente}') }}`;
-                        console.log("id obtenido de ajax Proyecto: " + idProyecto);
+                        let id_hito = JSON.parse(res);
+                        window.location.href = `{{ url('/cargar_registro_semanal${id_hito}_${idDocente}') }}`;
+                        console.log("id obtenido de ajax GE: " + id_hito);
                         
                     }).fail(function(jqXHR, textStatus, errorThrown) {
                         console.error('Error en la solicitud:', textStatus, errorThrown);
                         console.error('Detalles del error:', jqXHR.responseText);
-                        
                     });
                     console.log("-----------------------------------------");
                     console.log("Valor seleccionado: " + valorSeleccionado);
@@ -242,9 +194,7 @@
                 
                 window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
             });
-            
-        });
+    });
     </script>
-
 </body>
 </html>
