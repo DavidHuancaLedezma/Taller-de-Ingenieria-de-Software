@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Evaluaciones Semanales</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   
     <style>
         * {
             box-sizing: border-box;
@@ -126,10 +127,26 @@
         input[type="date"]:focus{
             border: 2px solid #3F9BBF; /* Cambia el color y grosor del borde */
             outline: none; 
-        }     
+        }  
+        
+        .back_button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            right: 100px; /* Fijar el botón al lado izquierdo */
+            top: 10px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
+
     </style>
 </head>
 <body>
+    <input type="hidden" id="id_estudiante" value="{{ $id_estudiante }}">
+    <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    
 <div class="container">
     <div class="header">
         <h2>Proyecto: {{ $proyecto->nombre_proyecto }}</h2>
@@ -279,7 +296,24 @@
       // Llama a la función al cargar la página para establecer el estado inicial
     window.onload = actualizarEstadoBoton;
 </script>
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#boton-home").on("click", function () {
+                const idEstudiante = $('#id_estudiante').val();
+                if (!idEstudiante) {
+                    console.error("ID del estudiante no encontrado");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se encontró el ID del estudiante.',
+                    });
+                    return;
+                }
 
-
+                const baseUrl = "{{ url('/estudiante_home') }}";
+                window.location.href = `${baseUrl}/${idEstudiante}`;
+            });
+        });
+    </script>
 </body>
 </html>
