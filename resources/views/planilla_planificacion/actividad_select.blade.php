@@ -7,7 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -19,17 +19,7 @@
             font-family: Arial, sans-serif;
             background-color: #e0e0e0;
         }
-        header{
-            background-color: #4682b4;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        
-        }
-
+       
         .container {
             width: 90%;
             margin: 50px auto;
@@ -237,17 +227,24 @@
             .lista-actividades strong, .lista-criterios strong {
                     font-size: 1em; /* Mantener el texto en negrita ligeramente más grande */
                 }
+         .back_button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            right: 100px; /* Fijar el botón al lado izquierdo */
+            top: 10px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
+
 
     </style>
 </head>
 <body>
-    <header>
-    <nav class="navegacion">
-            <a>Home</a>
-            <a>Planificación</a>
-            
-        </nav>
-    </header>
+    <input type="hidden" id="id_estudiante" value="{{ $id_estudiante }}">
+    <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
     <div class="container">
         <div class="container_uno">
             <div class="header">
@@ -557,7 +554,12 @@
             }
         });
     });
-        
+    $("#boton-home").on("click", function () {
+                //Regresa al home del estudiante
+                let idEstudiante = $('#id_estudiante').val();
+                
+                window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
+    });
     </script>
  </body>
 </html>

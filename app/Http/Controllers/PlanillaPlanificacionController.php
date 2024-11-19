@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class PlanillaPlanificacionController extends Controller
 {
-    public function create_actividad($id_proyecto)
-    {
-        $proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
-        if (!$proyecto) {
+    public function create_actividad($id_estudiante)
+    {   $id_proyecto = $this->get_idProyecto ($id_estudiante);
+        //$proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+        if (!$id_proyecto) {
             return redirect()->back()->withErrors('El proyecto no existe.');
         }
         // Obtener la fecha actual
@@ -21,8 +21,8 @@ class PlanillaPlanificacionController extends Controller
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
             WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
-        /*
-        $hitos = DB::select("
+        
+        /*$hitos = DB::select("
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
             WHERE h.id_proyecto = ?", [$id_proyecto]);*/
@@ -50,8 +50,27 @@ class PlanillaPlanificacionController extends Controller
             // Convierte el arreglo a una colección
             $estudiantes = collect($estudiantes);
              
-        return view('planilla_planificacion.actividad_select', compact('hitos','entregables', 'estudiantes'));
+        return view('planilla_planificacion.actividad_select', compact('hitos','entregables', 'estudiantes','id_estudiante'));
 
+    }
+    private function get_idProyecto($id_estudiante){
+        $respuesta = DB::select(
+            "SELECT pr.id_proyecto
+             FROM proyecto pr, estudiante es, estudiante_grupoempresa egr, grupo_empresa ge
+             WHERE es.id_usuario = egr.id_usuario 
+             AND egr.id_grupo_empresa = ge.id_grupo_empresa 
+             AND ge.id_grupo_empresa = pr.id_grupo_empresa 
+             AND es.id_usuario = ?", [$id_estudiante]
+        );
+        
+        // Verifica si la consulta devolvió resultados
+        if (!empty($respuesta)) {
+            // Extraer `id_proyecto` del primer resultado
+            return $respuesta[0]->id_proyecto;
+        } else {
+            return null; // Retorna null si no hay resultados
+        }
+        
     }
 
     public function getEntregablesPorHito(Request $request)
@@ -120,10 +139,11 @@ class PlanillaPlanificacionController extends Controller
     }
 
     // ------------ Criterio de Aceptacion-------------------------
-    public function create_criterio_aceptacion($id_proyecto)
+    public function create_criterio_aceptacion($id_estudiante)
     {
-        $proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
-        if (!$proyecto) {
+        $id_proyecto = $this->get_idProyecto ($id_estudiante);
+        //$proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+        if (!$id_proyecto) {
             return redirect()->back()->withErrors('El proyecto no existe.');
         }
         // Obtener la fecha actual
