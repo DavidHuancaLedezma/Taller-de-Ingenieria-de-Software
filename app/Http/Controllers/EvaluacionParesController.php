@@ -124,15 +124,6 @@ ORDER BY ce.id_criterio_evaluacion
         return response()->json($criteriosParametros);
     }
 
-    private static function getEstudiantes2($idGrupoEmpresa)
-    {
-        // Devuelve los estudiantes de una grupo empresa específica
-        $estudiantes = DB::select("SELECT e.id_usuario, concat(e.nombre_estudiante, ' ', e.apellido_estudiante) as nombre_estudiante 
-        FROM estudiante e, estudiante_grupoempresa ege
-        WHERE e.id_usuario = ege.id_usuario
-        AND ege.id_grupo_empresa = ?", array($idGrupoEmpresa));
-        return $estudiantes;
-    }
 
     private static function getEstudiantesCalificados($idGrupoEmpresa, $idEvaluador)
     {
