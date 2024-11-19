@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use DateTime;
 class EvaluacionParesController extends Controller
 {
     public function evaluacionPares($idEstudiante)
@@ -149,4 +149,36 @@ ORDER BY ce.id_criterio_evaluacion
         ", [$idEvaluador, $idGrupoEmpresa]); // Pasar el ID del evaluador actual y el grupo empresa
         return $consulta;
     }
+
+    public function validacionFechasEvaluacionPares(Request $request)
+    {
+
+        $idEvaluacion = $request->input("idEvaluacion");
+
+        // Obtener la fecha actual
+        date_default_timezone_set('America/La_Paz');
+        $fechaActual = date('Y-m-d');
+
+        $fechaActual = new DateTime($fechaActual);
+
+        $antesDeFecha = 0;
+        $despuesDeFecha = 0;
+
+        $consulta = DB::select("SELECT fecha_evaluacion_ini, fecha_evaluacion_fin FROM evaluacion
+        WHERE id_evaluacion = ?", array($idEvaluacion));
+
+        $fechaIniEvaluacion = new DateTime($consulta[0]->fecha_evaluacion_ini);
+        $fechaFinEvaluacion = new DateTime($consulta[0]->fecha_evaluacion_fin);
+
+        if ($fechaActual < $fechaIniEvaluacion) {
+            $antesDeFecha = 1;
+        }
+        if ($fechaActual > $fechaFinEvaluacion) {
+            $despuesDeFecha = 1;
+        }
+
+        $respuesta = array(array($antesDeFecha, $fechaActual->format('Y-m-d'), $fechaIniEvaluacion->format('Y-m-d')), array($despuesDeFecha, $fechaActual->format('Y-m-d'), $fechaFinEvaluacion->format('Y-m-d')));
+        return response(json_encode($respuesta), 200)->header('Content-type', 'text/plain');
+    }
+
 }

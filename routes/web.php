@@ -74,6 +74,7 @@ Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class,'
 
 // Ruta para mostrar la evaluación de un estudiante
 Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
+Route::post('/validacion_fechas_evaluacion_pares', [EvaluacionParesController::class, 'validacionFechasEvaluacionPares']);
 
 
 use App\Http\Controllers\GrupoEmpresaController;
