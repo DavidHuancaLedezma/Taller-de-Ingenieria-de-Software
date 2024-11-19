@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\DB;
 class ObjetivoController extends Controller
 {
        
-    public function create($id_proyecto)
+    public function create($id_estudiante)
     {
         // Validar que el proyecto exista
-        $proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
-        if (!$proyecto) {
-            return redirect()->back()->withErrors('El proyecto no existe.');
-        }
+        $id_proyecto = $this->get_idProyecto ($id_estudiante);
+         //$proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+         if (!$id_proyecto) {
+             return redirect()->back()->withErrors('El proyecto no existe.');
+         }
         // Obtener la fecha actual
         $fecha_actual = now(); // Obtiene la fecha y hora actua
         // Obtener los hitos asociados al proyecto
@@ -25,9 +26,27 @@ class ObjetivoController extends Controller
             FROM hito h
             WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
         // Pasar los hitos a la vista de registro_objetivo.blade.php
-        return view('registro_objetivo', compact('hitos', 'id_proyecto'));
+        return view('registro_objetivo', compact('hitos', 'id_proyecto', 'id_estudiante'));
     }
-
+    private function get_idProyecto($id_estudiante){
+        $respuesta = DB::select(
+            "SELECT pr.id_proyecto
+             FROM proyecto pr, estudiante es, estudiante_grupoempresa egr, grupo_empresa ge
+             WHERE es.id_usuario = egr.id_usuario 
+             AND egr.id_grupo_empresa = ge.id_grupo_empresa 
+             AND ge.id_grupo_empresa = pr.id_grupo_empresa 
+             AND es.id_usuario = ?", [$id_estudiante]
+        );
+        
+        // Verifica si la consulta devolvió resultados
+        if (!empty($respuesta)) {
+            // Extraer `id_proyecto` del primer resultado
+            return $respuesta[0]->id_proyecto;
+        } else {
+            return null; // Retorna null si no hay resultados
+        }
+        
+    }
         
     public function store(Request $request)
 {
