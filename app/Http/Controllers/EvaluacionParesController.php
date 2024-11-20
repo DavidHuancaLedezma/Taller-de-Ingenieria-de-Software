@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 class EvaluacionParesController extends Controller
 {
@@ -15,7 +16,7 @@ class EvaluacionParesController extends Controller
 
         // También podemos obtener estudiantes calificados utilizando el mismo grupo
         $idGrupoEmpresa = self::getGrupoEmpresaByEstudiante($idEstudiante);
-        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa);
+        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa, $idEstudiante);
 
 
         return view("evaluacion_pares", [
@@ -124,28 +125,60 @@ ORDER BY ce.id_criterio_evaluacion
         return response()->json($criteriosParametros);
     }
 
-    private static function getEstudiantes2($idGrupoEmpresa)
+
+    private static function getEstudiantesCalificados($idGrupoEmpresa, $idEvaluador)
     {
-        // Devuelve los estudiantes de una grupo empresa específica
-        $estudiantes = DB::select("SELECT e.id_usuario, concat(e.nombre_estudiante, ' ', e.apellido_estudiante) as nombre_estudiante 
-        FROM estudiante e, estudiante_grupoempresa ege
-        WHERE e.id_usuario = ege.id_usuario
-        AND ege.id_grupo_empresa = ?", array($idGrupoEmpresa));
-        return $estudiantes;
+        $consulta = DB::select("
+            SELECT re.puntaje, 
+                   e.id_usuario as id_estudiante, 
+                   re.otro_id_estudiante, 
+                   re.id_estudiante as id_evaluador
+            FROM respuesta re
+            JOIN evaluacion ev ON re.id_evaluacion = ev.id_evaluacion
+            JOIN estudiante e ON re.otro_id_estudiante = e.id_usuario
+            WHERE ev.id_tipo_evaluacion = 2
+              AND re.id_estudiante = ? -- Filtra por el evaluador actual
+              AND re.id_estudiante IN (
+                  SELECT id_usuario 
+                  FROM estudiante 
+                  WHERE id_usuario IN (
+                      SELECT id_usuario 
+                      FROM estudiante_grupoempresa 
+                      WHERE id_grupo_empresa = ?
+                  )
+              )
+        ", [$idEvaluador, $idGrupoEmpresa]); // Pasar el ID del evaluador actual y el grupo empresa
+        return $consulta;
     }
 
-    private static function getEstudiantesCalificados($idGrupoEmpresa)
+    public function validacionFechasEvaluacionPares(Request $request)
     {
-        $consulta = DB::select("SELECT re.puntaje, e.id_usuario as id_estudiante, re.otro_id_estudiante 
-    FROM respuesta re
-    JOIN evaluacion ev ON re.id_evaluacion = ev.id_evaluacion
-    JOIN estudiante e ON re.otro_id_estudiante = e.id_usuario
-    WHERE ev.id_tipo_evaluacion = 2
-    AND re.id_estudiante IN (SELECT id_usuario 
-                         FROM estudiante 
-                         WHERE id_usuario IN (SELECT id_usuario 
-                                              FROM estudiante_grupoempresa 
-                                              WHERE id_grupo_empresa = ?))", array($idGrupoEmpresa));
-        return $consulta;
+
+        $idEvaluacion = $request->input("idEvaluacion");
+
+        // Obtener la fecha actual
+        date_default_timezone_set('America/La_Paz');
+        $fechaActual = date('Y-m-d');
+
+        $fechaActual = new DateTime($fechaActual);
+
+        $antesDeFecha = 0;
+        $despuesDeFecha = 0;
+
+        $consulta = DB::select("SELECT fecha_evaluacion_ini, fecha_evaluacion_fin FROM evaluacion
+        WHERE id_evaluacion = ?", array($idEvaluacion));
+
+        $fechaIniEvaluacion = new DateTime($consulta[0]->fecha_evaluacion_ini);
+        $fechaFinEvaluacion = new DateTime($consulta[0]->fecha_evaluacion_fin);
+
+        if ($fechaActual < $fechaIniEvaluacion) {
+            $antesDeFecha = 1;
+        }
+        if ($fechaActual > $fechaFinEvaluacion) {
+            $despuesDeFecha = 1;
+        }
+
+        $respuesta = array(array($antesDeFecha, $fechaActual->format('Y-m-d'), $fechaIniEvaluacion->format('Y-m-d')), array($despuesDeFecha, $fechaActual->format('Y-m-d'), $fechaFinEvaluacion->format('Y-m-d')));
+        return response(json_encode($respuesta), 200)->header('Content-type', 'text/plain');
     }
 }

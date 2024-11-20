@@ -58,7 +58,7 @@ Route::post('/obtener_id_proyecto_de_grupo_empresa', [ControllerVisualizarPlanil
 
 Route::get('/', function () {
     return view('/Inicio');
-});
+})->name('inicio');
 
 Route::get('/estudiante', function () {
     return view('/grupo_empresa/registroEstudiante');
@@ -69,18 +69,11 @@ Route::get('/docente', function () {
 });
 
 
-
-Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
-
-Route::post('/guardar_nota_evaluacion_pares', [EvaluacionParesController::class, 'guardarNotaEstudiantes']);
-
-
-
-Route::post('/guardar-nota-pares', [EvaluacionParesController::class, 'guardarNotaPares'])->name('guardar.nota.pares');
 // Ruta para mostrar la evaluación de un estudiante
 Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
-Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
-
+Route::post('/validacion_fechas_evaluacion_pares', [EvaluacionParesController::class, 'validacionFechasEvaluacionPares']);
+Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
+Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class,'guardarNotaEstudiantes']);
 
 use App\Http\Controllers\GrupoEmpresaController;
 
@@ -159,11 +152,13 @@ Route::post('/guardar_nota_evaluacion_cruzada', [ControllerEvaluacionCruzada::cl
 Route::post('/fechas_validas_de_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'rangoFechasEvaluacionCruzada']);
 
 
-//HOME estudiante
-Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome']);
+// HOME estudiante
+Route::get('/estudiante_home/{idEstudiante}', [ControllerHome::class, 'openHome'])
+    ->name('estudiante_home');
 
-//Home docente
-Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente']);
+// HOME docente
+Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHomeDocente'])
+    ->name('docente_home');
 
 
 Route::view('/planilla-planificacion', 'planilla_planificacion.h_planilla_planificacion');
@@ -182,9 +177,8 @@ Route::post('/planilla_evaluacion/store', [PlanillaEvaluacionController::class, 
 
 Route::get('/get-empresas-por-evaluacion/{id_tipo_evaluacion}/{id_docente}', [PlanillaEvaluacionController::class, 'getEmpresasPorEvaluacion']);
 
-use App\Http\Controllers\InicioController;
-
-//Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
-//Route ::get('/estudiante/estudiante',[InicioController::class,'registrarse'])->name('estudiante.estudiante');
-Route::get('/login', [LoginController::class, 'iniciarSesion'])->name('login');
+//Rutas del login
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);

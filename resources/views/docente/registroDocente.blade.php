@@ -46,10 +46,119 @@
             margin-bottom: 1px;
             min-height: 20px; 
         }
+
+        .btn-login {
+            border: 1px solid white;
+        }
+        .btn-register {
+            background-color: white;
+            color: #367FA9;
+        }
+
+        .btn-login:hover
+        {
+            background-color: white;
+            color: #296689;
+        }
+
+
+        /* Navbar */
+        .navbar {
+            background-color: #367FA9;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+
+        }
+
+        .nav-item {
+            display: inline-block;
+            margin-left: 20px;
+        }
+
+        .nav-link {
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 5px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Footer */
+        footer {
+            background-color: #367FA9;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #cfcfcf;
+        }
+
+        /* General Animation */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .nav-item {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
-
+<!-- Navbar -->
+<nav class="navbar">
+<a class="navbar-brand no-underline" href="{{ route('inicio') }}">
+            <div class="navbar-brand">GESTIÓN DE PROYECTOS</div>
+        </a>  
+    <div>
+        <a class="nav-link btn-login nav-item" href="{{route('login')}}">Iniciar Sesión</a>
+        <a class="nav-link btn-register nav-item" href="{{route('registro_estudiante.create')}}">Registrar Estudiante</a>
+    </div>
+</nav>
 <div class="container d-flex justify-content-center mt-5">
     <div class="custom-container">
         <h4 class="text-center mb-4">Registro Docente</h4>
@@ -184,6 +293,8 @@
 @endif
 
 <script src="{{ asset('js/RegistroDocente.js') }}"></script>
-
+<footer>
+    <p>&copy; 2024 - Todos los derechos reservados | <a href="#">Política de Privacidad</a></p>
+</footer>
 </body>
 </html>

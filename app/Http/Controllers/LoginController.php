@@ -2,51 +2,71 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
 
 class LoginController extends Controller
 {
     /**
-     * Muestra la vista de inicio.
-     *
-     * @return \Illuminate\View\View
+     * Mostrar la vista de login.
      */
-    public function VeriniciarSesion()
+    public function showLoginForm()
     {
-        return view('login'); // Asegúrate de que este nombrecoincida con el archivo 'Inicio.blade.php'
+        return view('login');
     }
-    // Método para procesar el inicio de sesión
-    public function iniciarSesion(Request $request)
+
+    /**
+     * Manejar la solicitud de inicio de sesión.
+     */
+    public function login(Request $request)
     {
-        // Validar los datos del formulario
-        $request->validate([
+        // Validar los datos ingresados
+        $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+        ], [
+            'email.required' => 'El correo es obligatorio.',
+            'email.email' => 'Debe ser un correo válido.',
+            'password.required' => 'La contraseña es obligatoria.',
         ]);
 
-        // Intento de autenticación usando las credenciales proporcionadas
-        if (Auth::attempt([
-            'correo_electronico_user' => $request->email,
-            'contrasena' => $request->password // Laravel automáticamente usará bcrypt
-        ])) {
-            // Redirigir al dashboard si la autenticación es exitosa
-            return redirect()->intended('dashboard');
+        // Verificar si el usuario existe en la base de datos
+        $usuario = Usuario::where('correo_electronico_user', $credentials['email'])->first();
+
+        if (!$usuario) {
+            return back()->withErrors(['email' => 'El correo ingresado no existe.']);
         }
 
-        // Si las credenciales no son válidas, regresar con un mensaje de error
-        return back()->withErrors([
-            'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
-        ])->onlyInput('email'); // Mantener el valor de email en el formulario
+        // Validar la contraseña
+        if (!password_verify($credentials['password'], $usuario->contrasena)) {
+            return back()->withErrors(['password' => 'La contraseña es incorrecta.']);
+        }
+
+        // Iniciar sesión manualmente
+        Auth::login($usuario);
+
+        // Redirigir según el tipo de usuario
+        if ($usuario->estudiante) {
+            return redirect()->route('estudiante_home', ['idEstudiante' => $usuario->id_usuario]);
+        } elseif ($usuario->docente) {
+            return redirect()->route('docente_home', ['idDocente' => $usuario->id_usuario]);
+        }
+
+        // Si no es estudiante ni docente, cerrar sesión y mostrar un error
+        Auth::logout();
+        return back()->withErrors(['email' => 'El usuario no tiene permisos asignados.']);
     }
 
-    // Método para cerrar sesión
-    public function cerrarSesion()
+    /**
+     * Cerrar sesión.
+     */
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/');
-    }
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
+        return redirect()->route('login');
+    }
 }
