@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+
 class EvaluacionParesController extends Controller
 {
     public function evaluacionPares($idEstudiante)
@@ -15,7 +16,7 @@ class EvaluacionParesController extends Controller
 
         // También podemos obtener estudiantes calificados utilizando el mismo grupo
         $idGrupoEmpresa = self::getGrupoEmpresaByEstudiante($idEstudiante);
-        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa,$idEstudiante);
+        $estudiantesCalificados = self::getEstudiantesCalificados($idGrupoEmpresa, $idEstudiante);
 
 
         return view("evaluacion_pares", [
@@ -180,5 +181,4 @@ ORDER BY ce.id_criterio_evaluacion
         $respuesta = array(array($antesDeFecha, $fechaActual->format('Y-m-d'), $fechaIniEvaluacion->format('Y-m-d')), array($despuesDeFecha, $fechaActual->format('Y-m-d'), $fechaFinEvaluacion->format('Y-m-d')));
         return response(json_encode($respuesta), 200)->header('Content-type', 'text/plain');
     }
-
 }
