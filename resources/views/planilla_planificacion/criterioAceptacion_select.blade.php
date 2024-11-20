@@ -231,7 +231,7 @@
             border-radius: 25px;
             border: none;
             position: absolute;
-            right: 100px; /* Fijar el botón al lado izquierdo */
+            left: 80px; /* Fijar el botón al lado izquierdo */
             top: 10px; /* Posición fija desde el top */
             padding: 10px 20px;
             cursor: pointer;
