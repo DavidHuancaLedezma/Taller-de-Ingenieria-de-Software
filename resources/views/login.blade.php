@@ -109,6 +109,7 @@
         }
 
         .btn-register {
+            margin: 3px;
             background-color: white;
             color: #367FA9;
         }
@@ -157,7 +158,7 @@
                 margin-top: 10px;
             }
         }
-
+ 
         @media (max-width: 480px) {
             .navbar-brand {
                 text-decoration: none;
