@@ -127,7 +127,7 @@
     <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
  <div class="Contenedor_body">
     <div class="combo_GEs">
-        <label for="opciones">Elige una opción:</label>
+        <label for="opciones">Elige una Grupo Empresa:</label>
         <select id="opciones" name="opciones">
             <option value="">Seleccionar</option>
         @foreach ($grupoEmpresas as $empresa)
