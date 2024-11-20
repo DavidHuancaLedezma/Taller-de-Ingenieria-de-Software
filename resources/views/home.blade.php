@@ -946,8 +946,8 @@
                             <img src="https://img.freepik.com/vector-premium/progreso-proyecto-flujo-trabajo-trabajo-hombre-completa-tareas-paso-paso_159757-1418.jpg" alt="Autoevaluacion" class="card-image-planificacion">
                             <h3>Registro de hitos</h3>
                             <p class="description">Los hitos son puntos críticos o eventos significativos que marcan el progreso en el proyecto.<p>  
-                            <form action="{{ url('/registro_hitos/2')}}" method="GET">
-                                <button id="btn-switch-hitos" type="submit">REGISTRO HITOS(idProyecto)</button>
+                            <form action="{{ url('/registro_hitos/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-hitos" type="submit">REGISTRO HITOS</button>
                             </form>
                         </div>
                     </div>
@@ -957,12 +957,12 @@
                     
                     <div class="evaluation-card">
                         <div class="card">
-                            <h3>REGISTRO DE OBJETIVOS</h3>
+                            <h3>REGISTRO DE ENTREGABLES</h3>
                             <img src="https://img.freepik.com/vector-premium/concepto-progresion-proyecto-hacer-cosas-tareas-completadas-o-logros-comerciales_178888-1909.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de hitos</h3>
-                            <p class="description">Se formularán objetivos claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
-                            <form action="{{ url('/registro_objetivo/2')}}" method="GET">
-                                <button id="btn-switch-objetivos" type="submit">REGISTRO OBJETIVOS(idProyecto)</button>
+                            <h3>Registro de entregables</h3>
+                            <p class="description">Se formularán entregables claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
+                            <form action="{{ url('/registro_objetivo/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-objetivos" type="submit">REGISTRO ENTREGABLES</button>
                             </form>                            
                         </div>
                     </div>
@@ -972,10 +972,23 @@
                         <div class="card">
                             <h3>REGISTRO DE ACTIVIDADES</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de hitos</h3>
+                            <h3>Registro de actividades</h3>
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('/actividad_criterioAceptacion/5')}}" method="GET">
-                                <button id="btn-switch-actividades" type="submit">ACTIVIDADES(idObjetivo)</button>
+                            <form action="{{ url('/planilla_planificacion_actividad/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">ACTIVIDADES</button>
+                            </form>                        
+                        </div>
+                    </div>
+                </div> 
+                <div class="switch_actividades">
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <h3>REGISTRO DE CRITERIOS DE ACEPTACIÓN</h3>
+                            <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
+                            <h3>Registro de criterios de aceptación</h3>
+                            <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
+                            <form action="{{ url('/planilla_planificacion_criterio_aceptacion/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">CRITERIOS DE ACEPTACIÓN</button>
                             </form>                        
                         </div>
                     </div>
