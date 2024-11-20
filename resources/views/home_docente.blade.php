@@ -507,9 +507,73 @@
         .switch_control_semanal #btn-switch-control-semanal:hover {
             background-color: #789bc0;
         }
+
+        
+        .switch_planilla_evaluacion {
+            max-width: 650px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .switch_planilla_evaluacion h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .switch_planilla_evaluacion .evaluation-card {
+            display: flex;
+            justify-content: center;
+        }
+
+        .switch_planilla_evaluacion .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .switch_planilla_evaluacion .card-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .switch_planilla_evaluacion h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .switch_planilla_evaluacion .description {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .switch_planilla_evaluacion .evaluation-form {
+            margin-top: 10px;
+        }
+
+        .switch_planilla_evaluacion #btn-switch-planilla-evaluacion{
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .switch_planilla_evaluacion #btn-switch-planilla-evaluacion:hover {
+            background-color: #789bc0;
+        }
     </style>
 </head>
 <body>
+    <input id="id-docente" type="hidden" value="{{$idDocente}}">
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -539,6 +603,12 @@
                     <a onclick="cargarContenido('control_semanal')">
                         <ion-icon name="person-outline"></ion-icon>
                         <span>Control semanal</span>
+                    </a>
+                </li>
+                <li>
+                    <a onclick="cargarContenido('planilla_evaluacion')">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <span>Planilla evaluacion</span>
                     </a>
                 </li>
             </ul>
@@ -622,6 +692,7 @@
         });
 
         function cargarContenido(seccion) {
+            let idDocente = document.getElementById('id-docente').value;
             const contenido = document.getElementById('contenido');
             let html = '';
 
@@ -635,7 +706,7 @@
                             <img src="https://img.freepik.com/vector-gratis/planificacion-empresarial-calendario_23-2149164011.jpg" alt="Autoevaluacion" class="card-image">
                             <h3>Descripcion</h3>
                             <p class="description">La visualización de la planificación de proyectos permite al docente revisar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
-                            <form action="{{ url('/visualizar_planilla_de_planificacion/2')}}" method="GET">
+                            <form action="{{ url('/visualizar_planilla_de_planificacion/0/${idDocente}')}}" method="GET">
                                 <button id="btn-switch-visualizar-planificacion" type="submit">Visualizar planificacion</button>
                             </form>
                        </div>
@@ -652,15 +723,28 @@
                             <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
                             <h3>Descripcion</h3>
                             <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
-                            <form action="{{ url('/cargar_registro_semanal20')}}" method="GET">
+                            <form action="{{ url('/cargar_registro_semanal0_${idDocente}')}}" method="GET">
                                 <button id="btn-switch-control-semanal" type="submit">Control semanal</button>
                             </form>
                        </div>
                     </div>
                 </div> `;
                     break;
-                case 'evaluaciones':
-                    html = '<div class="container_home"><h2>Evaluaciones</h2><div class="evaluation-card"><div class="card"><h3>Autoevaluación</h3><p class="description">Evaluación que permite a los equipos de trabajo y a sus integrantes realizar una retroalimentación sobre su trabajo.</p></div><div class="card"><h3>Evaluación Cruzada</h3><p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.</p></div><div class="card"><h3>Evaluación en Pares</h3><p class="description">Permite a los integrantes de un equipo evaluar el desempeño de sus compañeros de equipo.</p></div></div></div>';
+                case 'planilla_evaluacion':
+                    html = `                
+                <div class="switch_planilla_evaluacion">
+                    <h2>Crear planilla de evaluacion</h2>
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <img src="https://www.bizneo.com/blog/wp-content/uploads/2020/05/formato-de-evaluacion-del-desempen%CC%83o-810x455.webp" alt="planilla de evaluacion" class="card-image">
+                            <h3>Descripcion</h3>
+                            <p class="description">Planilla de evaluación para registrar y calificar desempeño en diversas áreas y competencias.<p>  
+                            <form action="{{ url('/planilla_evaluacion/${idDocente}')}}" method="GET">
+                                <button id="btn-switch-planilla-evaluacion" type="submit">Crear planilla</button>
+                            </form>
+                       </div>
+                    </div>
+                </div> `;
                     break;
                 case 'notificaciones':
                     html = '<h1>Notificaciones</h1><p>Aquí va el contenido de Notificaciones.</p>';
