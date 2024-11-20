@@ -40,6 +40,7 @@ class ControllerRegistroSemanalGE extends Controller
                 if ($semanaActual[0] === $ultimaSemana['inicio'] && $semanaActual[1] === $ultimaSemana['fin']) {
                     // Redirigir a la vista de evaluación final del hito
                     //return redirect()->route('evaluacion_final_hito', ['idHito' => $idHito]);
+                    $grupoEmpresas = self::getGrupoEmpresas($idDocente);
                     return view('evaluacion_final_hito', compact(
                         'idHito',
                         'objetivos',
@@ -53,7 +54,9 @@ class ControllerRegistroSemanalGE extends Controller
                         'nombreCorto',
                         'criteriosDeAceptacion',
                         'historiaUsuario',
-                        'mostrarMensaje'
+                        'mostrarMensaje',
+                        'grupoEmpresas',
+                        'idDocente'
                     ));
                 }
 
