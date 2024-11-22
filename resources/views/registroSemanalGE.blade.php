@@ -527,6 +527,7 @@
                             title: "Exito",
                             text: mensaje,
                             icon: "success",
+                            confirmButtonText: 'Aceptar',
                             allowOutsideClick: false
                         }).then((result) => {
                             if (result.isConfirmed) {

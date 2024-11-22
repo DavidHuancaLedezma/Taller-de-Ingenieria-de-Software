@@ -512,6 +512,7 @@
                         icon: 'error',
                         title: 'Evaluacion cruzada sin asignar ',
                         text: 'La grupo empresa no tiene una evaluacion designada',
+                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     });
                 }
@@ -669,6 +670,7 @@
                         icon: 'success',
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
+                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.isConfirmed) {

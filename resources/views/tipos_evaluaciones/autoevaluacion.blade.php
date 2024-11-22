@@ -392,6 +392,7 @@ function mostrarValor(valor) {
                         icon: 'success',
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
+                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.isConfirmed) {
