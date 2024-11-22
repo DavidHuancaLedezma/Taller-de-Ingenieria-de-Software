@@ -1156,6 +1156,7 @@
                 icon: 'error',
                 title: 'Autoevaluación ya realizada',
                 text: 'Usted ya registro su autoevaluación',
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
@@ -1166,6 +1167,7 @@
                 icon: 'error',
                 title: 'Autoevaluación sin asignar',
                 text: 'Actualmente su grupo empresa no tiene autoevaluaciones asignadas',
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
@@ -1179,6 +1181,7 @@
                 icon: 'error',
                 title: 'Autoevaluación sin comenzar',
                 text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' + fechaComienzo,
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
@@ -1191,6 +1194,7 @@
                 icon: 'error',
                 title: 'Fecha de autoevaluación finalizada',
                 text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
