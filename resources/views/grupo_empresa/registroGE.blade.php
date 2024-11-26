@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>REGISTRO GRUPO EMPRESA</title>
 
     <!-- Bootstrap CSS -->
@@ -39,11 +41,28 @@
             background-color: #2b6483;
             color: white;
         }
+
+        .button_home {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px;
+            /* Fijar el botón al lado izquierdo */
+            top: 20px;
+            /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white;
+            background-color: #367FA9
+        }
+
     </style>
 </head>
 
 <body>
 
+    <button class="button_home" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    
     <div class="my-container">
         <div class="card col-12 col-md-8 col-lg-6">
             <h2 class="mb-4 text-center text-primary">Registrar Grupo Empresa</h2>
@@ -137,11 +156,26 @@
             </form>
         </div>
     </div>
-  
+<script>
+    $("#boton-home").on("click", function() {
+            // Obtén el ID del evaluador desde el input hidden
+            let idEvaluador = $('#id-evaluador').val();
+
+            // Valida si el ID está definido
+            if (!idEvaluador) {
+                alert("El ID del evaluador no está definido. Verifica los datos.");
+                return;
+            }
+
+            // Redirige al home del estudiante evaluador
+            window.location.href = `/estudiante_home/${idEvaluador}`;
+        });
+</script>
 
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
