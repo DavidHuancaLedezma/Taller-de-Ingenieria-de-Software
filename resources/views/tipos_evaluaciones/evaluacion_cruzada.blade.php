@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Evaluacion de pares Escala Likert</title>
     <style>
@@ -92,6 +93,17 @@
             text-align: center;
         }
 
+        .back_button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px; /* Fijar el botón al lado izquierdo */
+            top: 20px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
     </style>
     <style>
         .ventana-emergente-calificacion {
@@ -110,8 +122,8 @@
             /*background-color: white;
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 750px;*/ 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+            width: 980px;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -225,7 +237,7 @@
             top: 35px; /* Debajo del botón */
             left: 0px;
             max-width: 200px; /* Ancho aceptable */
-            min-width: 150px;
+            min-width: 300px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             z-index: 10;
             word-wrap: break-word;
@@ -274,7 +286,11 @@
 <body>
     <input id="id-evaluacion" type="hidden" value="">
     <input id="id-evaluador" type="hidden" value="{{$idEvaluador}}">
+    <input id="id-estudiante" type="hidden" value="{{$idEstudiante}}">
     <input id="id-grupo-empresa-a-evaluar" type="hidden" value="">
+
+    <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+
     <div class="container">
         <h1>Registro de evaluación cruzada</h1>
         <table class="likert">
@@ -358,7 +374,7 @@
             $("#id-grupo-empresa-a-evaluar").val(id_grupo_empresa);
 
             $.ajax({
-                url: '{{ url('/obtener_criterios_y_parametros') }}', //nueva url para la comunicación con AJAX
+                url: '{{ url('/obtener_criterios_y_parametros_dj') }}', //nueva url para la comunicación con AJAX
                 method: 'POST',
                 data: {
                     idGrupoEmpresa: id_grupo_empresa 
@@ -368,146 +384,140 @@
                 let criteriosParametros = JSON.parse(res);
                 console.log(criteriosParametros);
                 try {
-                    $("#id-evaluacion").val(criteriosParametros[0].id_evaluacion);
+                    $("#id-evaluacion").val(criteriosParametros[0][0].id_evaluacion);
                 } catch (error) {
                     console.log(error);
+                    console.log("Aquí esta el try catch");
                 }
-                
+                console.log("LONGITUD DE CRITERIOS Y PARAMETROS:" + criteriosParametros.length);
 
-                let template = "";
-                for(let i=0; i<criteriosParametros.length; i++){
-                    if(criteriosParametros[i].nombre_parametro === "Escala Likert"){
-                        $('#titulo-evaluacion-grupo-empresa').html("Evaluando a " + criteriosParametros[i].nombre_corto);
-                        template += `
-                            <tr>
-                                <td>
-                                    ${criteriosParametros[i].evaluacion}
-                                </td>
-                                <td>
-                                    <button class="info-button">?</button>
-                                    <div class="info-message">
-                                        ${criteriosParametros[i].descripcion_evaluacion}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label>Deficiente</label>
-                                        <input type="radio" name="question${i}" value="10">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label>Malo</label>
-                                        <input type="radio" name="question${i}" value="30">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Regular</label>
-                                        <input type="radio" name="question${i}" value="50">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Bueno</label>
-                                        <input type="radio" name="question${i}" value="75">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Excelente</label>
-                                        <input type="radio" name="question${i}" value="100">
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
+                if(criteriosParametros.length > 0){
 
-                    }
-                    if(criteriosParametros[i].nombre_parametro === "Elección binaria"){
-                        template += `
-                            <tr>
-                                <td>${criteriosParametros[i].evaluacion}</td>
-                                <td>
-                                    <button class="info-button">?</button>
-                                    <div class="info-message">
-                                        ${criteriosParametros[i].descripcion_evaluacion}
-                                    </div>
-        
-                                </td>
-        
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Falso</label>
-                                        <input type="radio" name="question${i}" value="15">
-                                    </div>
-                                    <td>
-                                        <div class="radio-group">
-                                            <label >Verdadero</label>
-                                            <input type="radio" name="question${i}" value="100">
-                                        </div>
-                                    </td>
-                                </td>
-                            </tr>
-                            
-                        `;
+                    //Verificar fecha valida inicio
+                    $.ajax({
+                        url: '{{ url('/fechas_validas_de_evaluacion_cruzada') }}', //nueva url para la comunicación con AJAX
+                        method: 'POST',
+                        data: {
+                            idEvaluacion: $("#id-evaluacion").val()
+                        }
 
-                    }
-                    if(criteriosParametros[i].nombre_parametro === "Numeral entero"){
-                        template += `
-                            <tr>
-                                <td>${criteriosParametros[i].evaluacion}</td>
-                                <td>
-                                    <button class="info-button">?</button>
-                                    <div class="info-message">
-                                        ${criteriosParametros[i].descripcion_evaluacion}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Rango [0 - 100]</label>
-                                        <input class="rango-numeros" type="text" id="numero" value="0" oninput="validarEntrada(event)" onpaste="prevenirPegar(event)" maxlength="3" />
-                                    </div>
-                                </td>
-                            </tr>
-                        
-                        `;
-                    }
-                    if(criteriosParametros[i].nombre_parametro === "Categoria"){
-                        template += `
-                            <tr>
-                                <td>${criteriosParametros[i].evaluacion}</td>
-                                <td>
-                                    <button class="info-button">?</button>
-                                    <div class="info-message">
-                                        ${criteriosParametros[i].descripcion_evaluacion}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Baja</label>
-                                        <input type="radio" name="question${i}" value="10">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Media</label>
-                                        <input type="radio" name="question${i}" value="50">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="radio-group">
-                                        <label >Alta</label>
-                                        <input type="radio" name="question${i}" value="100">
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
+                    }).done(function(res){
+                        let fechasEvaluacionCruzada = JSON.parse(res);
+                        console.log(fechasEvaluacionCruzada);
+                        //logica 
 
-                    }
+                        if(fechasEvaluacionCruzada[0][0] === 1){
+                            //Aun no comenzo la fecha de evaluación cruzada
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Fecha de evaluación cruzada no iniciada',
+                                text: 'Usted se encuentra en fecha: ' + fechasEvaluacionCruzada[0][1] + ' y la evaluacion para esta grupo empresa comienza en fecha: ' + fechasEvaluacionCruzada[0][2],
+                                allowOutsideClick: false,
+                            });
+
+                        }else if(fechasEvaluacionCruzada[1][0] === 1){
+                            //Ya finalizo la fecha de evaluación cruzada 
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Fecha de evaluación cruzada finalizada',
+                                text: 'Usted se encuentra en fecha: ' + fechasEvaluacionCruzada[1][1] + ' y la evaluacion para esta grupo empresa finalizo el: ' + fechasEvaluacionCruzada[1][2],
+                                allowOutsideClick: false,
+                            });
+                        }else{
+                            //Fecha valida para realizar la evaluación cruzada
+
+                            let numeroQuestion = 1;
+            
+                            let template = "";
+                            for(let i=0; i<criteriosParametros.length; i++){
+
+                                if(criteriosParametros[i][0].nombre_parametro !== "Numeral entero"){
+                                    $('#titulo-evaluacion-grupo-empresa').html("Evaluando a " + criteriosParametros[i][0].nombre_corto);
+                                    template2 = "";
+                                    puntaje = criteriosParametros[i][0].puntaje_evaluacion; 
+                                    for(let j=0;j<criteriosParametros[i][1].length;j++){
+                                        puntaje_final = puntaje * (criteriosParametros[i][1][j].escala_cuantitativa/100)
+                                        template2 += `
+                                            <td>
+                                                <div class="radio-group">
+                                                    <label>${criteriosParametros[i][1][j].escala_cualitativa}</label>   
+                                                    <input type="radio" name="question${numeroQuestion}" value="${puntaje_final}" onclick="mostrarValorSeleccionado(this)">
+                                                </div>
+                                            </td>
+                                        `;
+                                    }
+                                    template += `
+                                        <tr>
+                                            <td>
+                                                ${criteriosParametros[i][0].evaluacion}
+                                            </td>
+                                            <td>
+                                                <button class="info-button">?</button>
+                                                <div class="info-message">
+                                                    ${criteriosParametros[i][0].descripcion_evaluacion}
+                                                </div>
+                                            </td>
+                                            ${template2}
+                                                
+                                        </tr>
+                                    `;
+                                    numeroQuestion = numeroQuestion + 1;
+                                }else{
+                                    function contarDigitos(numero) {
+                                        if (numero === 0) return 1;
+                                        return Math.floor(Math.log10(Math.abs(numero))) + 1;
+                                    }
+                                    puntaje = criteriosParametros[i][0].puntaje_evaluacion;
+                                    contarDigitosPuntaje = contarDigitos(puntaje);
+                                    template += `
+                                        <tr>
+                                            <td>${criteriosParametros[i][0].evaluacion}</td>
+                                            <td>
+                                                <button class="info-button">?</button>
+                                                <div class="info-message">
+                                                    ${criteriosParametros[i][0].descripcion_evaluacion}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="radio-group">
+                                                    <label >Rango [0 - ${puntaje}]</label>
+                                                    <input class="rango-numeros" type="text" id="numero" value="0" oninput="validarEntrada(event, ${puntaje})" onpaste="prevenirPegar(event)" maxlength="${contarDigitosPuntaje}" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }    
+                            }
+
+
+
+                            $("#contenido-tabla").html(template);
+                            $('.ventana-emergente-calificacion').css('display', 'flex');
+
+                        }
+
+
+
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error en la solicitud:', textStatus, errorThrown);
+                        console.error('Detalles del error:', jqXHR.responseText);
+                    });
+
+                    //Verificar fecha valida fin
+
                     
+                    
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Evaluacion cruzada sin asignar ',
+                        text: 'La grupo empresa no tiene una evaluacion designada',
+                        allowOutsideClick: false,
+                    });
                 }
-                $("#contenido-tabla").html(template);
-                $('.ventana-emergente-calificacion').css('display', 'flex');
+
+
+                
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.error('Error en la solicitud:', textStatus, errorThrown);
@@ -543,7 +553,7 @@
         });
     </script>
     <script>
-        function validarEntrada(event) {
+        function validarEntrada(event, maximo) {
             const input = event.target;
             let valor = input.value;
 
@@ -556,8 +566,8 @@
             }
 
             // Limita el valor a 100
-            if (parseInt(valor) > 100) {
-                valor = valor.slice(0, -1);
+            if (parseInt(valor) > maximo) {
+                valor = maximo.toString();
             }
 
             // Actualiza el valor del input
@@ -632,7 +642,7 @@
                         sumatoriaNota = sumatoriaNota + notas[i];
                     }
 
-                    sumatoriaNota = sumatoriaNota / notas.length;
+                    sumatoriaNota = sumatoriaNota;
                     sumatoriaNota = Math.round(sumatoriaNota);
 
                     //eliminar inicio
@@ -679,7 +689,21 @@
 
                 }
             });
+
+
+            $("#boton-home").on("click", function () {
+                //Regresa al home del estudiante
+                let idEstudiante = $('#id-estudiante').val();
+                
+                window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
+            });
+
         });
     </script>
+    <script>
+    function mostrarValorSeleccionado(element) {
+        console.log("Valor seleccionado:", element.value);
+    }
+</script>
 </body>
 </html>

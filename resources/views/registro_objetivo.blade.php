@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registro objetivo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -201,6 +202,7 @@
     </style>
 </head>
 <body>
+    <input type="hidden" id="id_estudiante" value="{{ $id_estudiante }}">
     <div class="background"></div>
     <div class="content">
         <div class="container">
@@ -273,7 +275,7 @@
                     </button>
 
                     <!-- Cambia route() por url() si sigues teniendo problemas con route() -->
-                    <button type="button"  class="btn-cancelar" onclick="window.location.href='{{ url('/') }}'">
+                    <button type="button"  class="btn-cancelar" id="boton-home">
                         Cancelar <i class="bi bi-x-circle-fill"></i>
                         <span class="overplay"></span>
                     </button>
@@ -439,6 +441,14 @@
             }
         });
     });
+
+    $("#boton-home").on("click", function () {
+                    //Regresa al home del estudiante
+        let idEstudiante = $('#id_estudiante').val();
+                    
+        window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
+    });
+       
 </script>
 
 

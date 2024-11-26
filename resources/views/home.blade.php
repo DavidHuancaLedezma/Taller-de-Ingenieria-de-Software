@@ -776,6 +776,11 @@
 <body>
     <input id="id-estudiante-home" type="hidden" value="{{$idEstudinte}}">
     <input id="autoevaluacion-realizada" type="hidden" value="{{$autoevaluacion}}">
+    <input id="id-grupo-empresa-del-estudiante" type="hidden" value="{{$idGrupoEmpresa}}">
+    <input id="parametros-de-autoevaluacion" type="hidden" value="{{$conParametros}}">
+    <input id="fechas-autoevaluacion" type="hidden" value="{{ json_encode($fechasDeAutoevaluacion) }}">
+    
+
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -874,9 +879,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script>
 
-        console.log(document.getElementById("id-estudiante-home").value);
+    <script>
+        
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
         const spans = document.querySelectorAll("span");
@@ -923,6 +928,8 @@
 
         function cargarContenido(seccion) {
             let idEstudiante = document.getElementById("id-estudiante-home").value;
+            let idGrupoEmpresa = document.getElementById("id-grupo-empresa-del-estudiante").value;
+            
             const contenido = document.getElementById('contenido');
             let html = '';
             switch (seccion) {
@@ -937,10 +944,10 @@
                         <div class="card">
                             <h3>REGISTRO DE HITOS</h3>
                             <img src="https://img.freepik.com/vector-premium/progreso-proyecto-flujo-trabajo-trabajo-hombre-completa-tareas-paso-paso_159757-1418.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Descripcion</h3>
+                            <h3>Registro de hitos</h3>
                             <p class="description">Los hitos son puntos críticos o eventos significativos que marcan el progreso en el proyecto.<p>  
-                            <form action="{{ url('/registro_hitos/2')}}" method="GET">
-                                <button id="btn-switch-hitos" type="submit">REGISTRO HITOS(idProyecto)</button>
+                            <form action="{{ url('/registro_hitos/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-hitos" type="submit">REGISTRO HITOS</button>
                             </form>
                         </div>
                     </div>
@@ -952,12 +959,10 @@
                         <div class="card">
                             <h3>REGISTRO DE ENTREGABLES</h3>
                             <img src="https://img.freepik.com/vector-premium/concepto-progresion-proyecto-hacer-cosas-tareas-completadas-o-logros-comerciales_178888-1909.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-
                             <h3>Registro de entregables</h3>
-
-                            <p class="description">Se formularán objetivos claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
-                            <form action="{{ url('/registro_objetivo/2')}}" method="GET">
-                                <button id="btn-switch-objetivos" type="submit">REGISTRO ENTREGABLES(idProyecto)</button>
+                            <p class="description">Se formularán entregables claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
+                            <form action="{{ url('/registro_objetivo/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-objetivos" type="submit">REGISTRO ENTREGABLES</button>
                             </form>                            
                         </div>
                     </div>
@@ -967,12 +972,10 @@
                         <div class="card">
                             <h3>REGISTRO DE ACTIVIDADES</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-
-                            <h3>Registro de Actividades</h3>
-
+                            <h3>Registro de actividades</h3>
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('planilla_planificacion_actividad/4')}}" method="GET">
-                                <button id="btn-switch-actividades" type="submit">ACTIVIDADES(idObjetivo)</button>
+                            <form action="{{ url('/planilla_planificacion_actividad/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">ACTIVIDADES</button>
                             </form>                        
                         </div>
                     </div>
@@ -980,53 +983,119 @@
                 <div class="switch_actividades">
                     <div class="evaluation-card">
                         <div class="card">
-                            <h3>REGISTRO DE CRITERIOS DE ACEPTACION</h3>
+                            <h3>REGISTRO DE CRITERIOS DE ACEPTACIÓN</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de Criterios de aceptación</h3>
+                            <h3>Registro de criterios de aceptación</h3>
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('planilla_planificacion_criterio_aceptacion/4')}}" method="GET">
-                                <button id="btn-switch-actividades" type="submit">CRITERIO ACEPTACIÓN(idObjetivo)</button>
+                            <form action="{{ url('/planilla_planificacion_criterio_aceptacion/${idEstudiante}')}}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">CRITERIOS DE ACEPTACIÓN</button>
                             </form>                        
                         </div>
                     </div>
                 </div> 
-                
                     `;
                     break;
                 case 'autoevaluacion':
                     let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
+                    let autoevaluacionConParametros = document.getElementById("parametros-de-autoevaluacion").value;
+                    let fechas_autoevaluacion = document.getElementById('fechas-autoevaluacion').value;
+                    fechas_autoevaluacion = JSON.parse(fechas_autoevaluacion);
+                    console.log(fechas_autoevaluacion);
+                    
+                    let valor = "hola";
+                    console.log(autoevaluacionConParametros);
+                    console.log("-----------------------------");
                     console.log(autoevaluacion);
                     if(autoevaluacion == 0){
-                        html = `
+                        if(autoevaluacionConParametros === "si"){
+
+                            if(fechas_autoevaluacion[0][0] === 1){
+                                //fecha antes sin comenzar(No inicio la autoevalución)
+                                html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            
+                                                <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionSinComenzar('${fechas_autoevaluacion[0][1]}','${fechas_autoevaluacion[0][2]}')">AUTOEVALUACIÓN</button>
+                                            
+                                    </div>
+                                    </div>
+                                </div> `;
+
+                            }else if(fechas_autoevaluacion[1][0] === 1){
+                                //fecha despues (ya termino la autoevaluación)
+                                html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            
+                                                <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionTerminada('${fechas_autoevaluacion[1][1]}','${fechas_autoevaluacion[1][2]}')">AUTOEVALUACIÓN</button>
+                                            
+                                    </div>
+                                    </div>
+                                </div> `;
+                            }else{
+                                //Ingreso normal a la autoevaluación
+                                html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            <form action="{{ url('/autoevaluacion/${idEstudiante}')}}" method="GET">
+                                                <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
+                                            </form>
+                                    </div>
+                                    </div>
+                                </div> `;
+                            }
+
+                            
+
+                        }else{
+                            html = `
                             <div class="switch_autoevaluacion">
                                 <h2>Evaluaciones</h2>
                                 <div class="evaluation-card">
                                     <div class="card">
                                         <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                        <h3>Descripcion autoevaluacion</h3>
+                                        <h3>Autoevaluacion</h3>
                                         <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                                        <form action="{{ url('/autoevaluacion/${idEstudiante}')}}" method="GET">
-                                            <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
-                                        </form>
+                                        
+                                            <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionSinParametros()">AUTOEVALUACIÓN</button>
+                                        
                                 </div>
                                 </div>
                             </div> `;
 
+                        }
+                        
+
                     }else{
                             html = `
-                    <div class="switch_autoevaluacion">
-                        <h2>Evaluaciones</h2>
-                        <div class="evaluation-card">
-                            <div class="card">
-                                <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                <h3>Descripcion autoevaluacion</h3>
-                                <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                                
-                                    <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionYaRegistrada()">AUTOEVALUACIÓN</button>
-                                
-                        </div>
-                        </div>
-                    </div> `;
+                            <div class="switch_autoevaluacion">
+                                <h2>Evaluaciones</h2>
+                                <div class="evaluation-card">
+                                    <div class="card">
+                                        <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                        <h3>Autoevaluacion</h3>
+                                        <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                        
+                                            <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionYaRegistrada()">AUTOEVALUACIÓN</button>
+                                        
+                                </div>
+                                </div>
+                            </div> `;
 
                     }
                         
@@ -1039,7 +1108,7 @@
                     <div class="evaluation-card">
                         <div class="card">
                             <img src="https://evalart.com/wp-content/uploads/2023/01/nggallery_import/evaluacion-de-desempeno-constante-para-los-empleados_imgdest.webp" alt="Evaluación Pares" class="card-image">
-                            <h3>Descripcion evaluación pares</h3>
+                            <h3>Evaluación Pares</h3>
                             <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
                             <form action="" method="GET">
                                 <button id="btn-evaluacion-pares" type="submit">EVALUACIÓN PARES</button>
@@ -1057,9 +1126,9 @@
                     <div class="evaluation-card">
                         <div class="card">
                             <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
-                            <h3>Descripcion evaluación cruzada</h3>
+                            <h3>Evaluación Cruzada</h3>
                             <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                            <form action="{{ url('/evaluacion_cruzada/1')}}" method="GET">
+                            <form action="{{ url('/evaluacion_cruzada/${idGrupoEmpresa}/${idEstudiante}')}}" method="GET">
                                 <button id="btn-evaluacion-cruzada" type="submit">EVALUACIÓN CRUZADA</button>
                             </form>
                        </div>
@@ -1090,7 +1159,41 @@
                 allowOutsideClick: false,
             });
         }
+
+        function mensajeAutoevaluacionSinParametros(){
+            console.log("Ya funciona el mensaje de restriccion");
+            Swal.fire({
+                icon: 'error',
+                title: 'Autoevaluación sin asignar',
+                text: 'Actualmente su grupo empresa no tiene autoevaluaciones asignadas',
+                allowOutsideClick: false,
+            });
+        }
+
+        function mensajeAutoevaluacionSinComenzar(fechaActual, fechaComienzo){
+            console.log("AQUI -----------------------");
+            console.log(fechaActual);
+            console.log(fechaComienzo);
+            console.log("fIN AQUI-----------------------");
+            Swal.fire({
+                icon: 'error',
+                title: 'Autoevaluación sin comenzar',
+                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' + fechaComienzo,
+                allowOutsideClick: false,
+            });
+        }
         
+
+        function mensajeAutoevaluacionTerminada(fechaActual, fechaFin){
+            console.log(fechaActual);
+            console.log(fechaFin);
+            Swal.fire({
+                icon: 'error',
+                title: 'Fecha de autoevaluación finalizada',
+                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
+                allowOutsideClick: false,
+            });
+        }
     </script>
 </body>
 </html>

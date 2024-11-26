@@ -227,11 +227,25 @@
             .lista-actividades strong, .lista-criterios strong {
                     font-size: 1em; /* Mantener el texto en negrita ligeramente más grande */
                 }
+        .back_button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 80px; /* Fijar el botón al lado izquierdo */
+            top: 10px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
 
     </style>
 
 </head>
 <body>
+    <input type="hidden" id="id_estudiante" value="{{ $id_estudiante }}">
+    <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    
     <div class="container">
         <div class="container_uno">
             <div class="header">
@@ -480,7 +494,13 @@
             });
      
     });
-            
+        $("#boton-home").on("click", function () {
+                    //Regresa al home del estudiante
+                    let idEstudiante = $('#id_estudiante').val();
+                    
+                    window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
+        });
+        
        // });
     </script>
 </body>

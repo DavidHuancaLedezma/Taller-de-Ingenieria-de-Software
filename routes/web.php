@@ -45,12 +45,15 @@ use App\Http\Controllers\PlanillaEvaluacionController;
 
 
 //registro del control semanal con asistencias
-Route::get('/cargar_registro_semanal{parametroHito}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+//NOTA IMPORTANTE: la url /cargar_registro_semanal no funciona si se coloca / para los parametros(se tiene que sustituir el / con _ )
+Route::get('/cargar_registro_semanal{parametroHito}_{idDocente}', [ControllerRegistroSemanalGE::class, 'cargarRegistroSemanal']);
+Route::post('/obtener_id_hito_grupo_empresa_combo_box', [ControllerRegistroSemanalGE::class, 'getIdHitoComboxSeleccionado']);
 Route::post("/registrar_seguimiento", [ControllerRegistroSemanalGE::class, 'registrarSeguimiento']);
 
 
 //visialización de la planilla de planificación
-Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
+Route::get('/visualizar_planilla_de_planificacion/{idPlanillaProyecto}/{idDocente}', [ControllerVisualizarPlanillaDePlanificacion::class, 'visualizarPlanilla']);
+Route::post('/obtener_id_proyecto_de_grupo_empresa', [ControllerVisualizarPlanillaDePlanificacion::class, 'getIdProyectoDeGrupoEmpresa']);
 
 
 Route::get('/', function () {
@@ -66,16 +69,11 @@ Route::get('/docente', function () {
 });
 
 
-
-Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
-
-Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class,'guardarNotaEstudiantes']);
-
-
 // Ruta para mostrar la evaluación de un estudiante
 Route::get('/evaluacionPares/{id}/evaluar', [EvaluacionParesController::class, 'evaluarEstudiante'])->name('evaluar.estudiante');
 Route::post('/validacion_fechas_evaluacion_pares', [EvaluacionParesController::class, 'validacionFechasEvaluacionPares']);
-
+Route::get('/evaluacion_pares/{idEvaluacionPares}', [EvaluacionParesController::class, 'evaluacionPares']);
+Route::post('/guardar_nota_evaluacion_pares',[EvaluacionParesController::class,'guardarNotaEstudiantes']);
 
 use App\Http\Controllers\GrupoEmpresaController;
 
@@ -145,12 +143,13 @@ Route::post('/finHito/store/{id_hito}', [EvaluacionFinHitoController::class, 'st
 
 //Tipo de Evaluaciones 
 Route::get('/autoevaluacion/{idEstudiante}', [ControllerAutoevaluacion::class, 'autoevaluacion']);
-Route::get('/evaluacion_cruzada/{idGrupoEmpresa}', [ControllerEvaluacionCruzada::class, 'evaluacionCruzada']);
+Route::get('/evaluacion_cruzada/{idGrupoEmpresa}/{idEstudiante}', [ControllerEvaluacionCruzada::class, 'evaluacionCruzada']);
 
 //Rutas extras para el funcionamiento de evaluaciones
 Route::post('/guardar_nota_autoevaluacion', [ControllerAutoevaluacion::class, 'registroNota']);
-Route::post('/obtener_criterios_y_parametros', [ControllerEvaluacionCruzada::class, 'getCriteriosParametros']);
+Route::post('/obtener_criterios_y_parametros_dj', [ControllerEvaluacionCruzada::class, 'getCriteriosParametros']);
 Route::post('/guardar_nota_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'guardarNotaGrupoEmpresas']);
+Route::post('/fechas_validas_de_evaluacion_cruzada', [ControllerEvaluacionCruzada::class, 'rangoFechasEvaluacionCruzada']);
 
 
 // HOME estudiante
@@ -178,11 +177,8 @@ Route::post('/planilla_evaluacion/store', [PlanillaEvaluacionController::class, 
 
 Route::get('/get-empresas-por-evaluacion/{id_tipo_evaluacion}/{id_docente}', [PlanillaEvaluacionController::class, 'getEmpresasPorEvaluacion']);
 
-
+//Rutas del login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
-
-
-
