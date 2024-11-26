@@ -237,8 +237,80 @@
             cursor: pointer;
             color: white ; 
             background-color: #367FA9    
+          
+        }
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+            align-items: center;
         }
 
+        .container_uno {
+            order: 1;
+            width: 100%;
+        }
+
+        .container_two {
+            order: 2;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .table-container {
+            overflow-x: auto; /* Permitir desplazamiento horizontal en pantallas pequeñas */
+        }
+        .back_button {
+            left: 20px; /* Reduce la distancia desde el borde izquierdo */
+            top: 15px; /* Ajusta la distancia desde la parte superior */
+            padding: 8px 10px; /* Reduce el tamaño del botón */
+            font-size: 0.9rem; /* Disminuye el tamaño del texto */
+            
+        }
+    }
+    @media screen and (max-width: 576px) {
+        .container_uno select,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .back_button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .popup-form {
+            padding: 10px;
+        }
+
+        .contenedor-mini-formulario {
+            width: 100%;
+            padding: 15px;
+        }
+
+        .footer-mini-formulario {
+            flex-direction: column;
+            gap: 10px;
+        }
+        table {
+            width: 100%;
+        }
+
+        .table-container {
+            overflow-x: auto; /* Permitir desplazamiento horizontal en pantallas pequeñas */
+        }
+        .back_button {
+            left: 20px; /* Reduce la distancia desde el borde izquierdo */
+            top: 15px; /* Ajusta la distancia desde la parte superior */
+            padding: 8px 10px; /* Reduce el tamaño del botón */
+            font-size: 0.7rem; /* Disminuye el tamaño del texto */
+            width: 130px;
+        }
+    }
 
     </style>
 </head>
@@ -356,7 +428,7 @@
                                     <button id="add-activity" class="tab-button">Actividades +</button>
                                 
                                 </div>
-                                
+                                <div class="table-container">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -377,6 +449,7 @@
                                         }).join('')}
                                     </tbody>
                                 </table>
+                                </div>
                             `);
                         }
                     },
@@ -487,6 +560,7 @@
                             <div class="tabs">
                                 <button id="add-activity" class="tab-button">Actividades +</button>
                             </div>
+                            <div class="table-container">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -507,6 +581,7 @@
                                     }).join('')}
                                 </tbody>
                             </table>
+                            </div>
                         `);
                     },
                     error: function() {
@@ -521,7 +596,8 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: xhr.responseJSON.error
+                            text: xhr.responseJSON.error,
+                            confirmButtonText: "Aceptar"
                         });
                     }
                     });
