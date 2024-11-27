@@ -581,6 +581,7 @@
 
         .switch_planificacion{
             display: flex ; 
+           
             
         }
         .switch_hitos {
@@ -771,6 +772,86 @@
         .switch_actividades #btn-switch-actividades:hover {
             background-color: #789bc0;
         }
+
+        /* Estilo responsivo para pantallas con un ancho máximo de 900px */
+        @media (max-width: 1300px) {
+            .switch_planificacion {
+                display: grid; /* Cambiar de flex a grid */
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
+                gap: 20px; /* Espaciado entre filas y columnas */
+            }
+
+            .switch_planificacion > div {
+                margin: 0 auto; /* Centrar las tarjetas si sobra espacio */
+            }
+        }
+
+                /* Ajustes para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .header-planificacion {
+                padding: 10px;
+                text-align: center;
+            }
+
+            .switch_planificacion {
+                flex-direction: column; /* Cambiar a diseño en columna */
+                align-items: center;
+            }
+
+            .switch_hitos, .switch_objetivos, .switch_actividades {
+                max-width: 100%; /* Ajustar ancho al 100% de la pantalla */
+                padding: 10px; /* Reducir espacio interno */
+                text-align: center; /* Asegurar centrado */
+            }
+
+            .switch_hitos .card, 
+            .switch_objetivos .card, 
+            .switch_actividades .card {
+                width: 90%; /* Reducir el ancho de las tarjetas */
+                margin: 10px auto; /* Espaciado entre tarjetas */
+            }
+
+            .card-image-planificacion {
+                height: auto; /* Permitir que la altura se ajuste automáticamente */
+                max-width: 100%; /* Evitar desbordamiento en imágenes */
+            }
+
+            h3 {
+                font-size: 16px; /* Reducir tamaño de los encabezados */
+            }
+
+            .description {
+                font-size: 12px; /* Reducir tamaño de texto descriptivo */
+            }
+
+            button {
+                width: 100%; /* Botones al ancho completo */
+                padding: 12px; /* Más espacio interno */
+                font-size: 14px; /* Ajuste del tamaño del texto */
+            }
+        }
+
+        /* Ajustes para pantallas aún más pequeñas (móviles muy pequeños) */
+        @media (max-width: 580px) {
+            .switch_planificacion {
+                display: grid; /* Cambiar de flex a grid */
+                grid-template-columns: repeat(1, 1fr); /* Dos columnas de igual ancho */
+                gap: 20px; /* Espaciado entre filas y columnas */
+            }
+            .header-planificacion h2 {
+                font-size: 18px; /* Reducir el tamaño de texto del encabezado */
+            }
+
+            button {
+                font-size: 12px; /* Texto más pequeño en botones */
+                padding: 10px; /* Reducir espacio interno */
+            }
+
+            .description {
+                font-size: 10px; /* Texto más compacto */
+            }
+        }
+
     </style>
 </head>
 <body>
