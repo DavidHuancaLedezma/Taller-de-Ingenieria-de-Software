@@ -1043,6 +1043,12 @@
                     `;
                     break;
                 case 'autoevaluacion':
+                console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
+                if(idGrupoEmpresa != 0){
+                    console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
+
+
+
                     let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
                     let autoevaluacionConParametros = document.getElementById("parametros-de-autoevaluacion").value;
                     let fechas_autoevaluacion = document.getElementById('fechas-autoevaluacion').value;
@@ -1145,7 +1151,22 @@
                             </div> `;
 
                     }
-                        
+                }else{
+                    html = `
+                            <div class="switch_autoevaluacion">
+                                <h2>Evaluaciones</h2>
+                                <div class="evaluation-card">
+                                    <div class="card">
+                                        <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                        <h3>Autoevaluacion</h3>
+                                        <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                        
+                                            <button id="btn-autoevaluacion" onclick="mensajeDeNoTieneGE()">AUTOEVALUACIÓN</button>
+                                        
+                                </div>
+                                </div>
+                            </div> `;
+                }
                         break;    
                     break;
                 case 'Evaluacion_pares':
@@ -1167,6 +1188,8 @@
                 `;
                     break;
                 case 'evaluacion_cruzada':
+            if(idGrupoEmpresa != 0){
+                console.log("ingresando al if con ----->" + idGrupoEmpresa);        
                     html = `
                 <div class="switch_evaluacion_cruzada">
                     <h2>Evaluaciones</h2>
@@ -1180,7 +1203,26 @@
                             </form>
                        </div>
                     </div>
-                </div> `; 
+                </div> `
+            }else{
+                console.log("ingresando al else con ----->" + idGrupoEmpresa);  
+                html = `
+                <div class="switch_evaluacion_cruzada">
+                    <h2>Evaluaciones</h2>
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
+                            <h3>Evaluación Cruzada</h3>
+                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                            
+                                <button id="btn-evaluacion-cruzada" onclick="mensajeDeNoTieneGE()" type="submit">EVALUACIÓN CRUZADA</button>
+                            
+                       </div>
+                    </div>
+                </div> `
+            }
+                
+                ; 
                     break;
                 case 'registro_grupo_empresa':
                     html = '<h1>Registro grupo empresa</h1><p>Aquí va el contenido de registro grupo empresa.</p>';
@@ -1197,12 +1239,12 @@
             const enlaceActivo = document.querySelector(`a[onclick="cargarContenido('${seccion}')"]`);
             enlaceActivo.classList.add('activo');
         }
-        function mensajeAutoevaluacionYaRegistrada(){
+        function mensajeDeNoTieneGE(){
             console.log("Ya funciona el mensaje de restriccion");
             Swal.fire({
                 icon: 'error',
-                title: 'Autoevaluación ya realizada',
-                text: 'Usted ya registro su autoevaluación',
+                title: 'No pertence a una GrupoEmpresa',
+                text: 'Usted no pertene a un GrupoEmpresa para que sea considerado en evaluaciones debera unirse a una GE',
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
