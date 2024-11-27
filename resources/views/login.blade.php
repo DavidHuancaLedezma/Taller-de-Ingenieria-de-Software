@@ -81,6 +81,7 @@
             font-weight: bold;
             font-size: 1.5rem;
             color: white;
+            text-decoration: none;
         }
 
         .nav-item {
@@ -159,6 +160,7 @@
 
         @media (max-width: 480px) {
             .navbar-brand {
+                text-decoration: none;
                 font-size: 1.2rem;
             }
         }
@@ -167,33 +169,36 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-brand">GESTIÓN DE PROYECTOS</div>
+    <a class="navbar-brand no-underline" href="{{ route('inicio') }}">
+            <div class="navbar-brand">GESTIÓN DE PROYECTOS</div>
+        </a>  
         <div>
             <a class="nav-link btn-login nav-item" href="{{route('login')}}">Iniciar Sesión</a>
             <a class="nav-link btn-register nav-item" href="{{route('registro_estudiante.create')}}">Registrarse</a>
+            <a class="nav-link btn-register nav-item" href="{{route('registro_docente.create')}}">Registrar Docente</a>
         </div>
     </nav>
 
     <div class="login-container">
-        <h2>Inicio de Sesion</h2>
-        <form action="{{ route('login') }}" method="POST">
+        <h2>Inicio de Sesión</h2>
+
+        <!-- Formulario de inicio de sesión -->
+        <form action="{{ route('login.post') }}" method="POST">
             @csrf
-            
-            <input type="email" name="email" required placeholder="Correo electronico">
+
+            <input type="email" name="email" placeholder="Correo Electrónico" value="{{ old('email') }}" required>
             @error('email')
-                <div style="color: red;">{{ $message }}</div>
+                <div class="error">{{ $message }}</div>
             @enderror
-            
-            
-            <input type="password" name="password" required placeholder="Contraseña">
+
+            <input type="password" name="password" placeholder="Contraseña" required>
             @error('password')
-                <div style="color: red;">{{ $message }}</div>
+                <div class="error">{{ $message }}</div>
             @enderror
-            
+
             <button type="submit">Ingresar</button>
         </form>
     </div>
-
 
     <footer>
         <p>&copy; 2024 - Todos los derechos reservados | <a href="#">Política de Privacidad</a></p>

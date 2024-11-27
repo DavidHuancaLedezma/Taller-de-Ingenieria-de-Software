@@ -307,23 +307,35 @@
 
                             @foreach ($estudiantesCalificados ?? [] as $eCalificados)
                                 @if ($eCalificados->otro_id_estudiante == $item->id_usuario)
-                                    <td><button class="null" data-id="{{ $item->id_usuario }}"
-                                            disabled>Evaluar</button></td>
-                                    <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; {{ $eCalificados->puntaje }}/100 </td>
+                                    <td>
+                                        <button class="null" data-id="{{ $item->id_usuario }}" disabled>
+                                            Evaluar
+                                        </button>
+                                    </td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; {{ $eCalificados->puntaje }}/100
+                                    </td>
                                     @php
-                                        $valorCambiado = 1; // Cambias el valor indicando que ya fue calificado
+                                        $valorCambiado = 1; // Indica que ya fue calificado
                                     @endphp
                                 @endif
                             @endforeach
 
                             @if ($valorCambiado != 1)
-                                <td><button class="btn-calificar" data-id="{{ $item->id_usuario }}"
-                                        data-nombre="{{ $item->nombre_estudiante }}">Evaluar</button></td>
-                                <td>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; No calificado</td>
+                                <td>
+                                    <button class="btn-calificar" data-id="{{ $item->id_usuario }}"
+                                        data-nombre="{{ $item->nombre_estudiante }}">
+                                        Evaluar
+                                    </button>
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; No calificado
+                                </td>
                             @endif
                         </tr>
                     @endif
                 @endforeach
+
 
             </tbody>
         </table>
@@ -362,6 +374,7 @@
     <script>
         // Modificación del script de evaluación de pares
         $(document).on('click', '.btn-calificar', function() {
+            // Configurar el token CSRF para las solicitudes AJAX
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -379,6 +392,7 @@
 
             $('.ventana-emergente-calificacion h1').text('Evaluando a ' + nombreEstudiante);
 
+            // Obtener los criterios y parámetros de evaluación
             $.ajax({
                 url: "/obtener_criterios_y_parametros",
                 method: 'POST',
@@ -386,7 +400,6 @@
                     idEstudiante: idEstudiante
                 },
                 success: function(response) {
-                    // Asegurarse de que no necesitamos parsear si ya es JSON
                     let criteriosParametros = typeof response === 'string' ? JSON.parse(response) :
                         response;
 
@@ -394,35 +407,82 @@
                         $("#id-evaluacion").val(criteriosParametros[0].id_evaluacion);
                     } catch (error) {
                         console.error("Error al establecer id_evaluacion:", error);
+                        return;
                     }
 
-                    let template = "";
-                    criteriosParametros.forEach((item, i) => {
-                        switch (item.nombre_parametro) {
-                            case "Escala Likert":
-                                template += createLikertScale(item, i);
-                                break;
-                            case "Elección binaria":
-                                template += createBinaryChoice(item, i);
-                                break;
-                            case "Numeral entero":
-                                template += createNumeralInput(item, i);
-                                break;
-                            case "Categoria":
-                                template += createCategoryScale(item, i);
-                                break;
+                    // Validar fechas de la evaluación
+                    $.ajax({
+                        url: "/validacion_fechas_evaluacion_pares",
+                        method: "POST",
+                        data: {
+                            idEvaluacion: $("#id-evaluacion").val()
+                        },
+                        success: function(fechaResponse) {
+                            let fechasValidacion = typeof fechaResponse === 'string' ? JSON
+                                .parse(fechaResponse) : fechaResponse;
+
+                            if (fechasValidacion[0][0] === 1) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Fecha no válida',
+                                    text: `La evaluación no ha comenzado. Inicia el: ${fechasValidacion[0][2]}. Hoy es: ${fechasValidacion[0][1]}.`,
+                                    confirmButtonText: 'Aceptar',
+                                    allowOutsideClick: false,
+                                });
+                            } else if (fechasValidacion[1][0] === 1) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Fecha no válida',
+                                    text: `La evaluación ha finalizado. Terminó el: ${fechasValidacion[1][2]}. Hoy es: ${fechasValidacion[1][1]}.`,
+                                    confirmButtonText: 'Aceptar',
+                                    allowOutsideClick: false,
+                                });
+                            } else {
+                                // Continuar con la carga de criterios si la fecha es válida
+                                let template = "";
+                                criteriosParametros.forEach((item, i) => {
+                                    switch (item.nombre_parametro) {
+                                        case "Escala Likert":
+                                            template += createLikertScale(item, i);
+                                            break;
+                                        case "Elección binaria":
+                                            template += createBinaryChoice(item, i);
+                                            break;
+                                        case "Numeral entero":
+                                            template += createNumeralInput(item, i);
+                                            break;
+                                        case "Categoria":
+                                            template += createCategoryScale(item,
+                                                i);
+                                            break;
+                                    }
+                                });
+
+                                $("#contenido-tabla").html(template);
+                                $('.ventana-emergente-calificacion').css('display', 'flex');
+
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error('Error en la validación de fechas:', textStatus,
+                                errorThrown);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se pudo validar las fechas de la evaluación.',
+                                confirmButtonText: 'Aceptar'
+                            });
+
                         }
                     });
 
-                    $("#contenido-tabla").html(template);
-                    $('.ventana-emergente-calificacion').css('display', 'flex');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error en la solicitud:', textStatus, errorThrown);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Hubo un error al cargar los criterios de evaluación'
+                        text: 'Hubo un error al cargar los criterios de evaluación.'
                     });
                 }
             });
@@ -561,7 +621,7 @@
                 }
             });
 
-            // Validar radio buttons
+            // Validar radio buttons 
             const grupos = new Set();
             document.querySelectorAll('input[type="radio"]').forEach((input) => {
                 grupos.add(input.name);
@@ -599,13 +659,15 @@
                         icon: 'success',
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
+                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            location.reload();
+                            location.reload(); // Recarga la página después de confirmar
                         }
                     });
                 },
+
                 error: function(jqXHR, textStatus, errorThrown) {
                     Swal.fire({
                         icon: 'error',

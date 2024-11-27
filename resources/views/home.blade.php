@@ -773,6 +773,7 @@
             background-color: #789bc0;
         }
 
+
         /* Estilo responsivo para pantallas con un ancho máximo de 900px */
         @media (max-width: 1300px) {
             .switch_planificacion {
@@ -850,6 +851,69 @@
             .description {
                 font-size: 10px; /* Texto más compacto */
             }
+        }
+
+
+        .cont_home {
+            max-width: 650px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .cont_home h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .cont_home .evaluation-card {
+            display: flex;
+            justify-content: center;
+        }
+
+        .cont_home .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .cont_home .card-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .cont_home h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .cont_home .description {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .cont_home .evaluation-form {
+            margin-top: 10px;
+        }
+
+        .cont_home #btn-switch-visualizar-planificacion{
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cont_home #btn-switch-visualizar-planificacion:hover {
+            background-color: #789bc0;
         }
 
     </style>
@@ -932,37 +996,22 @@
         </div>
     </div>
     <main id="contenido">
-        <div class="container_home">
-            <h2>Evaluaciones</h2>
-            <div class="evaluation-card">
-                <div class="card">
-                    <h3>Autoevaluación</h3>
-                    <p class="description">
-                        Evaluación que permite a los equipos de trabajo y a sus integrantes realizar una retroalimentación sobre su trabajo.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>Evaluación Cruzada</h3>
-                    <p class="description">
-                        Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>Evaluación en Pares</h3>
-                    <p class="description">
-                        Permite a los integrantes de un equipo evaluar el desempeño de sus compañeros de equipo.
-                    </p>
+            <div class="cont_home">
+                <h2>ESTUDIANTE</h2>
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <img src="https://img.freepik.com/vector-premium/servicio-o-plataforma-linea-clase-escuela-retorica-capacitacion-estudiantes_277904-20638.jpg" alt="Autoevaluacion" class="card-image">
+                            <h3>Descripcion</h3>
+                            <p class="description">Se permite al estudiante avanzar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
+                    </div>
                 </div>
             </div>
-        </div>
-        
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-    <script>
-        
+    <script> 
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
         const spans = document.querySelectorAll("span");
@@ -1237,6 +1286,7 @@
                 icon: 'error',
                 title: 'Autoevaluación ya realizada',
                 text: 'Usted ya registro su autoevaluación',
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
@@ -1247,6 +1297,7 @@
                 icon: 'error',
                 title: 'Autoevaluación sin asignar',
                 text: 'Actualmente su grupo empresa no tiene autoevaluaciones asignadas',
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
@@ -1260,6 +1311,7 @@
                 icon: 'error',
                 title: 'Autoevaluación sin comenzar',
                 text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' + fechaComienzo,
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
@@ -1272,6 +1324,7 @@
                 icon: 'error',
                 title: 'Fecha de autoevaluación finalizada',
                 text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
+                confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
