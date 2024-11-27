@@ -12,7 +12,6 @@ class ControllerAutoevaluacion extends Controller
         $idProyecto = self::getIdProyecto($idEstudiante);
         $parametrosDeEvaluacion = self::getParametrosDeEvaluacion($idProyecto);
         return view("tipos_evaluaciones/autoevaluacion", ['parametrosDeEvaluacion' => $parametrosDeEvaluacion, 'idProyecto' => $idProyecto, 'idEstudiante' => $idEstudiante]);
-        //comentario de prueba
     }
     public function registroNota(Request $request)
     {

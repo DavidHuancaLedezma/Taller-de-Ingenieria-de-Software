@@ -259,49 +259,7 @@
             padding: 10px 20px;
             cursor: pointer;
             color: white ; 
-            background-color: #367FA9;    
-        }
-
-        @media (max-width: 380px) {
-           
-            body {
-                all: unset;
-                margin: 5px ; 
-                height: 100vh ; 
-                display: flex;
-                flex-direction: column ; 
-                
-                align-items: center;
-                background-color: #D2D6DE ;
-                gap : 10px; 
-            }
-            .back-button{
-                all: unset;
-                border-radius: 25px;
-                border: none;
-                padding: 10px 20px;
-                width: 150px;
-                cursor: pointer;
-                color: white ; 
-                background-color: #367FA9; 
-            }
-
-            
-            .margen{
-                width: 370px ;
-                margin-left: 10px; 
-
-            }
-            
-            .combo_GEs{
-                width: 360px ;
-            }
-
-            .Mensaje-de-semana-registrada{
-            position: absolute; 
-            z-index: 100;
-            margin-left: 144px ; 
-            }
+            background-color: #367FA9    
         }
     </style>
 </head>
@@ -569,7 +527,6 @@
                             title: "Exito",
                             text: mensaje,
                             icon: "success",
-                            confirmButtonText: 'Aceptar',
                             allowOutsideClick: false
                         }).then((result) => {
                             if (result.isConfirmed) {

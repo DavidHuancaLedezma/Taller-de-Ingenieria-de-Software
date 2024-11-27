@@ -116,7 +116,8 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 500;
         }
-        
+
+
         .ventana-emergente-calificacion .container {
             /*background-color: white;
             padding: 10px;
@@ -280,98 +281,6 @@
             padding: 10px ;
             border-radius: 10px ;
         }
-        @media (max-width: 380px) {
-            body {
-                all: unset;
-                margin: 5px ; 
-                height: 100vh ; 
-                display: flex;
-                flex-direction: column ; 
-                padding: 5px ;  
-                align-items: center;
-                background-color: #D2D6DE ;
-                gap : 10px; 
-           }
-
-           .back_button {
-                all: unset; 
-                border-radius: 25px;
-                padding: 10px 20px;
-                border: none;
-                cursor: pointer;
-                color: white ; 
-                background-color: #367FA9;      
-            }
-
-            .container{
-                width: 360px;
-            }
-
-            .ventana-emergente-calificacion .container{
-                width: 100%;
-            }
-            
-            .likert {
-                display: table;
-                table-layout: fixed; /* Asegura que las columnas tengan un ancho uniforme */
-                width: 100%;
-                overflow-x: hidden; /* Previene el desbordamiento horizontal */
-                border-collapse: collapse; /* Elimina espacios entre bordes */
-            }
-
-            .likert tr  {
-                width: 100%;
-                max-width: 100%;
-                word-wrap: break-word; /* Ajusta texto largo */
-                text-align: center; /* Centra contenido en las celdas */
-            }
-
-            .likert td{
-                width: 100%;
-                max-width: 100%;
-                word-wrap: break-word;
-            }
-
-            .likert .radio-group {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap; /* Permite que los hijos se acomoden en varias líneas si es necesario */
-                gap: 5px; /* Espaciado entre radio botones */
-                width: 100%;
-            }
-
-            .likert .radio-group input {
-                margin: 0;
-                width: 15px;
-                height: 15px;
-            }
-
-            .likert .radio-group label {
-                font-size: 12px;
-                display: block;
-                margin-top: 3px;
-                text-align: center;
-            }
-            tr{
-                font-size: 11px;
-            }
-            
-            .info-button {
-                width: 15px;
-                height: 15px;
-                margin: 0;
-                padding: 0;
-            }
-
-            .columnas h3{
-                font-size: 15px;
-            }
-
-            .criterios {
-                margin-left: 15px;
-                margin-right: 70px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -427,7 +336,7 @@
     </div>
 
     <div class="ventana-emergente-calificacion">
-        <div class="container">
+            <div class="container">
             <h1 id="titulo-evaluacion-grupo-empresa">Evaluando a EliteSoft</h1>
             <div class="columnas">
                 <h3 class="criterios">Criterios</h3>
@@ -603,7 +512,6 @@
                         icon: 'error',
                         title: 'Evaluacion cruzada sin asignar ',
                         text: 'La grupo empresa no tiene una evaluacion designada',
-                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     });
                 }
@@ -761,7 +669,6 @@
                         icon: 'success',
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
-                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.isConfirmed) {

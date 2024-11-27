@@ -283,27 +283,6 @@
             background-color: darkred; /* Cambia de color al pasar el ratón */
         }
         @media (max-width: 900px) {
-            .combo_GEs {
-        width: 80%;  /* Asegura que el div ocupe todo el ancho disponible */
-        max-width: 250px;  /* Limita el ancho máximo para hacerlo más pequeño */
-        flex-direction: column;
-        
-    }
-
-.combo_GEs label,
-.combo_GEs select {
-    width: 100%;  /* Asegura que el label y el select ocupen el ancho completo dentro del div */
-    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
-}
-
-.combo_GEs select {
-    margin-top: 10px; /* Añade espacio entre el label y el select */
-    padding: 8px;  /* Espacio dentro del select para que no esté tan pegado a los bordes */
-}
-.botonHome {
-    margin-bottom: 50px;  /* Espacio debajo del botón */
-    margin-top: 20px;
-}
             .seccion_dos {
                 flex-direction: column; /* Cambia la disposición de los elementos a columna */
             }
@@ -312,27 +291,6 @@
                 padding: 10px;
                 width: 100%; /* Ambos bloques ocupan el 100% del ancho */
             }
-            .bloque_uno{
-                width: 100%;
-            }
-            .bloque_dos {
-            overflow-x: auto; /* Permitir desplazamiento horizontal en pantallas pequeñas */
-        }
-        @media screen and (max-width: 576px){
-            .main-content {
-                flex-direction: column; /* Los elementos se apilan en una columna en pantallas pequeñas */
-                gap: 10px; /* Menor espacio entre elementos cuando estén en columna */
-            }
-
-            .attendance,
-            .description {
-                width: 100%; /* Asegura que cada bloque ocupe el 100% de ancho */
-            }
-            button.save {
-            width: 40%;       
-            }
-        }
-           
         }
        /*estilos del combobox*/
        .combo_GEs {
@@ -405,14 +363,11 @@
             color: white ; 
             background-color: #367FA9    
         }
-        
     </style>
 </head>
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
-    <div class="botonHome">
     <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
-    </div>
     <div class="combo_GEs">
             <label for="opciones">Elige una Grupo Empresa:</label>
             <select id="opciones" name="opciones">
@@ -435,7 +390,6 @@
                 icon: 'success',
                 title: 'Éxito',
                 text: "{{ session('success') }}",
-                confirmButtonText: "Aceptar"
             });
         </script>
         @endif
@@ -445,7 +399,6 @@
             icon: "error",
             title: "Oops...",
             text: "{{ session('error') }}",
-            confirmButtonText: "Aceptar"
             });
         </script>
         @endif
@@ -548,7 +501,7 @@
                 <h2 class="Mensaje-de-semana-registrada" style="color: red">La evaluación final de hito ya fue registrada</h2>
             @else
                 <div class="submit-section">
-                    <button type="submit" class="save">Guardar </button>
+                    <button type="submit" class="save">Guardar <i class="bi bi-rocket-takeoff-fill"></i></button>
                 </div>
             @endif
 
