@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Evaluacion de pares</title>
     <style>
@@ -92,6 +93,20 @@
         /* Centrar los números de calificación */
         table.likert .calificacion {
             text-align: center;
+        }
+
+        .button_home {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 20px;
+            /* Fijar el botón al lado izquierdo */
+            top: 20px;
+            /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white;
+            background-color: #367FA9
         }
     </style>
 
@@ -281,6 +296,9 @@
     <input id="id-evaluacion" type="hidden" value="">
     <input id="id-evaluador" type="hidden" value="{{ $idEvaluador ?? '' }}">
     <input id="id-estudiante-a-evaluar" type="hidden" value="">
+
+    <button class="button_home" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+
     <div class="container">
         <h1>Registro de evaluación de pares</h1>
         <table class="likert">
@@ -682,6 +700,20 @@
             $('.ventana-emergente-calificacion').css('display', 'none');
             $('.ventana-emergente-calificacion input[type="radio"]').prop('checked', false);
             errorMessage.style.display = 'none';
+        });
+
+        $("#boton-home").on("click", function() {
+            // Obtén el ID del evaluador desde el input hidden
+            let idEvaluador = $('#id-evaluador').val();
+
+            // Valida si el ID está definido
+            if (!idEvaluador) {
+                alert("El ID del evaluador no está definido. Verifica los datos.");
+                return;
+            }
+
+            // Redirige al home del estudiante evaluador
+            window.location.href = `/estudiante_home/${idEvaluador}`;
         });
     </script>
     <script>

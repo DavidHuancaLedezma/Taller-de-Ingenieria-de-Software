@@ -50,6 +50,7 @@
             color: #367FA9;
         }
         .btn-register {
+            margin: 3px;
             background-color: white;
             color: #367FA9;
         }

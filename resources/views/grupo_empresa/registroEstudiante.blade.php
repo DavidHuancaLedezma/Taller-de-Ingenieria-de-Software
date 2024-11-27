@@ -9,30 +9,34 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        body{
+           body {
             background-color: #D2D6DE;
+            padding-top: 80px;
+            padding-bottom: 60px;
         }
-        .btn-register {
-            background-color: white;
-            color: #367FA9;
-        }
+
         .toggle-password {
             cursor: pointer;
         }
+
         .form-check-label {
             margin-left: 0.5rem;
         }
+
         .custom-container {
-            width: 60%;
+            width: 90%;
+            max-width: 1000px;
             background-color: white;
-            padding: 50px;
+            padding: 30px;
             border-radius: 10px;
-            margin: 60px;
+            margin: 20px auto;
         }
+
         .form-control {
             border-radius: 8px;
             border-color: #c0c0c0;
         }
+
         .btn-custom {
             background-color: #4d7ca7;
             border-color: #4d7ca7;
@@ -40,42 +44,41 @@
             padding: 10px 30px;
             font-weight: bold;
             color: white;
+            width: auto;
+            min-width: 200px;
         }
+
         .btn-custom:hover {
             background-color: #3a5f82;
             border-color: #3a5f82;
         }
+
         .text-danger {
             font-size: 0.875rem;
             margin-top: 5px;
             margin-left: 2px;
             margin-bottom: 1px;
-             /* Reservar espacio */
-            /* Asegurar que siempre esté en bloque */
+            min-height: 20px;
         }
 
-        .btn-login {
-            border: 1px solid white;
-        }
-        
-
-        .btn-login:hover{
-            background-color: white;
-            color: #296689;
-        }
-
-        
-        /* Navbar */
         .navbar {
             background-color: #367FA9;
-            padding: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 15px;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .navbar-brand {
@@ -83,22 +86,38 @@
             font-size: 1.5rem;
             color: white;
             text-decoration: none;
+            margin-right: 20px;
         }
 
-        .nav-item {
-            display: inline-block;
-            margin-left: 20px;
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .nav-link {
             color: white;
             font-weight: 500;
             text-decoration: none;
-            padding: 5px 20px;
+            padding: 8px 20px;
             border-radius: 25px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            white-space: nowrap;
         }
-        /* Footer */
+
+        .btn-login {
+            border: 1px solid white;
+        }
+
+        .btn-register {
+            background-color: white;
+            color: #367FA9;
+        }
+
+        .btn-login:hover {
+            background-color: white;
+            color: #296689;
+        }
+
         footer {
             background-color: #367FA9;
             color: white;
@@ -111,7 +130,6 @@
 
         footer a {
             color: white;
-            font-weight: bold;
             text-decoration: none;
         }
 
@@ -119,33 +137,76 @@
             color: #cfcfcf;
         }
 
-        /* General Animation */
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 10px;
+            .custom-container {
+                width: 95%;
+                padding: 20px;
             }
 
-            .nav-item {
-                margin-left: 0;
-                margin-top: 10px;
+            .navbar-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                
+            }
+
+            .navbar-brand {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .row {
+                margin: 0;
+            }
+
+            .col-md-6 {
+                padding: 0 10px;
+            }
+
+            .btn-custom {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            body {
+                padding-top: 120px;
+            }
+            .btn-register{
+                margin-top: 3px;
             }
         }
 
         @media (max-width: 480px) {
+            .custom-container {
+                padding: 15px;
+            }
+
+            .navbar {
+                padding: 10px;
+            }
+
             .navbar-brand {
                 font-size: 1.2rem;
+            }
+
+            .nav-link {
+                padding: 6px 15px;
+                font-size: 0.9rem;
+            }
+
+            .form-check-label {
+                font-size: 0.9rem;
+            }
+
+            h4 {
+                font-size: 1.2rem;
+            }
+            .btn-register{
+                margin-top: 3px;
             }
         }
 
@@ -154,14 +215,15 @@
 <body>
 <!-- Navbar -->
 <nav class="navbar">
-<a class="navbar-brand no-underline" href="{{ route('inicio') }}">
-            <div class="navbar-brand">GESTIÓN DE PROYECTOS</div>
-        </a>  
-    <div>
-        <a class="nav-link btn-login nav-item" href="{{route('login')}}">Iniciar Sesión</a>
-        <a class="nav-link btn-register nav-item" href="{{route('registro_docente.create')}}">Registrar Docente</a>
+    <div class="navbar-content">
+        <a class="navbar-brand" href="{{ route('inicio') }}">GESTIÓN DE PROYECTOS</a>
+        <div class="nav-buttons">
+            <a class="nav-link btn-login" href="{{route('login')}}">Iniciar Sesión</a>
+            <a class="nav-link btn-register" href="{{route('registro_docente.create')}}">Registrar Docente</a>
+        </div>
     </div>
 </nav>
+
 <div class="container d-flex justify-content-center mt-5">
     <div class="custom-container">
         <h4 class="text-center mb-4">Registro Estudiante</h4>
