@@ -140,6 +140,62 @@
             color: white ; 
             background-color: #367FA9    
         }
+        /* Media queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .header h1, .header h2 {
+        font-size: 1.5em;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .back_button {
+        left: 5px;
+        top: 5px;
+        padding: 5px 15px;
+    }
+
+    .date-group {
+        flex-direction: column;
+    }
+
+    .tab-button {
+        width: 100%;
+    }
+    input[type="date"] {
+            color:rgba(80,80,80);
+            width: calc(45% - 8px); /* Ajusta el ancho de los campos de fecha */
+            margin-right: 2%;
+        }
+        input[type="text"] {
+            color:rgba(80,80,80);
+            width: calc(55% - 8px); /* Ajusta el ancho de los campos de fecha */
+            margin-right: 2%;
+        }
+}
+
+/* Media queries para pantallas muy pequeñas (móviles) */
+@media (max-width: 480px) {
+    .header h1, .header h2 {
+        font-size: 1.2em;
+    }
+
+    .table th, .table td {
+        font-size: 10px;
+    }
+
+    .back_button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
 
     </style>
 </head>
@@ -158,6 +214,7 @@
                 icon: 'error',
                 title: 'Error',
                 text: '{{ $errors->first() }}',
+                confirmButtonText: "Aceptar"
             });
         </script>
     @endif
@@ -168,6 +225,7 @@
                 icon: 'success',
                 title: 'Éxito',
                 text: "{{ session('success') }}",
+                confirmButtonText: "Aceptar"
             });
         </script>
     @endif
@@ -217,7 +275,7 @@
                 <input type="text" name="porcentaje_cobro" id="porcentaje_cobro" placeholder="Porcentaje de cobro %" value="{{ old('porcentaje_cobro') }}" required>
             </div>
         </div>   
-        <button type="submit" id="addHitoBtn" class="tab-button">Añadir Hito <i class="bi bi-rocket-takeoff-fill"></i> </button>
+        <button type="submit" id="addHitoBtn" class="tab-button">Añadir Hito </button>
     </form>
 </div>
 
@@ -276,6 +334,7 @@
                 icon: 'error',
                 title: 'Error',
                 text: 'El campo porcentaje de cobro debe ser un número entre 0 y 100.',
+                confirmButtonText: "Aceptar"
             });
         } else if (fechaInicio <= ultimoHitoFechaFin) {
             e.preventDefault();
@@ -283,6 +342,7 @@
                 icon: 'error',
                 title: 'Error',
                 text: 'La fecha de inicio debe ser después del ' + ultimoHitoFechaFin.toLocaleDateString(),
+                confirmButtonText: "Aceptar"
             });
         } else if (fechaFin < fechaInicio || fechaFin > fechaFinProyecto) {
             e.preventDefault();
@@ -290,6 +350,7 @@
                 icon: 'error',
                 title: 'Error',
                 text: 'La fecha de fin debe estar entre la fecha de inicio y la fecha de fin del proyecto (' + fechaFinProyecto.toLocaleDateString() + ').',
+                confirmButtonText: "Aceptar"
             });
         }
     });
@@ -306,6 +367,7 @@
                         icon: 'error',
                         title: 'Error',
                         text: 'No se encontró el ID del estudiante.',
+                        confirmButtonText: "Aceptar"
                     });
                     return;
                 }
