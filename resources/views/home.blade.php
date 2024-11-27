@@ -614,11 +614,8 @@
             align-items: center;
         }
 
-
-        .switch_planificacion{
-            display: flex ; 
-           
-            
+        .switch_planificacion {
+            display: flex;
 
         }
 
@@ -811,121 +808,24 @@
             background-color: #789bc0;
         }
 
-
-        /* Estilo responsivo para pantallas con un ancho máximo de 900px */
-        @media (max-width: 1300px) {
-            .switch_planificacion {
-                display: grid; /* Cambiar de flex a grid */
-                grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-                gap: 20px; /* Espaciado entre filas y columnas */
-            }
-
-            .switch_planificacion > div {
-                margin: 0 auto; /* Centrar las tarjetas si sobra espacio */
-            }
-        }
-
-                /* Ajustes para pantallas pequeñas */
-        @media (max-width: 768px) {
-            .header-planificacion {
-                padding: 10px;
-                text-align: center;
-            }
-
-            .switch_planificacion {
-                flex-direction: column; /* Cambiar a diseño en columna */
-                align-items: center;
-            }
-
-            .switch_hitos, .switch_objetivos, .switch_actividades {
-                max-width: 100%; /* Ajustar ancho al 100% de la pantalla */
-                padding: 10px; /* Reducir espacio interno */
-                text-align: center; /* Asegurar centrado */
-            }
-
-            .switch_hitos .card, 
-            .switch_objetivos .card, 
-            .switch_actividades .card {
-                width: 90%; /* Reducir el ancho de las tarjetas */
-                margin: 10px auto; /* Espaciado entre tarjetas */
-            }
-
-            .card-image-planificacion {
-                height: auto; /* Permitir que la altura se ajuste automáticamente */
-                max-width: 100%; /* Evitar desbordamiento en imágenes */
-            }
-
-            h3 {
-                font-size: 16px; /* Reducir tamaño de los encabezados */
-            }
-
-            .description {
-                font-size: 12px; /* Reducir tamaño de texto descriptivo */
-            }
-
-            button {
-                width: 100%; /* Botones al ancho completo */
-                padding: 12px; /* Más espacio interno */
-                font-size: 14px; /* Ajuste del tamaño del texto */
-            }
-        }
-
-        /* Ajustes para pantallas aún más pequeñas (móviles muy pequeños) */
-        @media (max-width: 580px) {
-            .switch_planificacion {
-                display: grid; /* Cambiar de flex a grid */
-                grid-template-columns: repeat(1, 1fr); /* Dos columnas de igual ancho */
-                gap: 20px; /* Espaciado entre filas y columnas */
-            }
-            .header-planificacion h2 {
-                font-size: 18px; /* Reducir el tamaño de texto del encabezado */
-            }
-
-            button {
-                font-size: 12px; /* Texto más pequeño en botones */
-                padding: 10px; /* Reducir espacio interno */
-            }
-
-            .description {
-                font-size: 10px; /* Texto más compacto */
-            }
-        }
-
-
-        .cont_home {
-            max-width: 650px;
-
         .switch_grupo_empresa {
             max-width: 500px;
-
             margin: auto;
             text-align: center;
             padding: 20px;
         }
 
-
-        .cont_home h2 {
-
         .switch_grupo_empresa h1 {
-
             margin-bottom: 20px;
             font-size: 24px;
         }
 
-
-        .cont_home .evaluation-card {
-
         .switch_grupo_empresa .grupo-empresa-card {
-
             display: flex;
             justify-content: center;
         }
 
-
-        .cont_home .card {
-
         .switch_grupo_empresa .card {
-
             background-color: #fff;
             border-radius: 8px;
             padding: 20px;
@@ -933,15 +833,6 @@
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: left;
         }
-
-
-        .cont_home .card-image {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        .cont_home h3 {
 
         .switch_grupo_empresa .card-image {
             max-width: 100%;
@@ -952,35 +843,22 @@
         }
 
         .switch_grupo_empresa h3 {
-
             font-size: 18px;
             color: #333;
             margin-top: 10px;
         }
 
-
-        .cont_home .description {
-
         .switch_grupo_empresa .description {
-
             font-size: 14px;
             color: #666;
             margin: 10px 0;
         }
-
-
-        .cont_home .evaluation-form {
-            margin-top: 10px;
-        }
-
-        .cont_home #btn-switch-visualizar-planificacion{
 
         .switch_grupo_empresa .grupo-empresa-form {
             margin-top: 10px;
         }
 
         .switch_grupo_empresa #btn-grupo-empresa {
-
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -990,16 +868,9 @@
             font-size: 14px;
         }
 
-
-        .cont_home #btn-switch-visualizar-planificacion:hover {
-            background-color: #789bc0;
-        }
-
-
         .switch_grupo_empresa #btn-grupo-empresa:hover {
             background-color: #789bc0;
         }
-
     </style>
 </head>
 
@@ -1076,18 +947,6 @@
         </div>
     </div>
     <main id="contenido">
-
-            <div class="cont_home">
-                <h2>ESTUDIANTE</h2>
-                    <div class="evaluation-card">
-                        <div class="card">
-                            <img src="https://img.freepik.com/vector-premium/servicio-o-plataforma-linea-clase-escuela-retorica-capacitacion-estudiantes_277904-20638.jpg" alt="Autoevaluacion" class="card-image">
-                            <h3>Descripcion</h3>
-                            <p class="description">Se permite al estudiante avanzar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
-                    </div>
-                </div>
-            </div>
-
         <div class="container_home">
             <h2>Evaluaciones</h2>
             <div class="evaluation-card">
@@ -1113,18 +972,12 @@
             </div>
         </div>
 
-
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-
-    <script> 
-
     <script>
         console.log(document.getElementById("id-estudiante-home").value);
-
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
         const spans = document.querySelectorAll("span");
@@ -1241,12 +1094,6 @@
                     `;
                     break;
                 case 'autoevaluacion':
-                console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
-                if(idGrupoEmpresa != 0){
-                    console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
-
-
-
                     let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
                     console.log(autoevaluacion);
                     if (autoevaluacion == 0) {
@@ -1283,25 +1130,7 @@
 
                     }
 
-                }else{
-                    html = `
-                            <div class="switch_autoevaluacion">
-                                <h2>Evaluaciones</h2>
-                                <div class="evaluation-card">
-                                    <div class="card">
-                                        <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                        <h3>Autoevaluacion</h3>
-                                        <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                                        
-                                            <button id="btn-autoevaluacion" onclick="mensajeDeNoTieneGE()">AUTOEVALUACIÓN</button>
-                                        
-                                </div>
-                                </div>
-                            </div> `;
-                }
-                        break;    
-
-
+                    break;
                     break;
                 case 'Evaluacion_pares':
                     html = `
@@ -1322,8 +1151,6 @@
                 `;
                     break;
                 case 'evaluacion_cruzada':
-            if(idGrupoEmpresa != 0){
-                console.log("ingresando al if con ----->" + idGrupoEmpresa);        
                     html = `
                 <div class="switch_evaluacion_cruzada">
                     <h2>Evaluaciones</h2>
@@ -1337,30 +1164,7 @@
                             </form>
                        </div>
                     </div>
-
-                </div> `
-            }else{
-                console.log("ingresando al else con ----->" + idGrupoEmpresa);  
-                html = `
-                <div class="switch_evaluacion_cruzada">
-                    <h2>Evaluaciones</h2>
-                    <div class="evaluation-card">
-                        <div class="card">
-                            <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
-                            <h3>Evaluación Cruzada</h3>
-                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                            
-                                <button id="btn-evaluacion-cruzada" onclick="mensajeDeNoTieneGE()" type="submit">EVALUACIÓN CRUZADA</button>
-                            
-                       </div>
-                    </div>
-                </div> `
-            }
-                
-                ; 
-
                 </div> `;
-
                     break;
                 case 'registro_grupo_empresa':
                     html = `
@@ -1390,60 +1194,15 @@
             enlaceActivo.classList.add('activo');
         }
 
-        function mensajeDeNoTieneGE(){
-
-
         function mensajeAutoevaluacionYaRegistrada() {
-
             console.log("Ya funciona el mensaje de restriccion");
             Swal.fire({
                 icon: 'error',
-                title: 'No pertence a una GrupoEmpresa',
-                text: 'Usted no pertene a un GrupoEmpresa para que sea considerado en evaluaciones debera unirse a una GE',
-                confirmButtonText: 'Aceptar',
+                title: 'Autoevaluación ya realizada',
+                text: 'Usted ya registro su autoevaluación',
                 allowOutsideClick: false,
             });
         }
-
-
-        function mensajeAutoevaluacionSinParametros(){
-            console.log("Ya funciona el mensaje de restriccion");
-            Swal.fire({
-                icon: 'error',
-                title: 'Autoevaluación sin asignar',
-                text: 'Actualmente su grupo empresa no tiene autoevaluaciones asignadas',
-                confirmButtonText: 'Aceptar',
-                allowOutsideClick: false,
-            });
-        }
-
-        function mensajeAutoevaluacionSinComenzar(fechaActual, fechaComienzo){
-            console.log("AQUI -----------------------");
-            console.log(fechaActual);
-            console.log(fechaComienzo);
-            console.log("fIN AQUI-----------------------");
-            Swal.fire({
-                icon: 'error',
-                title: 'Autoevaluación sin comenzar',
-                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' + fechaComienzo,
-                confirmButtonText: 'Aceptar',
-                allowOutsideClick: false,
-            });
-        }
-        
-
-        function mensajeAutoevaluacionTerminada(fechaActual, fechaFin){
-            console.log(fechaActual);
-            console.log(fechaFin);
-            Swal.fire({
-                icon: 'error',
-                title: 'Fecha de autoevaluación finalizada',
-                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
-                confirmButtonText: 'Aceptar',
-                allowOutsideClick: false,
-            });
-        }
-
     </script>
 </body>
 

@@ -22,7 +22,7 @@ class PlanillaPlanificacionController extends Controller
             FROM hito h
             WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
         
-      /*  $hitos = DB::select("
+        /*$hitos = DB::select("
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
             WHERE h.id_proyecto = ?", [$id_proyecto]);*/
@@ -153,8 +153,8 @@ class PlanillaPlanificacionController extends Controller
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
             WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
-        
-        /*$hitos = DB::select("
+        /*
+        $hitos = DB::select("
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
             FROM hito h
             WHERE h.id_proyecto = ?", [$id_proyecto]);*/

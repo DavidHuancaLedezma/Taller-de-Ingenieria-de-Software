@@ -7,7 +7,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
         * {
@@ -40,10 +39,12 @@
 
         .container_two {
             width: 80%;
-            max-width: 100%; /* Asegura que el contenedor no crezca más allá de su padre */
-            overflow-x: auto; /* Permite desplazamiento horizontal si el contenido es demasiado grande */
+           /* background-image: url('https://i.pinimg.com/564x/84/4c/8e/844c8e710a5b94b7ef68294b20028051.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;*/
+            border-radius: 8px;
         }
-
 
         .header h3 {
             text-align: center;
@@ -102,22 +103,18 @@
             background-color: #222D32;
             color: white;
         }
-        
+
         .table {
             width: 100%;
             border-collapse: collapse;
-            /*margin-top: 20px;*/
-            table-layout: auto; 
+            margin-top: 20px;
         }
 
         .table th, .table td {
             border: 1px solid #ddd;
             padding: 12px;
            
-            
         }
-      
-
         .table td{
             text-align: left;   
         }
@@ -241,94 +238,7 @@
             color: white ; 
             background-color: #367FA9    
         }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .container_uno, .container_two {
-                width: 100%;
-                margin-bottom: 10px; /* Espaciado entre los contenedores */
-            }
-            .table th, .table td {
-                font-size: 12px;
-                padding: 8px;
-            }
-            .table {
-                font-size: 14px; /* Reduce el tamaño de fuente para dispositivos pequeños */
-                overflow-x: auto; 
-            }
 
-        }
-        @media screen and (max-width: 576px) {
-            .container_uno select,
-            .form-group textarea,
-            .form-group select {
-                width: 100%;
-                font-size: 14px;
-            }
-            .container_two {
-                order: 2;
-                width: 100%;
-            }
-
-            .back_button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .popup-form {
-                padding: 10px;
-            }
-
-            .contenedor-mini-formulario {
-                width: 100%;
-                padding: 15px;
-            }
-
-            .footer-mini-formulario {
-                flex-direction: column;
-                gap: 10px;
-            }
-            table {
-                width: 100%;
-            }
-
-            .table-container {
-                overflow-x: auto; /* Permitir desplazamiento horizontal en pantallas pequeñas */
-            }
-        
-            .back_button {
-                left: 20px; /* Reduce la distancia desde el borde izquierdo */
-                top: 15px; /* Ajusta la distancia desde la parte superior */
-                padding: 8px 10px; /* Reduce el tamaño del botón */
-                font-size: 0.7rem; /* Disminuye el tamaño del texto */
-                width: 130px;
-            }
-            
-
-            .table tr {
-                display: block; /* Convierte las filas en bloques */
-                margin-bottom: 10px; /* Añade separación entre filas */
-            }
-
-            .table td {
-                display: block; /* Cada celda es un bloque */
-                
-                font-size: 12px; /* Reduce el tamaño de texto */
-            }
-
-            .table td::before {
-                content: attr(data-label); /* Usa el atributo personalizado data-label */
-                float: left; /* Mueve el contenido del encabezado al inicio */
-                font-weight: bold;
-                text-transform: uppercase;
-            }
-            .table th, .table td {
-                font-size: 12px;
-                padding: 8px;
-            }
-        }
     </style>
 
 </head>
@@ -522,8 +432,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: response.error,
-                                    confirmButtonText: "Aceptar"
+                                    text: response.error
                                 });
                             } else {
                                 $('.container_two').html(`
@@ -533,22 +442,20 @@
                                     <div class="tabs">
                                         <button id="add-criteria" class="tab-button">Criterios de Aceptación +</button>
                                     </div>
-                                   
-                                        <table class="table">
-                                            <thead>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Descripción de criterio de aceptación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="activityTable">
+                                            ${response.criterios_aceptacion.map(criterio => `
                                                 <tr>
-                                                    <th>Descripción de criterio de aceptación</th>
+                                                    <td>${criterio.descripcion_ca}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody id="activityTable">
-                                                ${response.criterios_aceptacion.map(criterio => `
-                                                    <tr>
-                                                        <td>${criterio.descripcion_ca}</td>
-                                                    </tr>
-                                                `).join('')}
-                                            </tbody>
-                                        </table>
-                                  
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
                                 `);
                             }
                         },
@@ -556,8 +463,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Error al obtener los datos del entregable.',
-                                confirmButtonText: "Aceptar"
+                                text: 'Error al obtener los datos del entregable.'
                             });
                         }
                     });
@@ -569,8 +475,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: xhr.responseJSON.error,
-                    confirmButtonText: "Aceptar"
+                    text: xhr.responseJSON.error
                 });
             }
         });

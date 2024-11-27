@@ -40,7 +40,7 @@
             position: relative;
             z-index: 1;
            text-align: center;
-            top: 50%;
+            top: 40%;
             transform: translateY(-50%);
             color: black;
             font-size: 24px;
@@ -52,7 +52,7 @@
             border-radius: 8px;
             padding: 10%;
             display: inline-block;
-            max-width: 80%;  /*Ajusta el máximo ancho del contenedor */
+            max-width: 80%; /* Ajusta el máximo ancho del contenedor */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
             box-sizing: border-box; /* Asegura que el padding no se agregue al tamaño total del contenedor */
             text-align: left; /* Alinea el contenido a la izquierda */
@@ -98,14 +98,8 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px; 
-            gap: 10px;
     
         }
-        /* Ajuste para inputs de fecha */
-.date-group input[type="date"] {
-    flex: 1; /* Hace que los inputs sean del mismo ancho */
-    max-width: calc(95% - 7px); /* Máximo ancho proporcional a la pantalla */
-}
         select {
             width: 400px;
             height: 40px;
@@ -165,29 +159,20 @@
         .botones button{
             cursor: pointer;
             /*background-color: transparent;*/
-           /* border: 2px solid #118CD9;*/
+            border: 2px solid #118CD9;
             width: fit-content;
             display: block;
             margin: 20px auto;
             padding: 10px 22px;
             font-size: 16px;
+            color: black;
             position: relative;
             z-index: 10;
             border-radius: 8px; /* Bordes ligeramente curvados */
             transition: background-color 0.5s, color 0.5s, border-color 0.5s;
         
         }
-        .btn-aceptar{
-            color: white;
-            background-color: #118CD9;
-            border: 2px solid #118CD9;
-        }
-        .btn-cancelar{
-            color: white;
-            background-color: darkred;
-            border: 2px solid darkred;
-        }
-   /*
+   
         .botones button:hover .overplay{
             width: 100%;
           
@@ -198,11 +183,12 @@
             
         }
 
-         .btn-cancelar:hover {
+        /* Cambiar el color del texto y el fondo al pasar el mouse sobre el botón de Cancelar */
+        .btn-cancelar:hover {
             background-color: darkred;
             color: white;
             border-color: darkred;
-        }*/
+        }
         .error-message {
             color: red;
             font-size: 0.9em;
@@ -213,77 +199,6 @@
             color: #4682b4;
            
         }
-        /* Estilos responsive */
-@media (max-width: 1024px) {
-    .container {
-        width: 80%; /* Reduce el tamaño para laptops más pequeñas */
-        padding: 4%;
-    }
-}
-
-@media (max-width: 768px) {
-    .container {
-        width: 85%; /* Mayor adaptación para tablets y móviles */
-        padding: 3%;
-    }
-    .content {
-        top: 50%; /* Ajusta la posición en móviles */
-        font-size: 18px;
-    }
-    .date-group input[type="date"] {
-        max-width: 100%; /* El input ocupa el 100% del ancho del contenedor */
-        margin-bottom: 10px; /* Espacio entre los inputs */
-    }
-    .botones {
-        flex-direction: flex; /* Apila los botones en una columna */
-        gap: 15px; /* Espaciado adicional entre botones */
-        align-items: center; /* Centra los botones horizontalmente */
-    }
-    select {
-        max-width: 100%; /* El input ocupa el 100% del ancho del contenedor */
-        margin-bottom: 10px; /* Espacio entre los inputs */
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        width: 100%; /* Mayor adaptación para tablets y móviles */
-        
-        padding: 3%;
-    }
-    .content {
-        top: 50%; /* Ajusta la posición en móviles */
-        font-size: 18px;
-        height: 90%;
-    }
-    .header h1 {
-        font-size: 20px;
-    }
-    .botones {
-        flex-direction: flex;
-        gap: 15px;
-        padding-top:150px;
-    }
-    .botones button {
-        width: 100%; /* Botones a pantalla completa */
-    }
-    input[type="text"] {
-        max-width: 100%; /* El input ocupa el 100% del ancho del contenedor */
-        margin-bottom: 5px; /* Espacio entre los inputs */
-    }
-    select {
-        max-width: 100%; /* El input ocupa el 100% del ancho del contenedor */
-        margin-bottom: 10px; /* Espacio entre los inputs */
-    }
-    .date-group input[type="date"] {
-        max-width: 80%; /* El input ocupa el 100% del ancho del contenedor */
-        margin-bottom: 10px; /* Espacio entre los inputs */
-    
-    }
-    .date-group{
-        padding-left: 15%;
-    }
-}
     </style>
 </head>
 <body>
@@ -301,7 +216,6 @@
                         icon: 'success',
                         title: 'Buen trabajo',
                         text: "{{ session('success') }}",
-                        confirmButtonText: "Aceptar"
                     });
                 </script>
             @endif
@@ -311,7 +225,6 @@
                         icon: "error",
                         title: "Oops...",
                         text: "{{ session('error') }}",
-                        confirmButtonText: "Aceptar"
                         });
                 </script>
             @endif
@@ -357,13 +270,13 @@
                 <!-- Botones de Aceptar y Cancelar -->
                 <div class="botones">
                     <button type="submit" class="btn-aceptar">
-                        Registrar 
+                        Registrar <i class="bi bi-rocket-takeoff-fill"></i>
                         <span class="overplay"></span>
                     </button>
 
                     <!-- Cambia route() por url() si sigues teniendo problemas con route() -->
                     <button type="button"  class="btn-cancelar" id="boton-home">
-                        Cancelar 
+                        Cancelar <i class="bi bi-x-circle-fill"></i>
                         <span class="overplay"></span>
                     </button>
                 </div>

@@ -118,44 +118,6 @@
             color: white ; 
             background-color: #367FA9    
         }
-        @media (max-width: 380px) {
-           
-           body {
-                all: unset;
-                margin: 5px ; 
-                height: 100vh ; 
-                display: flex;
-                flex-direction: column ; 
-                padding: 5px ;  
-                align-items: center;
-                background-color: #D2D6DE ;
-                gap : 4px; 
-           }
-
-           .back-button {
-                all: unset; 
-                border-radius: 25px;
-                padding: 10px 20px;
-                border: none;
-                cursor: pointer;
-                color: white ; 
-                background-color: #367FA9;   
-                 
-            }
-
-            .Contenedor_body{
-                gap: 7px ;  
-                padding: 0px ; 
-                width: 360px;
-            }
-            
-            .combo_GEs{
-                width: 360px ;
-            }
-            img{
-                width: 320px ;
-            }
-       }
     </style>
 </head>
 <body>

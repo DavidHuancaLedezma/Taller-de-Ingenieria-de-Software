@@ -44,16 +44,11 @@ class ControllerHome extends Controller
 
     private static function getIdGrupoEmpresaDelEstudiante($idEstudiante)
     {
-
         $consulta = DB::select("SELECT ge.id_grupo_empresa, ge.nombre_corto 
         FROM estudiante_grupoempresa ege, grupo_empresa ge
         WHERE ege.id_grupo_empresa = ge.id_grupo_empresa
         AND ege.id_usuario = ?", array($idEstudiante));
-        if (count($consulta) > 0) {
-            return $consulta[0]->id_grupo_empresa;
-        } else {
-            return 0;
-        }
+        return $consulta[0]->id_grupo_empresa;
     }
 
     private static function getIdProyecto($idEstudiante)
@@ -64,12 +59,7 @@ class ControllerHome extends Controller
         AND eg.id_grupo_empresa = ge.id_grupo_empresa
         AND ge.id_grupo_empresa = pr.id_grupo_empresa
         AND e.id_usuario = ?", array($idEstudiante));
-
-        if (count($idProyecto) > 0) {
-            return $idProyecto[0]->id_proyecto;
-        } else {
-            return 0;
-        }
+        return $idProyecto[0]->id_proyecto;
     }
 
 
@@ -142,4 +132,6 @@ class ControllerHome extends Controller
 
         return array(array($antesDeFecha, $fechaActual->format('Y-m-d'), $fechaIniEvaluacion->format('Y-m-d')), array($despuesDeFecha, $fechaActual->format('Y-m-d'), $fechaFinEvaluacion->format('Y-m-d')));
     }
+
 }
+
