@@ -35,6 +35,8 @@
             position : relative ;
         }
 
+
+        
         h1 {
             text-align: center;
             margin-bottom: 20px;
@@ -164,6 +166,97 @@
             color: white ; 
             background-color: #367FA9    
         }
+
+        @media (max-width: 380px) {
+           
+           body {
+                all: unset;
+                margin: 5px ; 
+                height: 100vh ; 
+                display: flex;
+                flex-direction: column ; 
+                padding: 5px ;  
+                align-items: center;
+                background-color: #D2D6DE ;
+                gap : 10px; 
+           }
+
+           .back_button {
+                all: unset; 
+                border-radius: 25px;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                color: white ; 
+                background-color: #367FA9;      
+            }
+
+            .container{
+                width: 360px;
+                display: flex; 
+                flex-direction: column ; 
+                overflow-x: hidden;
+            } 
+            
+           .likert {
+                display: table;
+                table-layout: fixed; /* Asegura que las columnas tengan un ancho uniforme */
+                width: 100%;
+                overflow-x: hidden; /* Previene el desbordamiento horizontal */
+                border-collapse: collapse; /* Elimina espacios entre bordes */
+            }
+
+            .likert tr  {
+                width: 100%;
+                max-width: 100%;
+                word-wrap: break-word; /* Ajusta texto largo */
+                text-align: center; /* Centra contenido en las celdas */
+            }
+
+            .likert td{
+                width: 100%;
+                max-width: 100%;
+                word-wrap: break-word;
+            }
+
+            .likert .radio-group {
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap; /* Permite que los hijos se acomoden en varias líneas si es necesario */
+                gap: 5px; /* Espaciado entre radio botones */
+                width: 100%;
+            }
+
+            .likert .radio-group input {
+                margin: 0;
+                width: 15px;
+                height: 15px;
+            }
+
+            .likert .radio-group label {
+                font-size: 12px;
+                display: block;
+                margin-top: 3px;
+                text-align: center;
+            }
+            tr{
+                font-size: 11px;
+            }
+            
+            .info-button {
+                width: 15px;
+                height: 15px;
+            }
+
+            .columnas h3{
+                font-size: 15px;
+            }
+
+            .criterios {
+                margin-left: 15px;
+                margin-right: 70px;
+            }
+       }
     </style>
 </head>
 <body>
@@ -392,6 +485,7 @@ function mostrarValor(valor) {
                         icon: 'success',
                         title: 'Evaluación completada',
                         text: 'Has calificado correctamente.',
+                        confirmButtonText: 'Aceptar',
                         allowOutsideClick: false,
                     }).then((result) => {
                         if (result.isConfirmed) {

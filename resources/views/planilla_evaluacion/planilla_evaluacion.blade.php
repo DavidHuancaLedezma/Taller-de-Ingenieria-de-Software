@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
    <style>
         * {
             margin: 0;
@@ -22,11 +25,12 @@
         }
 
         .container {
-            max-width: 70%;
+            width: 70%;
             margin: 0 auto;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: hidden;  /* Previene desbordamiento horizontal */
         }
 
         .header {
@@ -128,6 +132,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
+            overflow-x: auto; 
         }
 
         .evaluation-table th,
@@ -257,7 +262,10 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            justify-content: center;
+    align-items: center;
+    z-index: 9999;  /* Se asegura de estar encima de otros elementos */
+    overflow-y: auto; 
         }
 
         .criteria-modal-content {
@@ -266,11 +274,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            /*width: 400px;*/
-            width: 600px;
-            max-width: 90%;
-            border-radius: 8px;
+            /*width: 600px;*/
+            width: 50%;
+                       border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 80vh;  /* Limita la altura del modal */
+            overflow-y: auto;
         }
 
         .criteria-section {
@@ -433,11 +442,114 @@
         visibility: visible;
         opacity: 1;
     }
+    @media (max-width: 768px) {
+        .container{
+            width: 100%;
+        }
+    .evaluation-table {
+        font-size: 12px;  /* Reducir tamaño de texto para pantallas pequeñas */
+        overflow-x: auto; 
+    }
+
+    .criteria-modal-content {
+        width: 95%;  /* Hacer el modal más pequeño en pantallas pequeñas */
+        max-height: 90vh;  /* Asegura que el modal no ocupe toda la altura de la pantalla */
+    }
+
+    .form-container {
+        padding: 10px;  /* Reducir padding en la form-container */
+    }
+
+    .date-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;  /* Distribuir en dos columnas */
+        gap: 10px;  /* Espaciado entre las columnas */
+    }
+
+    .criteria-item {
+        font-size: 14px;  /* Reducir tamaño de texto para los elementos del modal */
+    }
+    .date-group input[type="date"] {
+        max-width: 80%; /* El input ocupa el 100% del ancho del contenedor */
+        margin-bottom: 10px; /* Espacio entre los inputs */
+    
+    }
+    .date-group{
+        padding-left: 15%;
+    }
+    .botonHome {
+    margin-bottom: 30px;  /* Espacio debajo del botón */
+    margin-top: 20px;
+   
+    }
+    .back-button {
+       margin-right: 20%;
+    }
+
+
+}
+@media (max-width: 480px) {
+    .evaluation-table th, .evaluation-table td {
+        font-size: 10px;  /* Asegurarse de que el texto sea legible en dispositivos pequeños */
+    }
+
+    .criteria-modal-content {
+        width: 80%;  /* Ajustar el modal al 100% de la pantalla */
+        height: auto;
+        padding: 15px;
+    }
+
+    .criteria-header {
+        font-size: 18px;  /* Reducir el tamaño del texto en el encabezado */
+    }
+
+    .criteria-group {
+        font-size: 12px;  /* Ajustar el tamaño de los textos en los elementos de criterios */
+    }
+
+    .criteria-group_2 {
+        font-size: 12px;  /* Ajustar el tamaño de los textos en los elementos de parámetros */
+    }
+    .criteria-group, .criteria-group_2 {
+                display: grid;
+                grid-template-columns: repeat(1, 1fr); /* Crear exactamente 6 columnas */
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+    .create-btn {
+        width: 40%;
+    }
+    .date-group input[type="date"] {
+        max-width: 60%; /* El input ocupa el 100% del ancho del contenedor */
+        margin-bottom: 5px; /* Espacio entre los inputs */
+    
+    }
+    .date-group{
+        padding-left: 20%;
+    }
+
+}
+.back-button {
+            border-radius: 25px;
+            border: none;
+            position: absolute;
+            left: 2%; /* Fijar el botón al lado izquierdo */
+            top: 10px; /* Posición fija desde el top */
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white ; 
+            background-color: #367FA9    
+        }
 </style>
 
     
 </head>
 <body>
+<input id="id-docente" type="hidden" value="{{$idDocente}}">
+    <div class="botonHome">
+    <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    </div>
     <div class="container">
         <div class="header">
             <h1>Planilla de evaluación</h1>
@@ -449,6 +561,7 @@
                         icon: 'success',
                         title: 'Buen trabajo',
                         text: "{{ session('success') }}",
+                        confirmButtonText: "Aceptar"
                     });
                 </script>
             @endif
@@ -458,6 +571,7 @@
                         icon: "error",
                         title: "Oops...",
                         text: "{{ session('error') }}",
+                        confirmButtonText: "Aceptar"
                         });
                 </script>
             @endif
@@ -644,6 +758,7 @@
                         icon: 'error',
                         title: 'Puntaje Excedido',
                         text: `El puntaje excede el máximo permitido (${maxScore}), puntaje actual: ${totalScore} .`,
+                        confirmButtonText: "Aceptar"
                     });
                     return; // Detiene la ejecución
                 }
@@ -663,6 +778,7 @@
                         icon: 'error',
                         title: 'Criterio Duplicado',
                         text: 'Este criterio de evaluación ya se ha agregado.',
+                        confirmButtonText: "Aceptar"
                     });
                     return; // Detiene la ejecución para evitar la duplicación
                 }
@@ -777,6 +893,7 @@
                     icon: 'error',
                     title: 'Fecha de inicio inválida',
                     text: 'La fecha de inicio no puede ser anterior a la fecha actual.',
+                    confirmButtonText: "Aceptar"
                 });
                 fechaInicioInput.value = ""; // Limpia el campo de fecha inicio
                 return;
@@ -796,6 +913,7 @@
                     icon: 'error',
                     title: 'Fechas inválidas',
                     text: 'La fecha de fin no puede ser anterior a la fecha de inicio.',
+                    confirmButtonText: "Aceptar"
                 });
                 fechaFinInput.value = ""; // Limpia el campo de fecha fin
             }
@@ -842,6 +960,14 @@
                 .catch(error => console.error('Error:', error));
         }
     }
+    $(document).ready(function() {
+    $("#boton-home").on("click", function () {
+        // Regresa al home del docente
+        let idDocente = $('#id-docente').val();
+        window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
+    });
+});
+
     
 </script>
 
