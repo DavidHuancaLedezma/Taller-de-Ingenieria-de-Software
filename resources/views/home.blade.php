@@ -64,7 +64,7 @@
             background-color: #D2D6DE;
         }
 
-        
+        /*-----------------Menu*/
         .menu {
             position: fixed;
             width: 50px;
@@ -83,7 +83,7 @@
         }
 
 
-       
+        /*----------------Barra Lateral*/
         .barra-lateral {
             position: fixed;
             display: flex;
@@ -138,7 +138,7 @@
         }
 
 
-        
+        /*------------> Botón*/
         .barra-lateral .boton {
             width: 100%;
             height: 45px;
@@ -158,7 +158,7 @@
         }
 
 
-        
+        /*--------------> Menu Navegación*/
         .barra-lateral .navegacion {
             height: 100%;
             overflow-y: auto;
@@ -195,7 +195,7 @@
         }
 
         .barra-lateral .navegacion a:hover {
-            background-color: var(--color-menu-hover);
+            /*background-color: var(--color-menu-hover);*/
             color: var(--color-menu-hover-texto);
         }
 
@@ -204,7 +204,7 @@
             font-size: 20px;
         }
 
-       
+        /*-----------------> Linea*/
         .barra-lateral .linea {
             width: 100%;
             height: 1px;
@@ -212,7 +212,7 @@
             background-color: var(--color-linea);
         }
 
-       
+        /*----------------> Modo Oscuro*/
         .barra-lateral .modo-oscuro {
             width: 100%;
             margin-bottom: 80px;
@@ -236,7 +236,7 @@
             font-size: 20px;
         }
 
-      
+        /*--->switch*/
         .barra-lateral .modo-oscuro .switch {
             display: flex;
             align-items: center;
@@ -270,7 +270,7 @@
             left: 15px;
         }
 
-    
+        /*---------------> Usuario*/
         .barra-lateral .usuario {
             width: 100%;
             display: flex;
@@ -312,7 +312,7 @@
         }
 
 
-       
+        /*-------------main*/
 
         /*#inbox{
 
@@ -335,7 +335,7 @@
 
 
 
-       
+        /*------------------> Responsive*/
         @media (max-height: 660px) {
             .barra-lateral .nombre-pagina {
                 margin-bottom: 5px;
@@ -614,11 +614,9 @@
             align-items: center;
         }
 
+        .switch_planificacion {
+            display: flex;
 
-        .switch_planificacion{
-            display: flex ; 
-           
-            
 
         }
 
@@ -815,17 +813,21 @@
         /* Estilo responsivo para pantallas con un ancho máximo de 900px */
         @media (max-width: 1300px) {
             .switch_planificacion {
-                display: grid; /* Cambiar de flex a grid */
-                grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-                gap: 20px; /* Espaciado entre filas y columnas */
+                display: grid;
+                /* Cambiar de flex a grid */
+                grid-template-columns: repeat(2, 1fr);
+                /* Dos columnas de igual ancho */
+                gap: 20px;
+                /* Espaciado entre filas y columnas */
             }
 
-            .switch_planificacion > div {
-                margin: 0 auto; /* Centrar las tarjetas si sobra espacio */
+            .switch_planificacion>div {
+                margin: 0 auto;
+                /* Centrar las tarjetas si sobra espacio */
             }
         }
 
-                /* Ajustes para pantallas pequeñas */
+        /* Ajustes para pantallas pequeñas */
         @media (max-width: 768px) {
             .header-planificacion {
                 padding: 10px;
@@ -833,99 +835,106 @@
             }
 
             .switch_planificacion {
-                flex-direction: column; /* Cambiar a diseño en columna */
+                flex-direction: column;
+                /* Cambiar a diseño en columna */
                 align-items: center;
             }
 
-            .switch_hitos, .switch_objetivos, .switch_actividades {
-                max-width: 100%; /* Ajustar ancho al 100% de la pantalla */
-                padding: 10px; /* Reducir espacio interno */
-                text-align: center; /* Asegurar centrado */
+            .switch_hitos,
+            .switch_objetivos,
+            .switch_actividades {
+                max-width: 100%;
+                /* Ajustar ancho al 100% de la pantalla */
+                padding: 10px;
+                /* Reducir espacio interno */
+                text-align: center;
+                /* Asegurar centrado */
             }
 
-            .switch_hitos .card, 
-            .switch_objetivos .card, 
+            .switch_hitos .card,
+            .switch_objetivos .card,
             .switch_actividades .card {
-                width: 90%; /* Reducir el ancho de las tarjetas */
-                margin: 10px auto; /* Espaciado entre tarjetas */
+                width: 90%;
+                /* Reducir el ancho de las tarjetas */
+                margin: 10px auto;
+                /* Espaciado entre tarjetas */
             }
 
             .card-image-planificacion {
-                height: auto; /* Permitir que la altura se ajuste automáticamente */
-                max-width: 100%; /* Evitar desbordamiento en imágenes */
+                height: auto;
+                /* Permitir que la altura se ajuste automáticamente */
+                max-width: 100%;
+                /* Evitar desbordamiento en imágenes */
             }
 
             h3 {
-                font-size: 16px; /* Reducir tamaño de los encabezados */
+                font-size: 16px;
+                /* Reducir tamaño de los encabezados */
             }
 
             .description {
-                font-size: 12px; /* Reducir tamaño de texto descriptivo */
+                font-size: 12px;
+                /* Reducir tamaño de texto descriptivo */
             }
 
             button {
-                width: 100%; /* Botones al ancho completo */
-                padding: 12px; /* Más espacio interno */
-                font-size: 14px; /* Ajuste del tamaño del texto */
+                width: 100%;
+                /* Botones al ancho completo */
+                padding: 12px;
+                /* Más espacio interno */
+                font-size: 14px;
+                /* Ajuste del tamaño del texto */
             }
         }
 
         /* Ajustes para pantallas aún más pequeñas (móviles muy pequeños) */
         @media (max-width: 580px) {
             .switch_planificacion {
-                display: grid; /* Cambiar de flex a grid */
-                grid-template-columns: repeat(1, 1fr); /* Dos columnas de igual ancho */
-                gap: 20px; /* Espaciado entre filas y columnas */
+                display: grid;
+                /* Cambiar de flex a grid */
+                grid-template-columns: repeat(1, 1fr);
+                /* Dos columnas de igual ancho */
+                gap: 20px;
+                /* Espaciado entre filas y columnas */
             }
+
             .header-planificacion h2 {
-                font-size: 18px; /* Reducir el tamaño de texto del encabezado */
+                font-size: 18px;
+                /* Reducir el tamaño de texto del encabezado */
             }
 
             button {
-                font-size: 12px; /* Texto más pequeño en botones */
-                padding: 10px; /* Reducir espacio interno */
+                font-size: 12px;
+                /* Texto más pequeño en botones */
+                padding: 10px;
+                /* Reducir espacio interno */
             }
 
             .description {
-                font-size: 10px; /* Texto más compacto */
+                font-size: 10px;
+                /* Texto más compacto */
             }
         }
 
 
         .cont_home {
             max-width: 650px;
-
-        .switch_grupo_empresa {
-            max-width: 500px;
-
             margin: auto;
             text-align: center;
             padding: 20px;
         }
 
-
         .cont_home h2 {
-
-        .switch_grupo_empresa h1 {
-
             margin-bottom: 20px;
             font-size: 24px;
         }
 
-
         .cont_home .evaluation-card {
-
-        .switch_grupo_empresa .grupo-empresa-card {
-
             display: flex;
             justify-content: center;
         }
 
-
         .cont_home .card {
-
-        .switch_grupo_empresa .card {
-
             background-color: #fff;
             border-radius: 8px;
             padding: 20px;
@@ -934,7 +943,6 @@
             text-align: left;
         }
 
-
         .cont_home .card-image {
             max-width: 100%;
             border-radius: 8px;
@@ -942,6 +950,60 @@
         }
 
         .cont_home h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .cont_home .description {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .cont_home .evaluation-form {
+            margin-top: 10px;
+        }
+
+        .cont_home #btn-switch-visualizar-planificacion {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cont_home #btn-switch-visualizar-planificacion:hover {
+            background-color: #789bc0;
+        }
+
+        .switch_grupo_empresa {
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .switch_grupo_empresa h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .switch_grupo_empresa .grupo-empresa-card {
+            display: flex;
+            justify-content: center;
+        }
+
+        .switch_grupo_empresa .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
 
         .switch_grupo_empresa .card-image {
             max-width: 100%;
@@ -952,35 +1014,22 @@
         }
 
         .switch_grupo_empresa h3 {
-
             font-size: 18px;
             color: #333;
             margin-top: 10px;
         }
 
-
-        .cont_home .description {
-
         .switch_grupo_empresa .description {
-
             font-size: 14px;
             color: #666;
             margin: 10px 0;
         }
-
-
-        .cont_home .evaluation-form {
-            margin-top: 10px;
-        }
-
-        .cont_home #btn-switch-visualizar-planificacion{
 
         .switch_grupo_empresa .grupo-empresa-form {
             margin-top: 10px;
         }
 
         .switch_grupo_empresa #btn-grupo-empresa {
-
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -989,12 +1038,6 @@
             cursor: pointer;
             font-size: 14px;
         }
-
-
-        .cont_home #btn-switch-visualizar-planificacion:hover {
-            background-color: #789bc0;
-        }
-
 
         .switch_grupo_empresa #btn-grupo-empresa:hover {
             background-color: #789bc0;
@@ -1006,6 +1049,11 @@
 <body>
     <input id="id-estudiante-home" type="hidden" value="{{ $idEstudinte }}">
     <input id="autoevaluacion-realizada" type="hidden" value="{{ $autoevaluacion }}">
+    <input id="id-grupo-empresa-del-estudiante" type="hidden" value="{{ $idGrupoEmpresa }}">
+    <input id="parametros-de-autoevaluacion" type="hidden" value="{{ $conParametros }}">
+    <input id="fechas-autoevaluacion" type="hidden" value="{{ json_encode($fechasDeAutoevaluacion) }}">
+
+
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -1076,55 +1124,25 @@
         </div>
     </div>
     <main id="contenido">
-
-            <div class="cont_home">
-                <h2>ESTUDIANTE</h2>
-                    <div class="evaluation-card">
-                        <div class="card">
-                            <img src="https://img.freepik.com/vector-premium/servicio-o-plataforma-linea-clase-escuela-retorica-capacitacion-estudiantes_277904-20638.jpg" alt="Autoevaluacion" class="card-image">
-                            <h3>Descripcion</h3>
-                            <p class="description">Se permite al estudiante avanzar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
-                    </div>
-                </div>
-            </div>
-
-        <div class="container_home">
-            <h2>Evaluaciones</h2>
+        <div class="cont_home">
+            <h2>ESTUDIANTE</h2>
             <div class="evaluation-card">
                 <div class="card">
-                    <h3>Autoevaluación</h3>
-                    <p class="description">
-                        Evaluación que permite a los equipos de trabajo y a sus integrantes realizar una
-                        retroalimentación sobre su trabajo.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>Evaluación Cruzada</h3>
-                    <p class="description">
-                        Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>Evaluación en Pares</h3>
-                    <p class="description">
-                        Permite a los integrantes de un equipo evaluar el desempeño de sus compañeros de equipo.
-                    </p>
+                    <img src="https://img.freepik.com/vector-premium/servicio-o-plataforma-linea-clase-escuela-retorica-capacitacion-estudiantes_277904-20638.jpg"
+                        alt="Autoevaluacion" class="card-image">
+                    <h3>Descripcion</h3>
+                    <p class="description">Se permite al estudiante avanzar el progreso y la organización del proyecto
+                        en el taller de ingeniería de software.
+                    <p>
                 </div>
             </div>
         </div>
-
-
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-
-    <script> 
-
     <script>
-        console.log(document.getElementById("id-estudiante-home").value);
-
         const cloud = document.getElementById("cloud");
         const barraLateral = document.querySelector(".barra-lateral");
         const spans = document.querySelectorAll("span");
@@ -1170,6 +1188,8 @@
 
         function cargarContenido(seccion) {
             let idEstudiante = document.getElementById("id-estudiante-home").value;
+            let idGrupoEmpresa = document.getElementById("id-grupo-empresa-del-estudiante").value;
+
             const contenido = document.getElementById('contenido');
             let html = '';
             switch (seccion) {
@@ -1184,10 +1204,10 @@
                         <div class="card">
                             <h3>REGISTRO DE HITOS</h3>
                             <img src="https://img.freepik.com/vector-premium/progreso-proyecto-flujo-trabajo-trabajo-hombre-completa-tareas-paso-paso_159757-1418.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Descripcion</h3>
+                            <h3>Registro de hitos</h3>
                             <p class="description">Los hitos son puntos críticos o eventos significativos que marcan el progreso en el proyecto.<p>  
-                            <form action="{{ url('/registro_hitos/2') }}" method="GET">
-                                <button id="btn-switch-hitos" type="submit">REGISTRO HITOS(idProyecto)</button>
+                            <form action="{{ url('/registro_hitos/${idEstudiante}') }}" method="GET">
+                                <button id="btn-switch-hitos" type="submit">REGISTRO HITOS</button>
                             </form>
                         </div>
                     </div>
@@ -1199,12 +1219,10 @@
                         <div class="card">
                             <h3>REGISTRO DE ENTREGABLES</h3>
                             <img src="https://img.freepik.com/vector-premium/concepto-progresion-proyecto-hacer-cosas-tareas-completadas-o-logros-comerciales_178888-1909.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-
                             <h3>Registro de entregables</h3>
-
-                            <p class="description">Se formularán objetivos claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
-                            <form action="{{ url('/registro_objetivo/2') }}" method="GET">
-                                <button id="btn-switch-objetivos" type="submit">REGISTRO ENTREGABLES(idProyecto)</button>
+                            <p class="description">Se formularán entregables claros que guíen las actividades del equipo, asegurando el cumplimiento de los requerimientos del proyecto.<p>  
+                            <form action="{{ url('/registro_objetivo/${idEstudiante}') }}" method="GET">
+                                <button id="btn-switch-objetivos" type="submit">REGISTRO ENTREGABLES</button>
                             </form>                            
                         </div>
                     </div>
@@ -1214,12 +1232,10 @@
                         <div class="card">
                             <h3>REGISTRO DE ACTIVIDADES</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-
-                            <h3>Registro de Actividades</h3>
-
+                            <h3>Registro de actividades</h3>
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('planilla_planificacion_actividad/4') }}" method="GET">
-                                <button id="btn-switch-actividades" type="submit">ACTIVIDADES(idObjetivo)</button>
+                            <form action="{{ url('/planilla_planificacion_actividad/${idEstudiante}') }}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">ACTIVIDADES</button>
                             </form>                        
                         </div>
                     </div>
@@ -1227,64 +1243,129 @@
                 <div class="switch_actividades">
                     <div class="evaluation-card">
                         <div class="card">
-                            <h3>REGISTRO DE CRITERIOS DE ACEPTACION</h3>
+                            <h3>REGISTRO DE CRITERIOS DE ACEPTACIÓN</h3>
                             <img src="https://img.freepik.com/vector-premium/tecnica-planificacion-agil-tablero-hombre-marca-metas-tareas-completadas-trabajando-equipo_547662-1332.jpg" alt="Autoevaluacion" class="card-image-planificacion">
-                            <h3>Registro de Criterios de aceptación</h3>
+                            <h3>Registro de criterios de aceptación</h3>
                             <p class="description">El registro de actividades incluye la planificación, asignación y seguimiento de tareas específicas a los miembros del equipo.<p>  
-                            <form action="{{ url('planilla_planificacion_criterio_aceptacion/4') }}" method="GET">
-                                <button id="btn-switch-actividades" type="submit">CRITERIO ACEPTACIÓN(idObjetivo)</button>
+                            <form action="{{ url('/planilla_planificacion_criterio_aceptacion/${idEstudiante}') }}" method="GET">
+                                <button id="btn-switch-actividades" type="submit">CRITERIOS DE ACEPTACIÓN</button>
                             </form>                        
                         </div>
                     </div>
                 </div> 
-                
                     `;
                     break;
                 case 'autoevaluacion':
-                console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
-                if(idGrupoEmpresa != 0){
                     console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
+                    if (idGrupoEmpresa != 0) {
+                        console.log(idGrupoEmpresa + "  <--------------- ID grupo empresa");
 
 
 
-                    let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
-                    console.log(autoevaluacion);
-                    if (autoevaluacion == 0) {
-                        html = `
+                        let autoevaluacion = document.getElementById("autoevaluacion-realizada").value;
+                        let autoevaluacionConParametros = document.getElementById("parametros-de-autoevaluacion").value;
+                        let fechas_autoevaluacion = document.getElementById('fechas-autoevaluacion').value;
+                        fechas_autoevaluacion = JSON.parse(fechas_autoevaluacion);
+                        console.log(fechas_autoevaluacion);
+
+                        let valor = "hola";
+                        console.log(autoevaluacionConParametros);
+                        console.log("-----------------------------");
+                        console.log(autoevaluacion);
+                        if (autoevaluacion == 0) {
+                            if (autoevaluacionConParametros === "si") {
+
+                                if (fechas_autoevaluacion[0][0] === 1) {
+                                    //fecha antes sin comenzar(No inicio la autoevalución)
+                                    html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            
+                                                <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionSinComenzar('${fechas_autoevaluacion[0][1]}','${fechas_autoevaluacion[0][2]}')">AUTOEVALUACIÓN</button>
+                                            
+                                    </div>
+                                    </div>
+                                </div> `;
+
+                                } else if (fechas_autoevaluacion[1][0] === 1) {
+                                    //fecha despues (ya termino la autoevaluación)
+                                    html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            
+                                                <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionTerminada('${fechas_autoevaluacion[1][1]}','${fechas_autoevaluacion[1][2]}')">AUTOEVALUACIÓN</button>
+                                            
+                                    </div>
+                                    </div>
+                                </div> `;
+                                } else {
+                                    //Ingreso normal a la autoevaluación
+                                    html = `
+                                <div class="switch_autoevaluacion">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="evaluation-card">
+                                        <div class="card">
+                                            <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                            <h3>Autoevaluacion</h3>
+                                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                            <form action="{{ url('/autoevaluacion/${idEstudiante}') }}" method="GET">
+                                                <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
+                                            </form>
+                                    </div>
+                                    </div>
+                                </div> `;
+                                }
+
+
+
+                            } else {
+                                html = `
                             <div class="switch_autoevaluacion">
                                 <h2>Evaluaciones</h2>
                                 <div class="evaluation-card">
                                     <div class="card">
                                         <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                        <h3>Descripcion autoevaluacion</h3>
+                                        <h3>Autoevaluacion</h3>
                                         <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                                        <form action="{{ url('/autoevaluacion/${idEstudiante}') }}" method="GET">
-                                            <button id="btn-autoevaluacion" type="submit">AUTOEVALUACIÓN</button>
-                                        </form>
+                                        
+                                            <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionSinParametros()">AUTOEVALUACIÓN</button>
+                                        
                                 </div>
                                 </div>
                             </div> `;
 
+                            }
+
+
+                        } else {
+                            html = `
+                            <div class="switch_autoevaluacion">
+                                <h2>Evaluaciones</h2>
+                                <div class="evaluation-card">
+                                    <div class="card">
+                                        <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
+                                        <h3>Autoevaluacion</h3>
+                                        <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                                        
+                                            <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionYaRegistrada()">AUTOEVALUACIÓN</button>
+                                        
+                                </div>
+                                </div>
+                            </div> `;
+
+                        }
                     } else {
                         html = `
-                    <div class="switch_autoevaluacion">
-                        <h2>Evaluaciones</h2>
-                        <div class="evaluation-card">
-                            <div class="card">
-                                <img src="https://www.intenalco.edu.co/css/images/encabezado.autoevaluacion.png" alt="Autoevaluacion" class="card-image">
-                                <h3>Descripcion autoevaluacion</h3>
-                                <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                                
-                                    <button id="btn-autoevaluacion" onclick="mensajeAutoevaluacionYaRegistrada()">AUTOEVALUACIÓN</button>
-                                
-                        </div>
-                        </div>
-                    </div> `;
-
-                    }
-
-                }else{
-                    html = `
                             <div class="switch_autoevaluacion">
                                 <h2>Evaluaciones</h2>
                                 <div class="evaluation-card">
@@ -1298,10 +1379,8 @@
                                 </div>
                                 </div>
                             </div> `;
-                }
-                        break;    
-
-
+                    }
+                    break;
                     break;
                 case 'Evaluacion_pares':
                     html = `
@@ -1322,26 +1401,25 @@
                 `;
                     break;
                 case 'evaluacion_cruzada':
-            if(idGrupoEmpresa != 0){
-                console.log("ingresando al if con ----->" + idGrupoEmpresa);        
-                    html = `
+                    if (idGrupoEmpresa != 0) {
+                        console.log("ingresando al if con ----->" + idGrupoEmpresa);
+                        html = `
                 <div class="switch_evaluacion_cruzada">
                     <h2>Evaluaciones</h2>
                     <div class="evaluation-card">
                         <div class="card">
                             <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
-                            <h3>Descripcion evaluación cruzada</h3>
+                            <h3>Evaluación Cruzada</h3>
                             <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
-                            <form action="{{ url('/evaluacion_cruzada/1') }}" method="GET">
+                            <form action="{{ url('/evaluacion_cruzada/${idGrupoEmpresa}/${idEstudiante}') }}" method="GET">
                                 <button id="btn-evaluacion-cruzada" type="submit">EVALUACIÓN CRUZADA</button>
                             </form>
                        </div>
                     </div>
-
                 </div> `
-            }else{
-                console.log("ingresando al else con ----->" + idGrupoEmpresa);  
-                html = `
+                    } else {
+                        console.log("ingresando al else con ----->" + idGrupoEmpresa);
+                        html = `
                 <div class="switch_evaluacion_cruzada">
                     <h2>Evaluaciones</h2>
                     <div class="evaluation-card">
@@ -1355,12 +1433,9 @@
                        </div>
                     </div>
                 </div> `
-            }
-                
-                ; 
+                    }
 
-                </div> `;
-
+                    ;
                     break;
                 case 'registro_grupo_empresa':
                     html = `
@@ -1386,15 +1461,11 @@
             enlacesBarra.forEach(enlace => enlace.classList.remove('activo'));
 
             // Añadir la clase 'activo' al enlace que se acaba de hacer clic
-            const enlaceActivo = document.querySelector(a[onclick="cargarContenido('${seccion}')"]);
+            const enlaceActivo = document.querySelector(`a[onclick="cargarContenido('${seccion}')"]`);
             enlaceActivo.classList.add('activo');
         }
 
-        function mensajeDeNoTieneGE(){
-
-
-        function mensajeAutoevaluacionYaRegistrada() {
-
+        function mensajeDeNoTieneGE() {
             console.log("Ya funciona el mensaje de restriccion");
             Swal.fire({
                 icon: 'error',
@@ -1405,8 +1476,7 @@
             });
         }
 
-
-        function mensajeAutoevaluacionSinParametros(){
+        function mensajeAutoevaluacionSinParametros() {
             console.log("Ya funciona el mensaje de restriccion");
             Swal.fire({
                 icon: 'error',
@@ -1417,7 +1487,7 @@
             });
         }
 
-        function mensajeAutoevaluacionSinComenzar(fechaActual, fechaComienzo){
+        function mensajeAutoevaluacionSinComenzar(fechaActual, fechaComienzo) {
             console.log("AQUI -----------------------");
             console.log(fechaActual);
             console.log(fechaComienzo);
@@ -1425,25 +1495,26 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Autoevaluación sin comenzar',
-                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' + fechaComienzo,
+                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación comienza en fecha: ' +
+                    fechaComienzo,
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
-        
 
-        function mensajeAutoevaluacionTerminada(fechaActual, fechaFin){
+
+        function mensajeAutoevaluacionTerminada(fechaActual, fechaFin) {
             console.log(fechaActual);
             console.log(fechaFin);
             Swal.fire({
                 icon: 'error',
                 title: 'Fecha de autoevaluación finalizada',
-                text: 'Usted se encuentra en fecha: ' + fechaActual + ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
+                text: 'Usted se encuentra en fecha: ' + fechaActual +
+                    ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
         }
-
     </script>
 </body>
 
