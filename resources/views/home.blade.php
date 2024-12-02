@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sidebar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
 
@@ -1042,8 +1043,83 @@
         .switch_grupo_empresa #btn-grupo-empresa:hover {
             background-color: #789bc0;
         }
+        .nombre{
+            color: #f0f8ff;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .grupo-empresa{
+            color: white;
+            margin-bottom: 10px;
+        }
 
     </style>
+      <style>
+
+    .dashboard {
+    max-width: 2200px;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 20px;
+    }
+
+    .header_2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    }
+
+    .header-left h1 {
+    font-size: 2rem;
+    color: #4cdddb;
+    }
+    .project-cards h3{
+        color: #357CA5;
+        margin-bottom: 10px;
+        font-size: 20px
+    }
+    .project-cards p{
+        margin-bottom: 10px;
+        font-size: 18px
+    }
+
+    .header-right input {
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    }
+
+    .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .equipo {
+        margin-left: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    }
+
+    .tasks ul {
+    list-style: none;
+    padding: 20px;
+    }
+
+    .task-list li {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -1069,6 +1145,14 @@
                 <ion-icon name="reload-outline"></ion-icon>
                 <span>ESTUDIANTE</span>
             </button>
+            <div class="nombre">
+                <h2>Hola, {{ $nombre_estudiante }}</h2>
+            </div>
+
+            <div class="grupo-empresa">
+                <h3>Grupo Empresa: {{ $nombre_grupoEmpresa }}</h3>
+            </div>
+
         </div>
 
         <nav class="navegacion">
@@ -1124,19 +1208,82 @@
         </div>
     </div>
     <main id="contenido">
-        <div class="cont_home">
-            <h2>ESTUDIANTE</h2>
-            <div class="evaluation-card">
-                <div class="card">
-                    <img src="https://img.freepik.com/vector-premium/servicio-o-plataforma-linea-clase-escuela-retorica-capacitacion-estudiantes_277904-20638.jpg"
-                        alt="Autoevaluacion" class="card-image">
-                    <h3>Descripcion</h3>
-                    <p class="description">Se permite al estudiante avanzar el progreso y la organización del proyecto
-                        en el taller de ingeniería de software.
-                    <p>
-                </div>
-            </div>
+        
+        <div class="dashboard">
+    <!-- Header -->
+    <header class="header_2">
+      <div class="header-left">
+        <h1>Hola, {{ $nombre_estudiante }}</h1>
+        <p>¡Sigue tú puedes!</p>
+      </div>
+      <div class="header-right">
+        
+        <div class="profile">
+            <i class="bi bi-person-circle"></i>
+          <span>{{ $nombre_estudiante }}</span>
         </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="equipo">
+      <section class="tasks">
+        <h2>Recent Tasks <span>All Task 📌</span></h2>
+        <ul class="task-list">
+          <li>
+            <span>Wireframing Concept</span>
+            <span class="task-meta">Today · 👫</span>
+            <input type="checkbox">
+          </li>
+          <li>
+            <span>Create Moodboard</span>
+            <span class="task-meta">Today · 📌</span>
+            <input type="checkbox" checked>
+          </li>
+          <li>
+            <span>Create Style Guide</span>
+            <span class="task-meta">Tomorrow · 👨‍💻</span>
+            <input type="checkbox">
+          </li>
+          <li>
+            <span>UI Design Started</span>
+            <span class="task-meta">Tomorrow · 👨‍💻</span>
+            <input type="checkbox">
+          </li>
+        </ul>
+      </section>
+
+      <section class="calendar">
+        <h2>{{ $fechaActual }}</h2>
+        
+      </section>
+
+      <section class="projects">
+        <h2>Grupo Empresa: <span>{{ $nombre_grupoEmpresa }} 👨‍💻</span></h2>
+        <div class="project-cards">
+          <div class="project-card purple">
+            <br>
+            <h3>{{ $nombreProyecto }}</h3>
+            <p>{{ $descripcionProyecto }}</p>
+            <p><i class="bi bi-calendar-check"></i> Fecha de inicio: {{ $fechaInicio }}</p>
+            <p><i class="bi bi-calendar-check"></i> Fecha de fin: {{ $fechaFin }}</p>
+            <div class="progress">
+              <div style="width: 43%;"></div>
+            </div>
+            <span>Etapa activa: {{ $nombreEtapa }}</span>
+          </div>
+      </section>
+
+      <section class="team">
+        <h2>Miembros del equipo  👫</h2>
+        <ul>
+        @foreach ($equipo as $miembro)
+            <li>{{ $miembro}}</li>
+        @endforeach
+        </ul>
+      </section>
+    </main>
+  </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
