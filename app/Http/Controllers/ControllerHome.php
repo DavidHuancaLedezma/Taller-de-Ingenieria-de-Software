@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Carbon\Carbon;
 
 class ControllerHome extends Controller
 {
@@ -12,10 +13,10 @@ class ControllerHome extends Controller
     {
         $autoevaluacion = self::autoevaluacionRealizada($idEstudiante);
         $idGrupoEmpresa = self::getIdGrupoEmpresaDelEstudiante($idEstudiante);
-
+        $nombre_estudiante = self::getnombreEstudiante($idEstudiante);
         $idProyecto = self::getIdProyecto($idEstudiante);
         $parametrosDeEvaluacion = self::getParametrosDeEvaluacion($idProyecto);
-
+        $nombre_grupoEmpresa = self::get_nombre_grupoEmpresa($idProyecto);
         $fechasDeAutoevaluacion = [];
         $conParametros = "no";
         if (count($parametrosDeEvaluacion) > 0) {
@@ -24,10 +25,132 @@ class ControllerHome extends Controller
             $fechasDeAutoevaluacion = self::rangoFechasAutoevaluacion($id);
             $conParametros = "si";
         }
+        $proyecto=self::getProyecto($idProyecto);
+        if (!empty($proyecto)) {
+            $nombreProyecto = $proyecto[0]->nombre_proyecto;
+            $descripcionProyecto = $proyecto[0]->descripcion_proyecto;
+            $fechaInicio = $proyecto[0]->fecha_ini_proyecto;
+            $fechaFin = $proyecto[0]->fecha_fin_proyecto;
+            $nombreEtapa = $proyecto[0]->nombre_etapa;
+        } else {
+            $nombreProyecto = "Proyecto no encontrado";
+            $descripcionProyecto = "";
+            $fechaInicio = "N/A";
+            $fechaFin = "N/A";
+            $nombreEtapa = "No disponible";
+        }
+        $miembros = $this->getMiembroEquipo($idGrupoEmpresa);
+        $equipo = array_map(function ($miembro) {
+            return $miembro->nombre_estudiante . ' ' . $miembro->apellido_estudiante;
+        }, $miembros);
+        $fechaActual = Carbon::now()->format('M j, Y');
+        $hito = $this->getHitoEnRango($idProyecto);
+       
+        if ($hito) {
+            $entregables = $this->getEntregablesYActividades($hito->id_hito, $idEstudiante);
+        } else {
+            $entregables = null;  // O puedes asignar un valor predeterminado si lo prefieres
+        }
 
-        return view("home", ['idEstudinte' => $idEstudiante, 'autoevaluacion' => $autoevaluacion, 'idGrupoEmpresa' => $idGrupoEmpresa, 'conParametros' => $conParametros, 'fechasDeAutoevaluacion' => $fechasDeAutoevaluacion]);
+        return view("home", ['idEstudinte' => $idEstudiante, 'autoevaluacion' => $autoevaluacion, 'idGrupoEmpresa' => $idGrupoEmpresa, 'conParametros' => $conParametros, 'fechasDeAutoevaluacion' => $fechasDeAutoevaluacion,
+                     'nombre_estudiante' => $nombre_estudiante,'nombre_grupoEmpresa' => $nombre_grupoEmpresa,
+                     'nombreProyecto'=>$nombreProyecto, 'descripcionProyecto'=>$descripcionProyecto, 'fechaInicio'=>$fechaInicio, 'fechaFin'=>$fechaFin,'nombreEtapa'=> $nombreEtapa,
+                     'equipo'=>$equipo,'fechaActual'=> $fechaActual, 'hito'=>$hito, 'entregables'=> $entregables]);
+    }
+    private function getnombreEstudiante($idEstudiante)
+    {
+        $consulta = DB::select("
+            SELECT nombre_estudiante, apellido_estudiante
+            FROM estudiante
+            WHERE id_usuario = ?", [$idEstudiante]
+        );
+
+        // Verificamos si se obtuvo un resultado
+        if ($consulta && count($consulta) > 0) {
+            return $consulta[0]->nombre_estudiante . ' ' . $consulta[0]->apellido_estudiante;
+        }
+        
+        return null;  // Retornamos null si no se encuentra el estudiante
     }
 
+    private function get_nombre_grupoEmpresa($idProyecto)
+    {
+        $consulta = DB::select("
+            SELECT ge.nombre_corto
+            FROM grupo_empresa ge
+            JOIN proyecto pr ON ge.id_grupo_empresa = pr.id_grupo_empresa
+            WHERE pr.id_proyecto = ?", [$idProyecto]
+        );
+
+        // Verificamos si se obtuvo un resultado
+        if ($consulta && count($consulta) > 0) {
+            return $consulta[0]->nombre_corto;
+        }
+
+        return null;  // Retornamos null si no se encuentra el grupo empresa
+    }
+    private function getProyecto($idProyecto){
+        $consulta= DB::select("
+        select pr.nombre_proyecto, pr.descripcion_proyecto,pr.fecha_ini_proyecto,fecha_fin_proyecto,et.nombre_etapa
+        from proyecto pr, etapa et
+        where pr.id_proyecto = et.id_proyecto and et.etapa_activa = 'true' and et.id_proyecto =?
+        ", [$idProyecto]);
+        return $consulta;
+    }
+    private function getHitoEnRango($idProyecto)
+    {
+        $fechaActual = date('Y-m-d'); // Obtén la fecha actual
+
+        $hito = DB::table('hito')
+            ->where('fecha_inicio_hito', '<=', $fechaActual)
+            ->where('fecha_fin_hito', '>=', $fechaActual)
+            ->where('id_proyecto',$idProyecto)
+            ->select('id_hito', 'numero_hito') 
+            ->first(); // Devuelve el primer registro encontrado
+
+        return $hito; // Retorna el id_hito o null si no hay coincidencia
+    }
+    private function getEntregablesYActividades($idHito, $idUsuario)
+    {
+        if (is_null($idHito)) {
+            return null;
+        }
+        $query = "
+            SELECT ob.id_objetivo, ob.descrip_objetivo, ac.descripcion_actividad
+            FROM objetivo ob
+            LEFT JOIN actividad ac ON ob.id_objetivo = ac.id_objetivo
+            WHERE ob.id_hito = ? AND (ac.id_usuario = ? OR ac.id_usuario IS NULL)
+            ORDER BY ob.id_objetivo, ac.id_actividad
+        ";
+
+        $resultados = DB::select($query, [$idHito, $idUsuario]);
+
+        // Agrupa los datos por entregables
+        $entregables = [];
+        foreach ($resultados as $fila) {
+            if (!isset($entregables[$fila->id_objetivo])) {
+                $entregables[$fila->id_objetivo] = [
+                    'descripcion' => $fila->descrip_objetivo,
+                    'actividades' => [],
+                ];
+            }
+            if ($fila->descripcion_actividad) {
+                $entregables[$fila->id_objetivo]['actividades'][] = $fila->descripcion_actividad;
+            }
+        }
+
+        return $entregables;
+    }
+
+
+    private function getmiembroEquipo($idGrupoEmpresa){
+        $consulta=DB:: select("
+        select es.nombre_estudiante, es.apellido_estudiante
+        from estudiante es, estudiante_grupoempresa ege
+        where es.id_usuario = ege.id_usuario and ege.id_grupo_empresa = ?
+        ", [$idGrupoEmpresa]);
+        return $consulta;
+    }
     private static function autoevaluacionRealizada($idEstudiante)
     {
         $evaluado = 0;

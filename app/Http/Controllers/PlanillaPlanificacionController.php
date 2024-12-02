@@ -9,50 +9,73 @@ use Illuminate\Support\Facades\DB;
 class PlanillaPlanificacionController extends Controller
 {
     public function create_actividad($id_estudiante)
-    {   $id_proyecto = $this->get_idProyecto ($id_estudiante);
-        //$proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+    {
+        $id_proyecto = $this->get_idProyecto($id_estudiante);
+        
         if (!$id_proyecto) {
             return redirect()->back()->withErrors('El proyecto no existe.');
         }
+        
         // Obtener la fecha actual
-        $fecha_actual = now(); // Obtiene la fecha y hora actua
-        // Obtener los hitos asociados al proyecto
-        $hitos = DB::select("
-            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
-            FROM hito h
-            WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+        $fecha_actual = now(); // Obtiene la fecha y hora actual
         
-      /*  $hitos = DB::select("
-            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
-            FROM hito h
-            WHERE h.id_proyecto = ?", [$id_proyecto]);*/
+        // Consultar la etapa activa del proyecto
+        $etapa_activa = DB::table('etapa')
+            ->where('id_proyecto', $id_proyecto)
+            ->where('etapa_activa', 1) // Filtra por etapa activa
+            ->first();
         
-        $entregables = DB::select(
-            " 
-            select id_hito, id_objetivo, descrip_objetivo
-            from objetivo
-            where id_proyecto =?", [$id_proyecto]);
-
+        // Validar si la etapa activa es "Planificación" o "Desarrollo"
+        if ($etapa_activa && in_array($etapa_activa->nombre_etapa, ['Planificación', 'Desarrollo'])) {
             
-            $estudiantes = DB::select(
-                "
+            // Obtener los hitos asociados al proyecto
+            $hitos = DB::select("
+                SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+                FROM hito h
+                WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+    
+            // Obtener los entregables asociados al proyecto
+            $entregables = DB::select("
+                select id_hito, id_objetivo, descrip_objetivo
+                from objetivo
+                where id_proyecto =?", [$id_proyecto]);
+    
+            // Obtener los estudiantes asociados al proyecto
+            $estudiantes = DB::select("
                 select estudiante.id_usuario, estudiante.nombre_estudiante
                 from estudiante, (
                     select eg.id_usuario
                     from estudiante_grupoempresa eg, 
                         (select id_grupo_empresa
                         from proyecto
-                        where id_proyecto = ?)b
+                        where id_proyecto = ?) b
                     where eg.id_grupo_empresa = b.id_grupo_empresa
-                )a
+                ) a
                 where estudiante.id_usuario = a.id_usuario", [$id_proyecto]);
             
-            // Convierte el arreglo a una colección
+            // Convertir el arreglo de estudiantes a una colección
             $estudiantes = collect($estudiantes);
-             
-        return view('planilla_planificacion.actividad_select', compact('hitos','entregables', 'estudiantes','id_estudiante'));
-
+    
+            // Redirigir a la vista de añadir actividad
+            return view('planilla_planificacion.actividad_select', compact('hitos', 'entregables', 'estudiantes', 'id_estudiante'));
+        } else {
+            // Si no está en "Planificación" o "Desarrollo", redirigir a la vista rangoEtapa.etapa
+            $etapa_actual = DB::table('etapa')
+                ->where('id_proyecto', $id_proyecto)
+                ->where('nombre_etapa', 'Desarrollo') 
+                ->first();
+    
+            $mensaje_inicio = 'La etapa de planificación del proyecto fue habilitada en las fechas:';
+            $mensaje_error = 'El proyecto no está en la etapa de "Planificación" o "Desarrollo". No se pueden añadir actividades.';
+            $fechas_etapa = $etapa_actual
+                ? ['inicio' => $etapa_actual->fecha_inicio_etapa, 'fin' => $etapa_actual->fecha_fin_etapa] 
+                : null;
+    
+            // Redirigir a la vista de rango de etapa con los mensajes y fechas
+            return view('rangoEtapa.etapa', compact('mensaje_error', 'mensaje_inicio', 'fechas_etapa', 'id_estudiante'));
+        }
     }
+    
     private function get_idProyecto($id_estudiante){
         $respuesta = DB::select(
             "SELECT pr.id_proyecto
@@ -141,33 +164,55 @@ class PlanillaPlanificacionController extends Controller
     // ------------ Criterio de Aceptacion-------------------------
     public function create_criterio_aceptacion($id_estudiante)
     {
-        $id_proyecto = $this->get_idProyecto ($id_estudiante);
-        //$proyecto = DB::table('proyecto')->where('id_proyecto', $id_proyecto)->first();
+        $id_proyecto = $this->get_idProyecto($id_estudiante);
+        
         if (!$id_proyecto) {
             return redirect()->back()->withErrors('El proyecto no existe.');
         }
+        
         // Obtener la fecha actual
-        $fecha_actual = now(); // Obtiene la fecha y hora actua
-        // Obtener los hitos asociados al proyecto
-        $hitos = DB::select("
-            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
-            FROM hito h
-            WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+        $fecha_actual = now(); // Obtiene la fecha y hora actual
         
-        /*$hitos = DB::select("
-            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
-            FROM hito h
-            WHERE h.id_proyecto = ?", [$id_proyecto]);*/
+        // Consultar la etapa activa del proyecto
+        $etapa_activa = DB::table('etapa')
+            ->where('id_proyecto', $id_proyecto)
+            ->where('etapa_activa', 1) // Filtra por etapa activa
+            ->first();
         
-        $entregables = DB::select(
-            " 
-            select id_hito, id_objetivo, descrip_objetivo
-            from objetivo
-            where id_proyecto =?", [$id_proyecto]);
-
-              
-        return view('planilla_planificacion.criterioAceptacion_select', compact('hitos','entregables', 'id_estudiante'));
-
+        // Validar si la etapa activa es "Planificación" o "Desarrollo"
+        if ($etapa_activa && in_array($etapa_activa->nombre_etapa, ['Planificación', 'Desarrollo'])) {
+            
+            // Obtener los hitos asociados al proyecto
+            $hitos = DB::select("
+                SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+                FROM hito h
+                WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+    
+            // Obtener los entregables asociados al proyecto
+            $entregables = DB::select("
+                select id_hito, id_objetivo, descrip_objetivo
+                from objetivo
+                where id_proyecto =?", [$id_proyecto]);
+            
+            // Redirigir a la vista de añadir criterio de aceptación
+            return view('planilla_planificacion.criterioAceptacion_select', compact('hitos', 'entregables', 'id_estudiante'));
+        } else {
+            // Si no está en "Planificación" o "Desarrollo", redirigir a la vista rangoEtapa.etapa
+            $etapa_actual = DB::table('etapa')
+                ->where('id_proyecto', $id_proyecto)
+                ->where('nombre_etapa', 'Desarrollo') 
+                ->first();
+    
+            $mensaje_inicio = 'La etapa de planificación del proyecto fue habilitada en las fechas:';
+            $mensaje_error = 'El proyecto no está en la etapa de "Planificación" o "Desarrollo". No se pueden añadir criterios de aceptación.';
+            $fechas_etapa = $etapa_actual
+                ? ['inicio' => $etapa_actual->fecha_inicio_etapa, 'fin' => $etapa_actual->fecha_fin_etapa] 
+                : null;
+    
+            // Redirigir a la vista de rango de etapa con los mensajes y fechas
+            return view('rangoEtapa.etapa', compact('mensaje_error', 'mensaje_inicio', 'fechas_etapa', 'id_estudiante'));
+        }
     }
+    
 
 }

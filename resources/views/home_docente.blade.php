@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
         :root{
@@ -633,6 +634,155 @@
             background-color: #789bc0;
         }
     </style>
+    <style>
+
+.dashboard {
+max-width: 2200px;
+width: 90%;
+height: 90%;
+margin: auto;
+padding: 20px;
+background: #fff;
+border-radius: 20px;
+}
+
+.header_2 {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.header-left h1 {
+font-size: 2rem;
+color: #4cdddb;
+}
+.project-cards h3{
+    color: #357CA5;
+    margin-bottom: 10px;
+    font-size: 20px
+}
+.project-cards p{
+    margin-bottom: 10px;
+    font-size: 18px
+}
+
+.header-right input {
+padding: 10px;
+border-radius: 20px;
+border: 1px solid #ddd;
+}
+
+
+
+.equipo {
+margin-left: 20px;
+display: grid;
+grid-template-columns: 2fr 1fr;
+gap: 20px;
+}
+
+.tasks ul {
+list-style: none;
+padding: 10px;
+}
+
+.task-list li {
+padding: 5px;
+display: flex;
+justify-content: space-between;
+align-items: left;
+border-bottom: 1px solid #eee;
+}
+
+/* Media Queries para Pantallas Pequeñas */
+@media (max-width: 1024px) {
+    .dashboard {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .header-left h1 {
+        font-size: 1.5rem;
+    }
+
+    .project-cards h3 {
+        font-size: 18px;
+    }
+
+    .project-cards p {
+        font-size: 16px;
+    }
+
+    .equipo {
+        display: block;
+        margin-left: 0;
+    }
+
+    .task-list li {
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+    }
+
+    .header-left h1 {
+        font-size: 1.2rem;
+    }
+
+    .project-cards h3 {
+        font-size: 16px;
+    }
+
+    .project-cards p {
+        font-size: 14px;
+    }
+
+    .tasks ul {
+        padding: 0;
+    }
+
+    .task-list li {
+        flex-direction: column;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .header_2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .equipo {
+        display: block;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-left h1 {
+        font-size: 1rem;
+    }
+
+    .project-cards h3 {
+        font-size: 14px;
+    }
+
+    .project-cards p {
+        font-size: 12px;
+    }
+
+    .task-list li {
+        font-size: 12px;
+    }
+}
+
+</style>
 </head>
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
@@ -694,16 +844,51 @@
         </div>
     </div>
     <main id="contenido">
-                <div class="cont_home">
-                    <h2>DOCENTE</h2>
-                    <div class="evaluation-card">
-                        <div class="card">
-                            <img src="https://www.shutterstock.com/image-vector/educational-web-seminar-internet-classes-600nw-2185213275.jpg" alt="Autoevaluacion" class="card-image">
-                            <h3>Descripcion</h3>
-                            <p class="description">Se permite al docente revisar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
-                       </div>
-                    </div>
-                </div> 
+        <div class="dashboard">
+            <!-- Header -->
+            <header class="header_2">
+            <div class="header-left">
+                <h1>Hola, {{ $nombre_docente }}</h1>
+                <p>¡Sigue tú puedes!</p>
+            </div>
+            <div class="header-right">
+                
+                <div class="profile">
+                
+                <span> <i class="bi bi-person-circle"></i> {{ $nombre_docente }}</span>
+                </div>
+            </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="equipo">
+            <section class="tasks">
+                @if ($grupoEmpresas === null)
+                    <h2>No hay <span>Grupo Empresas registradas 🚫</span></h2>
+                @else
+                <h2>Grupo Empresas 📌</h2>
+                <ul class="task-list">
+                    @forelse ($grupoEmpresas as $grupoEmpresa)
+                        <li>
+                            <strong>{{ $grupoEmpresa->nombre_corto }}</strong>
+                            <ul>
+                                <li>{{ $grupoEmpresa->nombre_proyecto }}</li>
+                            </ul>
+                        </li>
+                    @empty
+                        <li>No hay grupos de empresas para mostrar.</li>
+                    @endforelse
+                </ul>
+
+                @endif
+            </section>
+
+            <section class="calendar">
+                <h2>{{ $fechaActual }}</h2>
+                
+            </section>
+            </main>
+        </div>
     </main>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

@@ -11,21 +11,56 @@ class PlanillaEvaluacionController extends Controller
 {
     public function create($idDocente)
     {
-        $tipos_evaluacion = DB:: select(
-            "select * from tipo_evaluacion"
-        );
-        
-        $criterios_evaluacion= DB:: select(
-            "select * from criterio_evaluacion"
-        );
-        $parametros=DB:: select(
-            "select * from parametro_evaluacion"
-        );
-        $escalas=DB:: select(
-            "select * from escala_medicion"
-        );
-        return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion','criterios_evaluacion', 'parametros', 'escalas', 'idDocente'));
+        // Obtener el ID del proyecto asociado al docente
+        $id_proyecto = DB::select("
+            SELECT pr.id_proyecto 
+            FROM proyecto pr, grupo_materia gm
+            WHERE gm.id_grupo = pr.id_grupo 
+            AND gm.id_usuario = ?", [$idDocente]);
+
+        $id_proyecto = $id_proyecto ? $id_proyecto[0]->id_proyecto : null;
+
+        // Validar si el proyecto existe
+        if (!$id_proyecto) {
+            return redirect()->back()->withErrors('El proyecto no existe.');
+        }
+
+        // Consultar la etapa activa del proyecto
+        $etapa_activa = DB::table('etapa')
+            ->where('id_proyecto', $id_proyecto)
+            ->where('etapa_activa', 1) // Filtra por etapa activa
+            ->first();
+
+        // Verificar si la etapa activa es "Final"
+        if ($etapa_activa && $etapa_activa->nombre_etapa === 'Final') {
+            // Si está en la etapa final, redirigir a la vista de evaluación
+            $tipos_evaluacion = DB::select("SELECT * FROM tipo_evaluacion");
+            $criterios_evaluacion = DB::select("SELECT * FROM criterio_evaluacion");
+            $parametros = DB::select("SELECT * FROM parametro_evaluacion");
+            $escalas = DB::select("SELECT * FROM escala_medicion");
+
+            // Redirigir a la vista de evaluación
+            return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion', 'criterios_evaluacion', 'parametros', 'escalas', 'idDocente'));
+        } else {
+            // Si no está en la etapa "Final", redirigir a la vista de rango de etapa
+            $mensaje_error = 'Los proyectos no están en la etapa final. No se puede proceder a crear planilla de evaluación.';
+            
+            // Consultar las fechas de la etapa actual
+            $etapa_actual = DB::table('etapa')
+                ->where('id_proyecto', $id_proyecto)
+                ->where('nombre_etapa', 'Final') 
+                ->first();
+
+            $mensaje_inicio = 'La etapa final de los proyectos están habilitados en las fechas:';
+            $fechas_etapa = $etapa_actual 
+                ? ['inicio' => $etapa_actual->fecha_inicio_etapa, 'fin' => $etapa_actual->fecha_fin_etapa] 
+                : null;
+
+            // Redirigir a la vista de rango de etapa con los mensajes y fechas
+            return view('rangoEtapa.etapa_final', compact('mensaje_error', 'mensaje_inicio', 'fechas_etapa', 'idDocente'));
+        }
     }
+
 
     public function getEmpresasPorEvaluacion($id_tipo_evaluacion, $id_docente)
     {

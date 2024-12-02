@@ -161,7 +161,7 @@ Route::get('/docente_home/{idDocente}', [ControllerHomeDocente::class, 'openHome
     ->name('docente_home');
 
 
-Route::view('/planilla-planificacion', 'planilla_planificacion.h_planilla_planificacion');
+Route::view('/etapa', 'rangoEtapa.etapa');
 Route::view('/criterioAceptacion', 'planilla_planificacion.criterioAceptacion_select');
 
 Route::get('/planilla_planificacion_actividad/{id_proyecto}', [PlanillaPlanificacionController::class, 'create_actividad']);
