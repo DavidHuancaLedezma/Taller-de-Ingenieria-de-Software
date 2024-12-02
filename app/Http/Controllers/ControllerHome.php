@@ -44,10 +44,18 @@ class ControllerHome extends Controller
             return $miembro->nombre_estudiante . ' ' . $miembro->apellido_estudiante;
         }, $miembros);
         $fechaActual = Carbon::now()->format('M j, Y');
+        $hito = $this->getHitoEnRango($idProyecto);
+       
+        if ($hito) {
+            $entregables = $this->getEntregablesYActividades($hito->id_hito, $idEstudiante);
+        } else {
+            $entregables = null;  // O puedes asignar un valor predeterminado si lo prefieres
+        }
+
         return view("home", ['idEstudinte' => $idEstudiante, 'autoevaluacion' => $autoevaluacion, 'idGrupoEmpresa' => $idGrupoEmpresa, 'conParametros' => $conParametros, 'fechasDeAutoevaluacion' => $fechasDeAutoevaluacion,
                      'nombre_estudiante' => $nombre_estudiante,'nombre_grupoEmpresa' => $nombre_grupoEmpresa,
                      'nombreProyecto'=>$nombreProyecto, 'descripcionProyecto'=>$descripcionProyecto, 'fechaInicio'=>$fechaInicio, 'fechaFin'=>$fechaFin,'nombreEtapa'=> $nombreEtapa,
-                     'equipo'=>$equipo,'fechaActual'=> $fechaActual]);
+                     'equipo'=>$equipo,'fechaActual'=> $fechaActual, 'hito'=>$hito, 'entregables'=> $entregables]);
     }
     private function getnombreEstudiante($idEstudiante)
     {
@@ -89,6 +97,52 @@ class ControllerHome extends Controller
         ", [$idProyecto]);
         return $consulta;
     }
+    private function getHitoEnRango($idProyecto)
+    {
+        $fechaActual = date('Y-m-d'); // Obtén la fecha actual
+
+        $hito = DB::table('hito')
+            ->where('fecha_inicio_hito', '<=', $fechaActual)
+            ->where('fecha_fin_hito', '>=', $fechaActual)
+            ->where('id_proyecto',$idProyecto)
+            ->select('id_hito', 'numero_hito') 
+            ->first(); // Devuelve el primer registro encontrado
+
+        return $hito; // Retorna el id_hito o null si no hay coincidencia
+    }
+    private function getEntregablesYActividades($idHito, $idUsuario)
+    {
+        if (is_null($idHito)) {
+            return null;
+        }
+        $query = "
+            SELECT ob.id_objetivo, ob.descrip_objetivo, ac.descripcion_actividad
+            FROM objetivo ob
+            LEFT JOIN actividad ac ON ob.id_objetivo = ac.id_objetivo
+            WHERE ob.id_hito = ? AND (ac.id_usuario = ? OR ac.id_usuario IS NULL)
+            ORDER BY ob.id_objetivo, ac.id_actividad
+        ";
+
+        $resultados = DB::select($query, [$idHito, $idUsuario]);
+
+        // Agrupa los datos por entregables
+        $entregables = [];
+        foreach ($resultados as $fila) {
+            if (!isset($entregables[$fila->id_objetivo])) {
+                $entregables[$fila->id_objetivo] = [
+                    'descripcion' => $fila->descrip_objetivo,
+                    'actividades' => [],
+                ];
+            }
+            if ($fila->descripcion_actividad) {
+                $entregables[$fila->id_objetivo]['actividades'][] = $fila->descripcion_actividad;
+            }
+        }
+
+        return $entregables;
+    }
+
+
     private function getmiembroEquipo($idGrupoEmpresa){
         $consulta=DB:: select("
         select es.nombre_estudiante, es.apellido_estudiante

@@ -1043,81 +1043,175 @@
         .switch_grupo_empresa #btn-grupo-empresa:hover {
             background-color: #789bc0;
         }
-        .nombre{
-            color: #f0f8ff;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .grupo-empresa{
-            color: white;
-            margin-bottom: 10px;
-        }
-
     </style>
-      <style>
+    <style>
 
-    .dashboard {
-    max-width: 2200px;
-    width: 90%;
-    height: 90%;
-    margin: auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 20px;
-    }
+        .dashboard {
+        max-width: 2200px;
+        width: 90%;
+        height: 90%;
+        margin: auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 20px;
+        }
 
-    .header_2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    }
+        .header_2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        }
 
-    .header-left h1 {
-    font-size: 2rem;
-    color: #4cdddb;
-    }
-    .project-cards h3{
-        color: #357CA5;
-        margin-bottom: 10px;
-        font-size: 20px
-    }
-    .project-cards p{
-        margin-bottom: 10px;
-        font-size: 18px
-    }
+        .header-left h1 {
+        font-size: 2rem;
+        color: #4cdddb;
+        }
+        .project-cards h3{
+            color: #357CA5;
+            margin-bottom: 10px;
+            font-size: 20px
+        }
+        .project-cards p{
+            margin-bottom: 10px;
+            font-size: 18px
+        }
 
-    .header-right input {
-    padding: 10px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    }
+        .header-right input {
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+        }
 
-    .profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    }
+        .profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        }
 
-    .equipo {
-        margin-left: 20px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    }
+        .equipo {
+            margin-left: 20px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+        }
 
-    .tasks ul {
-    list-style: none;
-    padding: 20px;
-    }
+        .tasks ul {
+        list-style: none;
+        padding: 10px;
+        }
 
-    .task-list li {
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-    }
+        .task-list li {
+        padding: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        }
+
+        /* Media Queries para Pantallas Pequeñas */
+        @media (max-width: 1024px) {
+            .dashboard {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            .header-left h1 {
+                font-size: 1.5rem;
+            }
+
+            .project-cards h3 {
+                font-size: 18px;
+            }
+
+            .project-cards p {
+                font-size: 16px;
+            }
+
+            .equipo {
+                display: block;
+                margin-left: 0;
+            }
+
+            .task-list li {
+                padding: 10px 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+            }
+
+            .header-left h1 {
+                font-size: 1.2rem;
+            }
+
+            .project-cards h3 {
+                font-size: 16px;
+            }
+
+            .project-cards p {
+                font-size: 14px;
+            }
+
+            .tasks ul {
+                padding: 0;
+            }
+
+            .task-list li {
+                flex-direction: column;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .header_2 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile {
+                flex-direction: column;
+            }
+
+            .profile span {
+                margin-top: 5px;
+            }
+
+            .equipo {
+                display: block;
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-left h1 {
+                font-size: 1rem;
+            }
+
+            .project-cards h3 {
+                font-size: 14px;
+            }
+
+            .project-cards p {
+                font-size: 12px;
+            }
+
+            .task-list li {
+                font-size: 12px;
+            }
+
+            .profile i {
+                font-size: 1.5rem;
+            }
+
+            .profile span {
+                font-size: 1rem;
+            }
+        }
 
   </style>
 </head>
@@ -1145,14 +1239,6 @@
                 <ion-icon name="reload-outline"></ion-icon>
                 <span>ESTUDIANTE</span>
             </button>
-            <div class="nombre">
-                <h2>Hola, {{ $nombre_estudiante }}</h2>
-            </div>
-
-            <div class="grupo-empresa">
-                <h3>Grupo Empresa: {{ $nombre_grupoEmpresa }}</h3>
-            </div>
-
         </div>
 
         <nav class="navegacion">
@@ -1209,7 +1295,7 @@
     </div>
     <main id="contenido">
         
-        <div class="dashboard">
+    <div class="dashboard">
     <!-- Header -->
     <header class="header_2">
       <div class="header-left">
@@ -1219,8 +1305,8 @@
       <div class="header-right">
         
         <div class="profile">
-            <i class="bi bi-person-circle"></i>
-          <span>{{ $nombre_estudiante }}</span>
+           
+          <span> <i class="bi bi-person-circle"></i> {{ $nombre_estudiante }}</span>
         </div>
       </div>
     </header>
@@ -1228,29 +1314,31 @@
     <!-- Main Content -->
     <main class="equipo">
       <section class="tasks">
-        <h2>Recent Tasks <span>All Task 📌</span></h2>
-        <ul class="task-list">
-          <li>
-            <span>Wireframing Concept</span>
-            <span class="task-meta">Today · 👫</span>
-            <input type="checkbox">
-          </li>
-          <li>
-            <span>Create Moodboard</span>
-            <span class="task-meta">Today · 📌</span>
-            <input type="checkbox" checked>
-          </li>
-          <li>
-            <span>Create Style Guide</span>
-            <span class="task-meta">Tomorrow · 👨‍💻</span>
-            <input type="checkbox">
-          </li>
-          <li>
-            <span>UI Design Started</span>
-            <span class="task-meta">Tomorrow · 👨‍💻</span>
-            <input type="checkbox">
-          </li>
-        </ul>
+      @if($hito)
+            <h2>El proyecto se encuentra en el <span>Hito {{ $hito->numero_hito }} 📌</span></h2>
+        @else
+            <h2>El proyecto <span>no se encuentra en ningún hito actualmente 🚫</span></h2>
+        @endif
+        @if ($entregables === null)
+            <p>No hay entregables ni actividades para mostrar.</p>
+        @else
+            <ul class="task-list">
+                @forelse ($entregables as $entregable)
+                    <li>
+                        <strong>{{ $entregable['descripcion'] }}</strong>
+                        <ul>
+                            @forelse ($entregable['actividades'] as $actividad)
+                                <li>{{ $actividad }}</li>
+                            @empty
+                                <li>No hay actividades asignadas.</li>
+                            @endforelse
+                        </ul>
+                    </li>
+                @empty
+                    <li>No hay entregables ni actividades para mostrar.</li>
+                @endforelse
+            </ul>
+        @endif
       </section>
 
       <section class="calendar">
@@ -1263,8 +1351,8 @@
         <div class="project-cards">
           <div class="project-card purple">
             <br>
-            <h3>{{ $nombreProyecto }}</h3>
-            <p>{{ $descripcionProyecto }}</p>
+            <h3>Proyecto:  {{ $nombreProyecto }}</h3>
+            <p>Descripción de proyecto: {{ $descripcionProyecto }}</p>
             <p><i class="bi bi-calendar-check"></i> Fecha de inicio: {{ $fechaInicio }}</p>
             <p><i class="bi bi-calendar-check"></i> Fecha de fin: {{ $fechaFin }}</p>
             <div class="progress">
