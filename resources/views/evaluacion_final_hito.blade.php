@@ -556,6 +556,17 @@
 
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Evaluación Final de Hito',
+                text: 'Esta grupo Empresa se encuentra en una semana de finalización de hito. A continuación se le mostrará la planilla de evaluación de final de hito.',
+                icon: 'info',
+                timer: 8000, // Tiempo en milisegundos
+                showConfirmButton: false
+            });
+        });
+    </script>
+    <script>
 
 function setProgress(stepCount) {
     const steps = document.querySelectorAll('.step');
