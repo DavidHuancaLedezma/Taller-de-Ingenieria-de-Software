@@ -786,6 +786,7 @@ border-bottom: 1px solid #eee;
 </head>
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
+    <input id="fechas-desarrollo" type="hidden" value="{{ json_encode($fechasDesarrollo)}}">
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -890,6 +891,7 @@ border-bottom: 1px solid #eee;
             </main>
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
@@ -961,20 +963,57 @@ border-bottom: 1px solid #eee;
                     `;
                     break;
                 case 'control_semanal':
+                    
+                let fechas = document.getElementById("fechas-desarrollo").value;
+                fechas = JSON.parse(fechas);
+
+                let valor = fechas;
+                console.log(valor[1] + "<------------------");
+                if(valor[1] == 0 ){
                     html = `                
-                <div class="switch_control_semanal">
-                    <h2>Seguimiento de control semanal</h2>
-                    <div class="evaluation-card">
-                        <div class="card">
-                            <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
-                            <h3>Descripcion</h3>
-                            <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
-                            <form action="{{ url('/cargar_registro_semanal0_${idDocente}')}}" method="GET">
-                                <button id="btn-switch-control-semanal" type="submit">Control semanal</button>
-                            </form>
-                       </div>
-                    </div>
-                </div> `;
+                    <div class="switch_control_semanal">
+                        <h2>Seguimiento de control semanal</h2>
+                        <div class="evaluation-card">
+                            <div class="card">
+                                <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
+                                <h3>Descripcion</h3>
+                                <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
+                                <form action="{{ url('/cargar_registro_semanal0_${idDocente}')}}" method="GET">
+                                    <button id="btn-switch-control-semanal"  type="submit">Control semanal</button>
+                                </form>
+                        </div>
+                        </div>
+                    </div> `;
+                }else if(valor[1] == 1 ){
+                    html = `                
+                    <div class="switch_control_semanal">
+                        <h2>Seguimiento de control semanal</h2>
+                        <div class="evaluation-card">
+                            <div class="card">
+                                <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
+                                <h3>Descripcion</h3>
+                                <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
+                                
+                                    <button id="btn-switch-control-semanal" onclick="mensajeDeNoEtapaDesarrolloInicio('${valor[0].inicio_etapa}')" type="submit">Control semanal</button>
+                                
+                        </div>
+                        </div>
+                    </div> `;   
+                }else{
+                    html = `                
+                    <div class="switch_control_semanal">
+                        <h2>Seguimiento de control semanal</h2>
+                        <div class="evaluation-card">
+                            <div class="card">
+                                <img src="https://www.revistadiabetes.org/wp-content/uploads/Insulina-semanal-para-las-personas-con-diabetes-mellitus-tipo-2.-Una-gran-rev.1-1072x675.jpg" alt="Autoevaluacion" class="card-image">
+                                <h3>Descripcion</h3>
+                                <p class="description">El registro de control semanal es seccionado por hitos y por hito se seccionara en semanas que tiene este hito.<p>  
+                                
+                                    <button id="btn-switch-control-semanal" onclick="mensajeDeNoEtapaDesarrolloFin('${valor[0].fin_etapa}')" type="submit">Control semanal</button>
+                        </div>
+                        </div>
+                    </div> `;   
+                }
                     break;
                 case 'planilla_evaluacion':
                     html = `                
@@ -1007,6 +1046,28 @@ border-bottom: 1px solid #eee;
             // Añadir la clase 'activo' al enlace que se acaba de hacer clic
             const enlaceActivo = document.querySelector(`a[onclick="cargarContenido('${seccion}')"]`);
             enlaceActivo.classList.add('activo');
+        }
+
+        function mensajeDeNoEtapaDesarrolloInicio(fechaInicio){
+            console.log();
+            Swal.fire({
+                icon: 'error',
+                title: 'Fecha de desarrollo no comenzada',
+                text: 'La fecha de desarrollo comienza en' +fechaInicio+ '.',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false,
+            });
+        }
+
+        function mensajeDeNoEtapaDesarrolloFin(FechaFin){
+            console.log();
+            Swal.fire({
+                icon: 'error',
+                title: 'Fecha de desarrollo no comenzada',
+                text: 'La fecha de desarrollo finalizo en '+FechaFin+ '.',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false,
+            });
         }
     </script>
 </body>
