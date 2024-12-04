@@ -260,6 +260,8 @@
     </style>
 </head>
 <body>
+    // ids de proyecto y estudiante
+    // ----------
     <input id="id-proyecto" type="hidden" value="{{$idProyecto}}">
     <input id="id-estudiante" type="hidden" value="{{$idEstudiante}}">
 
