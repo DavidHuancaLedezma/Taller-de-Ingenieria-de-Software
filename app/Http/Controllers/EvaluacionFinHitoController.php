@@ -30,6 +30,11 @@ class EvaluacionFinHitoController extends Controller
         $historias = $request -> input('historias', []);
         $nuevas_historias = $request -> input ('nuevas_historias',[]);
         
+        if (!$descripcion) {
+            $respuesta = "Por favor añada una observación al registro de final de hito.";
+          
+            return redirect()->back()->with('error', $respuesta);
+        }
 
          // Obtener el id del proyecto
         $idProyecto = DB::select("SELECT id_proyecto FROM hito WHERE id_hito = ?", array($id_hito));

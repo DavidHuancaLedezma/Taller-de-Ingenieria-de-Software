@@ -18,15 +18,37 @@ class ObjetivoController extends Controller
          if (!$id_proyecto) {
              return redirect()->back()->withErrors('El proyecto no existe.');
          }
-        // Obtener la fecha actual
-        $fecha_actual = now(); // Obtiene la fecha y hora actua
-        // Obtener los hitos asociados al proyecto
-        $hitos = DB::select("
-            SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
-            FROM hito h
-            WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
-        // Pasar los hitos a la vista de registro_objetivo.blade.php
-        return view('registro_objetivo', compact('hitos', 'id_proyecto', 'id_estudiante'));
+        // Consultar la etapa activa del proyecto
+        $etapa_activa = DB::table('etapa')
+        ->where('id_proyecto', $id_proyecto)
+        ->where('etapa_activa', 1)
+        ->first();
+
+        // Validar si la etapa activa es "Planificación"
+        if ($etapa_activa && $etapa_activa->nombre_etapa === 'Planificación') {
+            // Obtener los hitos asociados al proyecto
+            $fecha_actual = now();
+            $hitos = DB::select("
+                SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito 
+                FROM hito h
+                WHERE h.id_proyecto = ? AND h.fecha_fin_hito >= ?", [$id_proyecto, $fecha_actual]);
+
+            // Pasar los hitos a la vista de registro_objetivo.blade.php
+            return view('registro_objetivo', compact('hitos', 'id_proyecto', 'id_estudiante'));
+        } else {
+            $etapa_actual = DB::table('etapa')
+            ->where('id_proyecto', $id_proyecto)
+            ->where('nombre_etapa', 'Planificación') 
+            ->first();
+         // Si no está en la etapa de planificación, redirigir a la vista 'rangoEtapa.etapa'
+         $mensaje_inicio='La etapa de planificación del proyecto fué habilitado en las fechas:';
+         $mensaje_error = 'Terminó la etapa de planificación. Ya no se pueden registrar entregables.';
+         $fechas_etapa = $etapa_actual
+             ? ['inicio' => $etapa_actual->fecha_inicio_etapa, 'fin' => $etapa_actual->fecha_fin_etapa] 
+             : null;
+
+         return view('rangoEtapa.etapa', compact('mensaje_error','mensaje_inicio','fechas_etapa', 'id_estudiante'));
+    }
     }
     private function get_idProyecto($id_estudiante){
         $respuesta = DB::select(

@@ -483,7 +483,7 @@
                             </ul>   
                         </div>
                         <div class="description">
-                            <h3>Descripción</h3>
+                            <h3>Observación Semanal</h3>
                             <textarea id="descripcion_control_semanal" name="descripcion_control_semanal" placeholder="Escribe descripción" oninput="validarDescripcionControlSemanal()">{{ old('descripcion_control_semanal') }}</textarea>
 
                             <span id="descripcionError" class="error"></span>
@@ -516,7 +516,7 @@
                             <tr>
                                 <th>Historia de Usuario</th>
                                 <th>Estimación</th>
-                                <th>Observación</th>
+                                <th>Observación <i class="bi bi-pen-fill"></i></th>
                                 <th>Evaluar</th>
                                 <th></th>
                             </tr>
@@ -579,7 +579,7 @@ function highlightFinalWeek() {
 const numero =  '{{ $numeroColor }}'; // Reemplazar con valor dinámico
 setProgress(numero);
 highlightFinalWeek();
-
+let filasIniciales = document.querySelectorAll('#tabla-dinamica tbody tr').length;
 function agregarFila(event) {
     event.preventDefault();
     const tabla = document.getElementById("tabla-dinamica").getElementsByTagName("tbody")[0];
@@ -655,8 +655,19 @@ function eliminarFila(boton) {
 
     // Validar títulos de nuevas historias
     function validarTituloHistoria(index) {
-        const titulo = document.getElementById(`historia_${index}`).value.trim();
+        const tituloElement = document.getElementById(`historia_${index}`);
         const errorElement = document.getElementById(`error_historia_${index}`);
+
+        // Verificar si el elemento existe
+        if (!tituloElement) {
+            console.error(`El elemento con ID historia_${index} no existe.`);
+            if (errorElement) {
+                errorElement.textContent = "Error: No se encontró el campo de título.";
+            }
+            return false;
+        }
+        const titulo = document.getElementById(`historia_${index}`).value.trim();
+       
         const caracteresEspeciales = titulo.match(/[!@#$%^&*(),.?":{}|<>]/g) || [];
 
         if (titulo === "") {
@@ -679,9 +690,16 @@ function eliminarFila(boton) {
 
     // Validar estimación de nuevas historias
     function validarEstimacionHistoria(index) {
-        const estimacion = document.getElementById(`estimacion_${index}`).value.trim();
+        const estimacionElemento = document.getElementById(`estimacion_${index}`);
         const errorElement = document.getElementById(`error_estimacion_${index}`);
-
+        if (!estimacionElemento) {
+            console.error(`El elemento con ID historia_${index} no existe.`);
+            if (errorElement) {
+                errorElement.textContent = "Error: No se encontró el campo de título.";
+            }
+            return false;
+        }
+        const estimacion = document.getElementById(`estimacion_${index}`).value.trim();
         if (!/^\d+$/.test(estimacion)) {
             errorElement.textContent = "La estimación debe contener solo valores numéricos.";
             return false;
@@ -696,8 +714,16 @@ function eliminarFila(boton) {
 
     // Validar descripción de nuevas historias
     function validarDescripcionHistoria(index) {
-        const descripcion = document.getElementById(`descripcion_${index}`).value.trim();
+        const descripcionElemento = document.getElementById(`descripcion_${index}`);
         const errorElement = document.getElementById(`error_descripcion_${index}`);
+        if (!descripcionElemento) {
+            console.error(`El elemento con ID historia_${index} no existe.`);
+            if (errorElement) {
+                errorElement.textContent = "Error: No se encontró el campo de título.";
+            }
+            return false;
+        }
+        const descripcion = document.getElementById(`descripcion_${index}`).value.trim();
         const caracteresEspeciales = descripcion.match(/[!@#$%^&*(),.?":{}|<>]/g) || [];
 
         if (descripcion.length > 500) {
@@ -717,6 +743,62 @@ function eliminarFila(boton) {
 
 
 </script>
+<script>
+    // Validar formulario completo antes del envío
+    document.getElementById('evaluacionForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Evita el envío inicial
+
+        // Validar descripción semanal
+        if (!validarDescripcionControlSemanal()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en la descripción semanal',
+                text: 'Por favor, completa la observación semanal antes de continuar.',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+
+        // Validar todas las nuevas historias de usuario
+        const filasActuales = document.querySelectorAll('#tabla-dinamica tbody tr').length;
+
+        if (filasActuales > filasIniciales) {
+            for (let i = 0; i < filas.length; i++) {
+                if (!validarTituloHistoria(i)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en las historias de usuario',
+                        text: 'Por favor, corrige los errores de titulo en las historias de usuario antes de continuar.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    return;
+                }
+                if (!validarEstimacionHistoria(i)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en las historias de usuario',
+                        text: 'Por favor, corrige los errores estimación en las historias de usuario antes de continuar.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    return;
+                }
+                if (!validarDescripcionHistoria(i)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en las historias de usuario',
+                        text: 'Por favor, corrige los errores de observación en las historias de usuario antes de continuar.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    return;
+                }
+            }
+        }
+
+        // Si todas las validaciones pasan, enviar el formulario
+        this.submit();
+    });
+</script>
+
 <script>
     // Configurar el token CSRF para todas las solicitudes AJAX
     $.ajaxSetup({
@@ -762,18 +844,56 @@ function eliminarFila(boton) {
                 console.log("Texto seleccionado: " + textoSeleccionado);
             }
         });
-
-        $("#boton-home").on("click", function () {
-                //Regresa al home del docente
-                let idDocente = $('#id-docente').val();
-                
-                window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
-            });
-        
     });
 
 </script>
+<script>
+    $("#boton-home").on("click", function (event) {
+    event.preventDefault(); // Prevenir la redirección automática
+    
+    // Obtener los datos de los campos
+    //let observacionSemanal = $("#observacion_semanal").val().trim(); // Campo de observación semanal
+    const observacionSemanal = document.getElementById('descripcion_control_semanal').value.trim();
+    let historias = $("[id^='historia_']").map(function () {
+        return $(this).val().trim();
+    }).get(); // Recopilar valores de todas las historias
 
+    // Verificar si hay datos en los campos
+    let hayCambios = observacionSemanal !== "" || historias.some(h => h !== "");
+
+    if (hayCambios && !@json($mostrarMensaje)) {
+        // Mostrar alerta si hay cambios
+        Swal.fire({
+            title: "Hay cambios sin guardar",
+            text: "¿Deseas guardar los cambios antes de salir?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Si",
+            cancelButtonText: "Salir sin guardar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Acción para guardar los datos (sin salir de la página)
+                Swal.fire({
+                    title: "Continuar ...",
+                    text: "Presione botón guardar del registro semanal",
+                    icon: "info",
+                    confirmButtonText: "Continuar"
+                });
+                // Aquí puedes invocar la función de guardar o enviar los datos al servidor
+            } else {
+                // Redirigir al home sin guardar
+                let idDocente = $('#id-docente').val();
+                window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
+            }
+        });
+    } else {
+        // Redirigir directamente si no hay cambios
+        let idDocente = $('#id-docente').val();
+        window.location.href = `{{ url('/docente_home/${idDocente}') }}`;
+    }
+});
+
+</script>
 
 </body>
 </html>

@@ -22,13 +22,44 @@ class HitoController extends Controller
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, h.porcentaje_cobro 
             FROM hito h
             WHERE h.id_proyecto = ?", [$id_proyecto]);*/
-        $hitos = collect(DB::select("
+        /*$hitos = collect(DB::select("
             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, h.porcentaje_cobro 
             FROM hito h
             WHERE h.id_proyecto = ?", [$id_proyecto]));
            
 
-        return view('registro_hitos', compact('id_proyecto','hitos','proyecto','id_estudiante'));
+        return view('registro_hitos', compact('id_proyecto','hitos','proyecto','id_estudiante'));*/
+         // Consultar la etapa activa del proyecto
+         $etapa_activa = DB::table('etapa')
+         ->where('id_proyecto', $id_proyecto)
+         ->where('etapa_activa', 1)
+         ->first();
+ 
+         // Validar si la etapa activa es "Planificación"
+         if ($etapa_activa && $etapa_activa->nombre_etapa === 'Planificación') {
+             // Obtener los hitos asociados al proyecto
+             $hitos = collect(DB::select("
+             SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, h.porcentaje_cobro 
+             FROM hito h
+             WHERE h.id_proyecto = ?", [$id_proyecto]));
+         
+             // Pasar los hitos a la vista de registro_objetivo.blade.php
+             return view('registro_hitos', compact('id_proyecto','hitos','proyecto','id_estudiante'));
+         } else {
+            $etapa_actual = DB::table('etapa')
+                ->where('id_proyecto', $id_proyecto)
+                ->where('nombre_etapa', 'Planificación') 
+                ->first();
+             // Si no está en la etapa de planificación, redirigir a la vista 'rangoEtapa.etapa'
+             $mensaje_inicio='La etapa de planificación del proyecto fué habilitado en las fechas:';
+             $mensaje_error = 'Terminó la etapa de planificación. Ya no se pueden registrar hitos al proyecto.';
+             $fechas_etapa = $etapa_actual
+                 ? ['inicio' => $etapa_actual->fecha_inicio_etapa, 'fin' => $etapa_actual->fecha_fin_etapa] 
+                 : null;
+ 
+             return view('rangoEtapa.etapa', compact('mensaje_error','mensaje_inicio','fechas_etapa', 'id_estudiante'));
+         }
+ 
     }
     private function get_idProyecto($id_estudiante){
         $respuesta = DB::select(
