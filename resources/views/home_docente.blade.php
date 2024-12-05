@@ -963,12 +963,18 @@ border-bottom: 1px solid #eee;
                     `;
                     break;
                 case 'control_semanal':
+
+                
                     
                 let fechas = document.getElementById("fechas-desarrollo").value;
                 fechas = JSON.parse(fechas);
 
                 let valor = fechas;
                 console.log(valor[1] + "<------------------");
+                console.log(valor);
+                console.log(valor[0].inicio_etapa);
+
+                console.log("---------------- XD");
                 if(valor[1] == 0 ){
                     html = `                
                     <div class="switch_control_semanal">
@@ -1053,7 +1059,7 @@ border-bottom: 1px solid #eee;
             Swal.fire({
                 icon: 'error',
                 title: 'Fecha de desarrollo no comenzada',
-                text: 'La fecha de desarrollo comienza en' +fechaInicio+ '.',
+                text: 'La fecha de desarrollo comienza en ' +fechaInicio+ '.',
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
