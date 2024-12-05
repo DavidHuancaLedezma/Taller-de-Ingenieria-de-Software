@@ -556,17 +556,6 @@
 
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                title: 'Evaluación Final de Hito',
-                text: 'Esta grupo Empresa se encuentra en una semana de finalización de hito. A continuación se le mostrará la planilla de evaluación de final de hito.',
-                icon: 'info',
-                timer: 8000, // Tiempo en milisegundos
-                showConfirmButton: false
-            });
-        });
-    </script>
-    <script>
 
 function setProgress(stepCount) {
     const steps = document.querySelectorAll('.step');
@@ -774,7 +763,7 @@ function eliminarFila(boton) {
         const filasActuales = document.querySelectorAll('#tabla-dinamica tbody tr').length;
 
         if (filasActuales > filasIniciales) {
-            for (let i = 0; i < filas.length; i++) {
+            for (let i = 0; i < filasActuales; i++) {
                 if (!validarTituloHistoria(i)) {
                     Swal.fire({
                         icon: 'error',
