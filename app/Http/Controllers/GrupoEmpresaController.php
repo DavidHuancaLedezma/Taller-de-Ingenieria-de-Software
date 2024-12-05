@@ -11,10 +11,16 @@ use App\Rules\GmailDomain;
 
 class GrupoEmpresaController extends Controller
 {
-    public function create()
+    public function create($idEstudiante = null)
     {
-        return view('grupo_empresa.registroGE');
+        if (!$idEstudiante) {
+            return redirect()->route('home')->with('error', 'El ID del estudiante no se proporcionó.');
+        }
+    
+        // Pasar el ID a la vista
+        return view('grupo_empresa.registroGE', compact('idEstudiante'));
     }
+
 
 
     public function store(Request $request)

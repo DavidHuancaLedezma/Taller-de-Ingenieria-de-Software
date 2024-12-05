@@ -182,3 +182,5 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/obtener_criterios_y_parametros', [EvaluacionParesController::class, 'getCriteriosParametros']);
+Route::get('/registro-grupo-empresa/{idEstudiante}', [GrupoEmpresaController::class, 'create'])
+    ->name('registro-grupo-empresa');

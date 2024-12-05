@@ -60,9 +60,9 @@
 </head>
 
 <body>
-
-    <button class="button_home" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
-    
+<a href="{{ url('/estudiante_home/' . $idEstudiante) }}">
+    <button class="button_home"  id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
+    </a>  
     <div class="my-container">
         <div class="card col-12 col-md-8 col-lg-6">
             <h2 class="mb-4 text-center text-primary">Registrar Grupo Empresa</h2>
@@ -156,21 +156,7 @@
             </form>
         </div>
     </div>
-<script>
-    $("#boton-home").on("click", function() {
-            // Obtén el ID del evaluador desde el input hidden
-            let idEvaluador = $('#id-evaluador').val();
 
-            // Valida si el ID está definido
-            if (!idEvaluador) {
-                alert("El ID del evaluador no está definido. Verifica los datos.");
-                return;
-            }
-
-            // Redirige al home del estudiante evaluador
-            window.location.href = `/estudiante_home/${idEvaluador}`;
-        });
-</script>
 
 
     <!-- Bootstrap JS -->

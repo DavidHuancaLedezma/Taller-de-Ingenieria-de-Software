@@ -1174,7 +1174,7 @@
                             <img src="https://i.pinimg.com/736x/69/a4/d8/69a4d852daa4a3f8033372c16962b437.jpg" alt="Grupo Empresa" class="card-image">
                             <h3>Descripción registro grupo empresa</h3>
                             <p class="description">El Registro de Grupo-Empresa permite la creación y gestión de equipos de trabajo o empresas simuladas dentro del sistema.<p>  
-                            <form action="{{ url('/registro-grupo-empresa') }}" method="GET">
+                            <form action="/registro-grupo-empresa/${idEstudiante}" method="GET">
                                 <button id="btn-grupo-empresa" type="submit">REGISTRO GRUPO EMPRESA</button>
                             </form>
                         </div>
