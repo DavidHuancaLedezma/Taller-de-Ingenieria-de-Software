@@ -1222,7 +1222,7 @@
     <input id="id-grupo-empresa-del-estudiante" type="hidden" value="{{ $idGrupoEmpresa }}">
     <input id="parametros-de-autoevaluacion" type="hidden" value="{{ $conParametros }}">
     <input id="fechas-autoevaluacion" type="hidden" value="{{ json_encode($fechasDeAutoevaluacion) }}">
-
+    <input id="fechas-final" type="hidden" value="{{ json_encode($fechasDeFinal)}}">
 
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
@@ -1638,7 +1638,17 @@
                 case 'evaluacion_cruzada':
                     if (idGrupoEmpresa != 0) {
                         console.log("ingresando al if con ----->" + idGrupoEmpresa);
-                        html = `
+
+
+                        let fechasP = document.getElementById("fechas-final").value;
+                        fechasP = JSON.parse(fechasP);
+                        let valorP = fechasP;
+                        console.log(valorP[1] + "<------------------");
+                        console.log(valorP);
+                        console.log(valorP[0].inicio_etapa);
+
+                        if(valorP[1] == 0){
+                            html = `
                 <div class="switch_evaluacion_cruzada">
                     <h2>Evaluaciones</h2>
                     <div class="evaluation-card">
@@ -1651,7 +1661,24 @@
                             </form>
                        </div>
                     </div>
-                </div> `
+                </div>`
+                        }else{
+                            html = `
+                <div class="switch_evaluacion_cruzada">
+                    <h2>Evaluaciones</h2>
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <img src="https://files.pucp.education/puntoedu/wp-content/uploads/2021/06/10190005/vri-evaluacion-grupos-de-investigacion-1920x1080-interior.jpg" alt="Evaluación Cruzada" class="card-image">
+                            <h3>Evaluación Cruzada</h3>
+                            <p class="description">Evaluación que permite a los equipos de trabajo evaluar el trabajo de otros equipos.<p>  
+                            
+                                <button id="btn-evaluacion-cruzada" onclick="mensajeDeNoComenzadaLaEtapaFinal('${valorP[0].inicio_etapa}')" type="submit">EVALUACIÓN CRUZADA</button>
+                            
+                       </div>
+                    </div>
+                </div>`            
+                        }
+
                     } else {
                         console.log("ingresando al else con ----->" + idGrupoEmpresa);
                         html = `
@@ -1746,6 +1773,17 @@
                 title: 'Fecha de autoevaluación finalizada',
                 text: 'Usted se encuentra en fecha: ' + fechaActual +
                     ' y la autoevaluación finalizo en la fecha: ' + fechaFin + ".",
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false,
+            });
+        }
+
+
+        function mensajeDeNoComenzadaLaEtapaFinal(FechaInicio){
+            Swal.fire({
+                icon: 'error',
+                title: 'Etapa final no comenzada',
+                text: 'La etapa final comienza en fecha: '+FechaInicio+ '.',
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
