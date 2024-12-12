@@ -17,7 +17,7 @@ class ControllerHomeDocente extends Controller
         $grupoEmpresas = self::getGrupoEmpresas($idDocente);
 
         $fechasDesarrollo = self::etapaDeDesarrollo($idDocente);
-        $fechasDesarrolloPlanificacion = self::etapaDeDesarrolloPlanificacion($idDocente);
+        $fechasDePlanificacion = self::etapaDePlanificacion($idDocente);
 
         return view("home_docente", [
             'idDocente' => $idDocente,
@@ -25,7 +25,7 @@ class ControllerHomeDocente extends Controller
             'fechaActual' => $fechaActual,
             'grupoEmpresas' => $grupoEmpresas,
             'fechasDesarrollo' => $fechasDesarrollo,
-            'fechasDesarrolloPlanificacion' => $fechasDesarrolloPlanificacion
+            'fechasDePlanificacion' => $fechasDePlanificacion
         ]);
     }
     private function getnombreDocente($idDocente)
@@ -87,7 +87,7 @@ class ControllerHomeDocente extends Controller
     }
 
 
-    private static function etapaDeDesarrolloPlanificacion($idDocente)
+    private static function etapaDePlanificacion($idDocente)
     {
         // Obtener la fecha actual
         date_default_timezone_set('America/La_Paz');
@@ -100,7 +100,7 @@ class ControllerHomeDocente extends Controller
             AND pr.id_proyecto = e.id_proyecto
             AND gr.id_grupo = pr.id_grupo
             AND gm.id_usuario = ?
-            AND e.nombre_etapa = 'Desarrollo'
+            AND e.nombre_etapa = 'Planificación'
             LIMIT 1", array($idDocente));
 
         $fecha_ini = new DateTime($consulta[0]->inicio_etapa);
