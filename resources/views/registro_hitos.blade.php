@@ -201,6 +201,8 @@
 </head>
 <body>
     <input type="hidden" id="id_estudiante" value="{{ $id_estudiante }}">
+    <input id="etapa_final_fecha" type="hidden" value="{{$fecha_etapa_final}}">
+    <input id="etapa_desarrollo_fecha" type="hidden" value="{{$fecha_etapa_desarrollo}}">
     <button class="back_button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
     
 <div class="container">
@@ -377,5 +379,56 @@
             });
         });
     </script>
+      <script>
+    const fechaInicioInput = document.getElementById("fecha_inicio_hito");
+    const fechaFinInput = document.getElementById("fecha_fin_hito");
+    const fecha_etapa_final = document.getElementById("etapa_final_fecha").value;
+    const fecha_etapa_desarrollo = document.getElementById("etapa_desarrollo_fecha").value;
+
+    // Verificar si hay hitos en la tabla
+    const ultimaFechaFinElement = document.querySelector("#hitoTable tr:last-child td:nth-child(3)");
+    let minimaFechaInicio = null;
+
+    if (ultimaFechaFinElement) {
+        // Si hay hitos, usar la última fecha fin +1 día
+        let ultimaFechaFin = ultimaFechaFinElement.textContent.trim();
+        const partesFecha = ultimaFechaFin.split("/");
+        const fechaFinDate = new Date(`${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}`);
+        fechaFinDate.setDate(fechaFinDate.getDate() + 1);
+        minimaFechaInicio = fechaFinDate.toISOString().split("T")[0];
+    } else if (fecha_etapa_desarrollo) {
+        // Si no hay hitos, usar la fecha de desarrollo
+        minimaFechaInicio = fecha_etapa_desarrollo;
+    }
+
+    // Configurar restricciones en los inputs
+    if (minimaFechaInicio) {
+        fechaInicioInput.setAttribute("min", minimaFechaInicio);
+        fechaFinInput.setAttribute("min", minimaFechaInicio);
+    }
+
+    if (fecha_etapa_final) {
+        fechaInicioInput.setAttribute("max", fecha_etapa_final);
+        fechaFinInput.setAttribute("max", fecha_etapa_final);
+    }
+
+    // Validación de las fechas
+    fechaInicioInput.addEventListener("change", validarFechas);
+    fechaFinInput.addEventListener("change", validarFechas);
+
+    function validarFechas() {
+        const fechaInicio = fechaInicioInput.value;
+        const fechaFin = fechaFinInput.value;
+
+        // Ajusta el mínimo de la fecha fin según la fecha inicio seleccionada
+        if (fechaInicio) {
+            fechaFinInput.setAttribute("min", fechaInicio);
+        } else if (minimaFechaInicio) {
+            fechaFinInput.setAttribute("min", minimaFechaInicio);
+        }
+    }
+</script>
+
+
 </body>
 </html>

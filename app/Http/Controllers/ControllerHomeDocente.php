@@ -18,14 +18,20 @@ class ControllerHomeDocente extends Controller
 
         $fechasDesarrollo = self::etapaDeDesarrollo($idDocente);
         $fechasDesarrolloPlanificacion = self::etapaDeDesarrolloPlanificacion($idDocente);
-
+        $fechasSemestre = self::getFechaSemestre($idDocente);
+        $fecha_ini_semestre = $fechasSemestre ? $fechasSemestre->fecha_inicio_semestre : null;
+        $fecha_fin_semestre = $fechasSemestre ? $fechasSemestre->fecha_fin_semestre : null;
+    
         return view("home_docente", [
             'idDocente' => $idDocente,
             'nombre_docente' => $nombre_docente,
             'fechaActual' => $fechaActual,
             'grupoEmpresas' => $grupoEmpresas,
             'fechasDesarrollo' => $fechasDesarrollo,
-            'fechasDesarrolloPlanificacion' => $fechasDesarrolloPlanificacion
+            'fechasDesarrolloPlanificacion' => $fechasDesarrolloPlanificacion,
+            'fechasSemestre'=>$fechasSemestre,
+            'fecha_ini_semestre'=>$fecha_ini_semestre,
+            'fecha_fin_semestre'=>$fecha_fin_semestre
         ]);
     }
     private function getnombreDocente($idDocente)
@@ -56,7 +62,14 @@ class ControllerHomeDocente extends Controller
 
         return !empty($grupoEmpresas) ? $grupoEmpresas : null;
     }
-
+    private function getFechaSemestre($idDocente){
+        $semestre = DB::select('
+        select semestre.fecha_inicio_semestre, semestre.fecha_fin_semestre 
+        from semestre, grupo_materia 
+        where semestre.id_semestre = grupo_materia.id_semestre and grupo_materia.id_usuario = ?
+        ', [$idDocente]);
+        return !empty($semestre) ? $semestre[0] : null;
+    }
     private static function etapaDeDesarrollo($idDocente)
     {
         // Obtener la fecha actual
@@ -73,15 +86,23 @@ class ControllerHomeDocente extends Controller
             AND e.nombre_etapa = 'Desarrollo'
             LIMIT 1", array($idDocente));
 
-        $fecha_ini = new DateTime($consulta[0]->inicio_etapa);
-        $fecha_fin = new DateTime($consulta[0]->fin_etapa);
+        // Verificar si la consulta devuelve resultados
+        if (!empty($consulta) && isset($consulta[0])) {
+            // Obtener fechas de inicio y fin
+            $fecha_ini = new DateTime($consulta[0]->inicio_etapa);
+            $fecha_fin = new DateTime($consulta[0]->fin_etapa);
 
-        if ($fechaActual < $fecha_ini) {
-            $res = array($consulta[0], 1);
-        } else if ($fechaActual > $fecha_fin) {
-            $res = array($consulta[0], 2);
+            // Comparar fechas y establecer el resultado
+            if ($fechaActual < $fecha_ini) {
+                $res = [$consulta[0], 1];
+            } elseif ($fechaActual > $fecha_fin) {
+                $res = [$consulta[0], 2];
+            } else {
+                $res = [$consulta[0], 0];
+            }
         } else {
-            $res = array($consulta[0], 0);
+            // Si no hay datos, devolver un resultado por defecto o manejar el error
+            $res = [null, -1]; // -1 para indicar que no se encontró la etapa
         }
         return $res;
     }
@@ -103,16 +124,25 @@ class ControllerHomeDocente extends Controller
             AND e.nombre_etapa = 'Desarrollo'
             LIMIT 1", array($idDocente));
 
-        $fecha_ini = new DateTime($consulta[0]->inicio_etapa);
-        $fecha_fin = new DateTime($consulta[0]->fin_etapa);
+          // Verificar si la consulta devuelve resultados
+        if (!empty($consulta) && isset($consulta[0])) {
+            // Obtener fechas de inicio y fin
+            $fecha_ini = new DateTime($consulta[0]->inicio_etapa);
+            $fecha_fin = new DateTime($consulta[0]->fin_etapa);
 
-        if ($fechaActual < $fecha_ini) {
-            $res = array($consulta[0], 1);
-        } else if ($fechaActual > $fecha_fin) {
-            $res = array($consulta[0], 2);
+            // Comparar fechas y establecer el resultado
+            if ($fechaActual < $fecha_ini) {
+                $res = [$consulta[0], 1];
+            } elseif ($fechaActual > $fecha_fin) {
+                $res = [$consulta[0], 2];
+            } else {
+                $res = [$consulta[0], 0];
+            }
         } else {
-            $res = array($consulta[0], 0);
+            // Si no hay datos, devolver un resultado por defecto o manejar el error
+            $res = [null, -1]; // -1 para indicar que no se encontró la etapa
         }
+
         return $res;
     }
 }

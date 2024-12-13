@@ -464,19 +464,33 @@
                 const hitoFechaInicio = new Date(hitoSeleccionado.fecha_inicio_hito);
                 const hitoFechaFin = new Date(hitoSeleccionado.fecha_fin_hito);
                 // Mostrar las fechas en el formato dd/mm/yyyy
-            fechaInicioDisplay.textContent = hitoFechaInicio.toLocaleDateString('es-BO', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-            fechaFinDisplay.textContent = hitoFechaFin.toLocaleDateString('es-BO', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
+            fechaInicioDisplay.textContent = formatoFechaDDMMYYYY(hitoSeleccionado.fecha_inicio_hito);
+            fechaFinDisplay.textContent = formatoFechaDDMMYYYY(hitoSeleccionado.fecha_fin_hito);
                    // Opcionalmente puedes ajustar los valores de los inputs de fecha también
                 fechaInicioInput.value = hitoSeleccionado.fecha_inicio_hito;
                 fechaFinInput.value = hitoSeleccionado.fecha_fin_hito;
+
+                fechaInicioInput.setAttribute("min", hitoSeleccionado.fecha_inicio_hito);
+                fechaFinInput.setAttribute("min", hitoSeleccionado.fecha_inicio_hito);
+
+                fechaInicioInput.setAttribute("max", hitoSeleccionado.fecha_fin_hito);
+                fechaFinInput.setAttribute("max", hitoSeleccionado.fecha_fin_hito);
+
+                fechaInicioInput.addEventListener("change", validarFechas);
+                fechaFinInput.addEventListener("change", validarFechas);
+                // Añadir eventos change para validar cada vez que cambie una fecha
+                function validarFechas() {
+                    const fechaInicio = fechaInicioInput.value;
+                    const fechaFin = fechaFinInput.value;
+
+                    if (fechaInicio) {
+                        fechaFinInput.setAttribute("min", fechaInicio);
+                    } else {
+                        // Restablecer el mínimo de fecha fin a la fecha de hoy si no hay fecha de inicio
+                        fechaFinInput.setAttribute("min", hitoSeleccionado.fecha_inicio_hito);
+                    }
+                }
+                
                 // Validar la fecha de inicio del objetivo
                 fechaInicioHandler = function () {
                     const fechaInicio = new Date(this.value);
@@ -536,9 +550,15 @@
         window.location.href = `{{ url('/estudiante_home/${idEstudiante}') }}`;
     });
        
+
+    function formatoFechaDDMMYYYY(fechaISO) {
+    const fecha = new Date(fechaISO);
+    const dia = String(fecha.getDate()+1).padStart(2, '0'); // Obtiene y asegura que tenga dos dígitos
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Meses en JS son 0-indexados
+    const anio = fecha.getFullYear(); // Obtiene el año completo
+    return `${dia}/${mes}/${anio}`;
+}
 </script>
-
-
 </body>
 
 </html>

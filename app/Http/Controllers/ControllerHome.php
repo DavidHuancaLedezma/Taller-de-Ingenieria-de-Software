@@ -51,11 +51,15 @@ class ControllerHome extends Controller
         } else {
             $entregables = null;  // O puedes asignar un valor predeterminado si lo prefieres
         }
-
+        $fechasSemestre = self::getFechaSemestre($idEstudiante);
+        $fecha_ini_semestre = $fechasSemestre ? $fechasSemestre->fecha_inicio_semestre : null;
+        $fecha_fin_semestre = $fechasSemestre ? $fechasSemestre->fecha_fin_semestre : null;
+    
         return view("home", ['idEstudinte' => $idEstudiante, 'autoevaluacion' => $autoevaluacion, 'idGrupoEmpresa' => $idGrupoEmpresa, 'conParametros' => $conParametros, 'fechasDeAutoevaluacion' => $fechasDeAutoevaluacion,
                      'nombre_estudiante' => $nombre_estudiante,'nombre_grupoEmpresa' => $nombre_grupoEmpresa,
                      'nombreProyecto'=>$nombreProyecto, 'descripcionProyecto'=>$descripcionProyecto, 'fechaInicio'=>$fechaInicio, 'fechaFin'=>$fechaFin,'nombreEtapa'=> $nombreEtapa,
-                     'equipo'=>$equipo,'fechaActual'=> $fechaActual, 'hito'=>$hito, 'entregables'=> $entregables]);
+                     'equipo'=>$equipo,'fechaActual'=> $fechaActual, 'hito'=>$hito, 'entregables'=> $entregables,
+                    'fechasSemestre'=>$fechasSemestre, 'fecha_ini_semestre'=>$fecha_ini_semestre, 'fecha_fin_semestre'=>$fecha_fin_semestre]);
     }
     private function getnombreEstudiante($idEstudiante)
     {
@@ -141,7 +145,14 @@ class ControllerHome extends Controller
 
         return $entregables;
     }
-
+    private function getFechaSemestre($idEstudiante){
+        $semestre= DB:: select('
+        select se.fecha_inicio_semestre, se.fecha_fin_semestre
+        from semestre se, grupo_materia grm, matricula mtr
+        where se.id_semestre = grm.id_semestre and grm.id_grupo = mtr.id_grupo and mtr.id_usuario = ?
+        ',[$idEstudiante]);
+        return !empty($semestre) ? $semestre[0] : null;
+    }
 
     private function getmiembroEquipo($idGrupoEmpresa){
         $consulta=DB:: select("
