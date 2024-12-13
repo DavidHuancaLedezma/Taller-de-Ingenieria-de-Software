@@ -787,6 +787,7 @@ border-bottom: 1px solid #eee;
 <body>
     <input id="id-docente" type="hidden" value="{{$idDocente}}">
     <input id="fechas-desarrollo" type="hidden" value="{{ json_encode($fechasDesarrollo)}}">
+    <input id="fechas-planificacion" type="hidden" value="{{ json_encode($fechasDePlanificacion)}}">
     <div class="menu">
         <ion-icon name="menu-outline"></ion-icon>
         <ion-icon name="close-outline"></ion-icon>
@@ -953,7 +954,16 @@ border-bottom: 1px solid #eee;
 
             switch (seccion) {
                 case 'visualizar_planificacion':
-                    html = `
+                    let fechasP = document.getElementById("fechas-planificacion").value;
+                    fechasP = JSON.parse(fechasP);
+
+                    let valorP = fechasP;
+                    console.log(valorP[1] + "<------------------");
+                    console.log(valorP);
+                    console.log(valorP[0].inicio_etapa);
+
+                    if(valorP[1] == 1 || valorP[1] == 2){
+                        html = `
                 <div class="switch_visualizar_planificacion">
                     <h2>Visualizar planificacion</h2>
                     <div class="evaluation-card">
@@ -968,11 +978,24 @@ border-bottom: 1px solid #eee;
                     </div>
                 </div> 
                     `;
-                    break;
-                case 'control_semanal':
+                    }else{
+                        html = `
+                <div class="switch_visualizar_planificacion">
+                    <h2>Visualizar planificacion</h2>
+                    <div class="evaluation-card">
+                        <div class="card">
+                            <img src="https://img.freepik.com/vector-gratis/planificacion-empresarial-calendario_23-2149164011.jpg" alt="Autoevaluacion" class="card-image">
+                            <h3>Descripcion</h3>
+                            <p class="description">La visualización de la planificación de proyectos permite al docente revisar el progreso y la organización del proyecto en el taller de ingeniería de software.<p>  
 
-                
-                    
+                                <button id="btn-switch-visualizar-planificacion" onclick="mensajeDeNoPlanificacionFin('${valorP[0].fin_etapa}')" type="submit">Visualizar planificacion</button>
+                       </div>
+                    </div>
+                </div> 
+                    `;
+                    }
+                        break;
+                case 'control_semanal':
                 let fechas = document.getElementById("fechas-desarrollo").value;
                 fechas = JSON.parse(fechas);
 
@@ -1061,8 +1084,19 @@ border-bottom: 1px solid #eee;
             enlaceActivo.classList.add('activo');
         }
 
+        function mensajeDeNoPlanificacionFin(FechaFin){
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Proceso de planificación',
+                text: 'Las grupo empresas se encuentran en proceso de planificación hasta el: '+FechaFin+ '.',
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false,
+            });
+        }
+
+
         function mensajeDeNoEtapaDesarrolloInicio(fechaInicio){
-            console.log();
             Swal.fire({
                 icon: 'error',
                 title: 'Fecha de desarrollo no comenzada',
@@ -1070,13 +1104,12 @@ border-bottom: 1px solid #eee;
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
             });
-        }
 
+        }
         function mensajeDeNoEtapaDesarrolloFin(FechaFin){
-            console.log();
             Swal.fire({
                 icon: 'error',
-                title: 'Fecha de desarrollo no comenzada',
+                title: 'Fecha de desarrollo finalizo',
                 text: 'La fecha de desarrollo finalizo en '+FechaFin+ '.',
                 confirmButtonText: 'Aceptar',
                 allowOutsideClick: false,
