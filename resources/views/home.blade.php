@@ -1722,6 +1722,7 @@
             // Remover la clase 'activo' de todos los enlaces
             enlacesBarra.forEach(enlace => enlace.classList.remove('activo'));
 
+            //cambio
             // Añadir la clase 'activo' al enlace que se acaba de hacer clic
             const enlaceActivo = document.querySelector(`a[onclick="cargarContenido('${seccion}')"]`);
             enlaceActivo.classList.add('activo');
