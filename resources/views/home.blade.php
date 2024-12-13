@@ -1343,7 +1343,13 @@
 
       <section class="calendar">
         <h2>{{ $fechaActual }}</h2>
-        
+        <h2>Semestre</h2>
+        @if ($fechasSemestre)
+            <p><i class="bi bi-calendar-check"></i> Fecha de inicio: {{ $fecha_ini_semestre }}</p>
+            <p><i class="bi bi-calendar-check"></i> Fecha de fin: {{ $fecha_fin_semestre }}</p>
+        @else
+            <p>No hay fechas de semestre registradas.</p>
+        @endif
       </section>
 
       <section class="projects">

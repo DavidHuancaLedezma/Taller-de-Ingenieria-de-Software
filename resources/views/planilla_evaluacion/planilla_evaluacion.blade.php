@@ -547,6 +547,7 @@
 </head>
 <body>
 <input id="id-docente" type="hidden" value="{{$idDocente}}">
+<input id="etapa_final_fecha" type="hidden" value="{{$fecha_etapa_final}}">
     <div class="botonHome">
     <button class="back-button" id="boton-home">Regreso al home <i class="fas fa-home"></i></button>
     </div>
@@ -876,9 +877,13 @@
         const fechaInicioInput = document.getElementById("fecha_inicio");
         const fechaFinInput = document.getElementById("fecha_fin");
 
+        let fecha_etapa_final = $('#etapa_final_fecha').val();
+
         // Establecer el mínimo de la fecha de inicio y fecha fin en la fecha actual
         fechaInicioInput.setAttribute("min", today);
         fechaFinInput.setAttribute("min", today);
+        fechaInicioInput.setAttribute("max", fecha_etapa_final);
+        fechaFinInput.setAttribute("max", fecha_etapa_final);
 
         fechaInicioInput.addEventListener("change", validarFechas);
         fechaFinInput.addEventListener("change", validarFechas);

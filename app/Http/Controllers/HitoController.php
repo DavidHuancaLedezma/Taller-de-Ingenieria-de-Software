@@ -42,9 +42,16 @@ class HitoController extends Controller
              SELECT h.id_hito, h.numero_hito, h.fecha_inicio_hito, h.fecha_fin_hito, h.porcentaje_cobro 
              FROM hito h
              WHERE h.id_proyecto = ?", [$id_proyecto]));
+
+             $etapa_final = DB::table('etapa')
+             ->where('id_proyecto', $id_proyecto)
+             ->where('nombre_etapa', 'Final') 
+             ->first();
+             $fecha_etapa_final = $etapa_final->fecha_inicio_etapa;
+             $fecha_etapa_desarrollo = $etapa_activa->fecha_fin_etapa;
          
              // Pasar los hitos a la vista de registro_objetivo.blade.php
-             return view('registro_hitos', compact('id_proyecto','hitos','proyecto','id_estudiante'));
+             return view('registro_hitos', compact('id_proyecto','hitos','proyecto','id_estudiante','fecha_etapa_final','fecha_etapa_desarrollo'));
          } else {
             $etapa_actual = DB::table('etapa')
                 ->where('id_proyecto', $id_proyecto)

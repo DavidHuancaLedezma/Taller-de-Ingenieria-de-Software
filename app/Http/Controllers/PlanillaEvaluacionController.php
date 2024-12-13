@@ -38,9 +38,10 @@ class PlanillaEvaluacionController extends Controller
             $criterios_evaluacion = DB::select("SELECT * FROM criterio_evaluacion");
             $parametros = DB::select("SELECT * FROM parametro_evaluacion");
             $escalas = DB::select("SELECT * FROM escala_medicion");
+            $fecha_etapa_final = $etapa_activa->fecha_fin_etapa;
 
             // Redirigir a la vista de evaluación
-            return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion', 'criterios_evaluacion', 'parametros', 'escalas', 'idDocente'));
+            return view('planilla_evaluacion.planilla_evaluacion', compact('tipos_evaluacion', 'criterios_evaluacion', 'parametros', 'escalas', 'idDocente','fecha_etapa_final'));
         } else {
             // Si no está en la etapa "Final", redirigir a la vista de rango de etapa
             $mensaje_error = 'Los proyectos no están en la etapa final. No se puede proceder a crear planilla de evaluación.';
