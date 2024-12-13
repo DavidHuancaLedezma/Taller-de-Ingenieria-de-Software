@@ -55,7 +55,10 @@ class ControllerHome extends Controller
         } else {
             $entregables = null;  // O puedes asignar un valor predeterminado si lo prefieres
         }
-
+        $fechasSemestre = self::getFechaSemestre($idEstudiante);
+        $fecha_ini_semestre = $fechasSemestre ? $fechasSemestre->fecha_inicio_semestre : null;
+        $fecha_fin_semestre = $fechasSemestre ? $fechasSemestre->fecha_fin_semestre : null;
+    
 
         return view("home", [
             'idEstudinte' => $idEstudiante,
@@ -78,8 +81,6 @@ class ControllerHome extends Controller
             'fechasSemestre'=>$fechasSemestre, 
             'fecha_ini_semestre'=>$fecha_ini_semestre,
             'fecha_fin_semestre'=>$fecha_fin_semestre]);
-
-        ]);
     }
     private function getnombreEstudiante($idEstudiante)
     {
