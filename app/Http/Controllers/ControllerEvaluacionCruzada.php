@@ -94,16 +94,21 @@ class ControllerEvaluacionCruzada extends Controller
 
     private static function getGrupoEmpresas($idGrupoEmpresa)
     {
-        $grupoEmpresas = DB::select("SELECT ge.id_grupo_empresa, ge.nombre_corto 
-        FROM grupo_empresa ge, estudiante_grupoempresa ege
-        WHERE ge.id_grupo_empresa = ege.id_grupo_empresa 
+        $grupoEmpresas = DB::select("SELECT ge.id_grupo_empresa, ge.nombre_corto
+        FROM grupo_empresa ge, estudiante_grupoempresa ege, proyecto pr, grupo gr 
+        WHERE ge.id_grupo_empresa = ege.id_grupo_empresa
+		AND ge.id_grupo_empresa = pr.id_grupo_empresa
+		AND pr.id_grupo = gr.id_grupo
+		AND gr.id_grupo = (SELECT gr.id_grupo FROM proyecto pr, grupo gr
+		WHERE pr.id_grupo = gr.id_grupo
+		AND pr.id_grupo_empresa = ?) 
         AND ege.periodo_grupoempresa = 
         (SELECT periodo_grupoEmpresa
         FROM estudiante_grupoEmpresa
         WHERE id_grupo_empresa = ?
         GROUP BY periodo_grupoempresa )
         AND ge.id_grupo_empresa != ?
-        GROUP BY ge.id_grupo_empresa, ge.nombre_corto", array($idGrupoEmpresa, $idGrupoEmpresa));
+        GROUP BY ge.id_grupo_empresa, ge.nombre_corto", array($idGrupoEmpresa, $idGrupoEmpresa, $idGrupoEmpresa));
         return $grupoEmpresas;
     }
 
